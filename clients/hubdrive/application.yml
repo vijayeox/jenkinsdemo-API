@@ -32,7 +32,7 @@ org:
             -
                 businessRole: 'Insurance Carrier'
                 entity:
-                    - 'Excess Liability'    
+                    - 'Excess Liability'
         preferences: '{}'
     -
         name: OnTrac
@@ -726,7 +726,7 @@ entity:
                         useRowData: false
             metadata: {  }
     -
-        name: Excess Liability
+        name: 'Excess Liability'
         start_date_field: start_date
         end_date_field: end_date
         status_field: status
@@ -751,7 +751,7 @@ entity:
                 identifier: email
         participantRole:
             -
-                businessRole: 'Independent Contractor'                
+                businessRole: 'Independent Contractor'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
@@ -1102,14 +1102,14 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
                         -
-                            title: Company Name
+                            title: 'Company Name'
                             field: companyName
                         -
-                            title: Date Created
+                            title: 'Date Created'
                             field: date_created
                             cell: '<td>{formatDate(item.date_created)}</td>'
                             filter: date
-                            filterFormat: YYYY-MM-DD   
+                            filterFormat: YYYY-MM-DD
     -
         name: 'Excess Liability'
         uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
@@ -1198,14 +1198,14 @@ pages:
                                         form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
                     columnConfig:
                         -
-                            title: Insured Name
+                            title: 'Insured Name'
                             field: insuredName
                         -
                             title: 'Policy Effective Date'
                             field: desiredPolicyEffectiveDate
                             cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
                             filter: date
-                            filterFormat: YYYY-MM-DD      
+                            filterFormat: YYYY-MM-DD
     -
         name: 'Excess Liability'
         uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
@@ -1294,14 +1294,14 @@ pages:
                                         form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
                     columnConfig:
                         -
-                            title: Insured Name
+                            title: 'Insured Name'
                             field: insuredName
                         -
                             title: 'Policy Effective Date'
                             field: desiredPolicyEffectiveDate
                             cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
                             filter: date
-                            filterFormat: YYYY-MM-DD                         
+                            filterFormat: YYYY-MM-DD
 menu:
     -
         name: 'Independent Contractor'
@@ -1322,13 +1322,13 @@ menu:
         uuid: d8180a96-bd0f-11eb-8529-0242ac130003
         privilege: MANAGE_COMPLIANCE
     -
-        name: Excess Liability
+        name: 'Excess Liability'
         icon: 'fas fa-list'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
-        privilege: '{"eq" : "MANAGE_ACCOUNT_MANAGER_READ","neq" : "MANAGE_APP_WRITE"}'  
+        privilege: '{"eq" : "MANAGE_ACCOUNT_MANAGER_READ","neq" : "MANAGE_APP_WRITE"}'
     -
-        name: Excess Liability
+        name: 'Excess Liability'
         icon: 'fas fa-list'
         page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
@@ -1337,9 +1337,9 @@ form:
     -
         name: 'Excess Liability Form'
         uuid: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
-        description: Excess Liability
+        description: 'Excess Liability'
         template_file: abExcessLiability.json
-        entity: Excess Liability
+        entity: 'Excess Liability'
     -
         name: 'Compliance CheckList Form'
         uuid: e26bd719-f47f-455b-9be4-9b26c18a0b78

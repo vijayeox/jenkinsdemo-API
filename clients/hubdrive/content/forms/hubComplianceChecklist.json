@@ -1,1468 +1,1719 @@
 {
-	"_id": "608102207169cd10e453b68c",
-	"type": "form",
-	"tags": [],
-	"owner": "5df87f7ef5bff0ba0e620c87",
-	"components": [{
-		"title": "Independent Contractor Information",
-		"theme": "primary",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false,
-		"key": "Panel1CertificateHolderInformation",
-		"type": "panel",
-		"label": "Independent Carrier Information",
-		"input": false,
-		"tableView": false,
-		"components": [{
-			"input": true,
-			"key": "name",
-			"tableView": false,
-			"label": "name",
-			"calculateValue": "value = data.iCFirstName + \" \" + data.IcLastName;",
-			"type": "hidden"
-		}, {
-			"label": "identifier_field",
-			"defaultValue": "iCEmail",
-			"calculateValue": "value = 'iCEmail';",
-			"key": "identifier_field",
-			"type": "hidden",
-			"input": true,
-			"tableView": true,
-			"lockKey": true,
-			"hideOnChildrenHidden": false
-		}, {
-			"title": "Independent Contractor Information",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"hideLabel": true,
-			"key": "certificateHolderInformation",
-			"type": "panel",
-			"label": "Independent Carrier Information",
-			"input": false,
-			"tableView": false,
-			"components": [{
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "First Name",
-						"tableView": true,
-						"validate": {
-							"required": true
-						},
-						"key": "iCFirstName",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"width": 3,
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "Last Name",
-						"tableView": true,
-						"validate": {
-							"required": true
-						},
-						"key": "IcLastName",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"width": 3,
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "Street",
-						"tableView": true,
-						"validate": {
-							"required": true
-						},
-						"key": "street1IC",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"width": 3,
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "City",
-						"tableView": true,
-						"validate": {
-							"required": true
-						},
-						"key": "city1IC",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"width": 3,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 3
-				}],
-				"key": "columns1CerticateHolderInformation",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "State Json",
-						"customDefaultValue": "value =  [\n    {\n        \"name\": \"Alabama\",\n        \"abbreviation\": \"AL\"\n    },\n    {\n        \"name\": \"Arizona\",\n        \"abbreviation\": \"AZ\"\n    },\n    {\n        \"name\": \"Arkansas\",\n        \"abbreviation\": \"AR\"\n    },\n    {\n        \"name\": \"California\",\n        \"abbreviation\": \"CA\"\n    },\n    {\n        \"name\": \"Colorado\",\n        \"abbreviation\": \"CO\"\n    },\n    {\n        \"name\": \"Connecticut\",\n        \"abbreviation\": \"CT\"\n    },\n    {\n        \"name\": \"Delaware\",\n        \"abbreviation\": \"DE\"\n    },\n    {\n        \"name\": \"District Of Columbia\",\n        \"abbreviation\": \"DC\"\n    },\n    {\n        \"name\": \"Florida\",\n        \"abbreviation\": \"FL\"\n    },\n    {\n        \"name\": \"Georgia\",\n        \"abbreviation\": \"GA\"\n    },\n    {\n        \"name\": \"Hawaii\",\n        \"abbreviation\": \"HI\"\n    },\n    {\n        \"name\": \"Idaho\",\n        \"abbreviation\": \"ID\"\n    },\n    {\n        \"name\": \"Illinois\",\n        \"abbreviation\": \"IL\"\n    },\n    {\n        \"name\": \"Indiana\",\n        \"abbreviation\": \"IN\"\n    },\n    {\n        \"name\": \"Iowa\",\n        \"abbreviation\": \"IA\"\n    },\n    {\n        \"name\": \"Kansas\",\n        \"abbreviation\": \"KS\"\n    },\n    {\n        \"name\": \"Kentucky\",\n        \"abbreviation\": \"KY\"\n    },\n    {\n        \"name\": \"Louisiana\",\n        \"abbreviation\": \"LA\"\n    },\n    {\n        \"name\": \"Maine\",\n        \"abbreviation\": \"ME\"\n    },\n    {\n        \"name\": \"Maryland\",\n        \"abbreviation\": \"MD\"\n    },\n    {\n        \"name\": \"Massachusetts\",\n        \"abbreviation\": \"MA\"\n    },\n    {\n        \"name\": \"Michigan\",\n        \"abbreviation\": \"MI\"\n    },\n    {\n        \"name\": \"Minnesota\",\n        \"abbreviation\": \"MN\"\n    },\n    {\n        \"name\": \"Mississippi\",\n        \"abbreviation\": \"MS\"\n    },\n    {\n        \"name\": \"Missouri\",\n        \"abbreviation\": \"MO\"\n    },\n    {\n        \"name\": \"Montana\",\n        \"abbreviation\": \"MT\"\n    },\n    {\n        \"name\": \"Nebraska\",\n        \"abbreviation\": \"NE\"\n    },\n    {\n        \"name\": \"Nevada\",\n        \"abbreviation\": \"NV\"\n    },\n    {\n        \"name\": \"New Hampshire\",\n        \"abbreviation\": \"NH\"\n    },\n    {\n        \"name\": \"New Jersey\",\n        \"abbreviation\": \"NJ\"\n    },\n    {\n        \"name\": \"New Mexico\",\n        \"abbreviation\": \"NM\"\n    },\n    {\n        \"name\": \"New York\",\n        \"abbreviation\": \"NY\"\n    },\n    {\n        \"name\": \"North Carolina\",\n        \"abbreviation\": \"NC\"\n    },\n    {\n        \"name\": \"North Dakota\",\n        \"abbreviation\": \"ND\"\n    },\n    {\n        \"name\": \"Ohio\",\n        \"abbreviation\": \"OH\"\n    },\n    {\n        \"name\": \"Oklahoma\",\n        \"abbreviation\": \"OK\"\n    },\n    {\n        \"name\": \"Oregon\",\n        \"abbreviation\": \"OR\"\n    },\n    {\n        \"name\": \"Pennsylvania\",\n        \"abbreviation\": \"PA\"\n    },\n    {\n        \"name\": \"Rhode Island\",\n        \"abbreviation\": \"RI\"\n    },\n    {\n        \"name\": \"South Carolina\",\n        \"abbreviation\": \"SC\"\n    },\n    {\n        \"name\": \"South Dakota\",\n        \"abbreviation\": \"SD\"\n    },\n    {\n        \"name\": \"Tennessee\",\n        \"abbreviation\": \"TN\"\n    },\n    {\n        \"name\": \"Texas\",\n        \"abbreviation\": \"TX\"\n    },\n    {\n        \"name\": \"Utah\",\n        \"abbreviation\": \"UT\"\n    },\n    {\n        \"name\": \"Vermont\",\n        \"abbreviation\": \"VT\"\n    },\n    {\n        \"name\": \"Virginia\",\n        \"abbreviation\": \"VA\"\n    },\n    {\n        \"name\": \"Washington\",\n        \"abbreviation\": \"WA\"\n    },\n    {\n        \"name\": \"West Virginia\",\n        \"abbreviation\": \"WV\"\n    },\n    {\n        \"name\": \"Wisconsin\",\n        \"abbreviation\": \"WI\"\n    },\n    {\n        \"name\": \"Wyoming\",\n        \"abbreviation\": \"WY\"\n    }\n]",
-						"calculateValue": "value =  [\n    {\n        \"name\": \"Alabama\",\n        \"abbreviation\": \"AL\"\n    },\n    {\n        \"name\": \"Arizona\",\n        \"abbreviation\": \"AZ\"\n    },\n    {\n        \"name\": \"Arkansas\",\n        \"abbreviation\": \"AR\"\n    },\n    {\n        \"name\": \"California\",\n        \"abbreviation\": \"CA\"\n    },\n    {\n        \"name\": \"Colorado\",\n        \"abbreviation\": \"CO\"\n    },\n    {\n        \"name\": \"Connecticut\",\n        \"abbreviation\": \"CT\"\n    },\n    {\n        \"name\": \"Delaware\",\n        \"abbreviation\": \"DE\"\n    },\n    {\n        \"name\": \"District Of Columbia\",\n        \"abbreviation\": \"DC\"\n    },\n    {\n        \"name\": \"Florida\",\n        \"abbreviation\": \"FL\"\n    },\n    {\n        \"name\": \"Georgia\",\n        \"abbreviation\": \"GA\"\n    },\n    {\n        \"name\": \"Hawaii\",\n        \"abbreviation\": \"HI\"\n    },\n    {\n        \"name\": \"Idaho\",\n        \"abbreviation\": \"ID\"\n    },\n    {\n        \"name\": \"Illinois\",\n        \"abbreviation\": \"IL\"\n    },\n    {\n        \"name\": \"Indiana\",\n        \"abbreviation\": \"IN\"\n    },\n    {\n        \"name\": \"Iowa\",\n        \"abbreviation\": \"IA\"\n    },\n    {\n        \"name\": \"Kansas\",\n        \"abbreviation\": \"KS\"\n    },\n    {\n        \"name\": \"Kentucky\",\n        \"abbreviation\": \"KY\"\n    },\n    {\n        \"name\": \"Louisiana\",\n        \"abbreviation\": \"LA\"\n    },\n    {\n        \"name\": \"Maine\",\n        \"abbreviation\": \"ME\"\n    },\n    {\n        \"name\": \"Maryland\",\n        \"abbreviation\": \"MD\"\n    },\n    {\n        \"name\": \"Massachusetts\",\n        \"abbreviation\": \"MA\"\n    },\n    {\n        \"name\": \"Michigan\",\n        \"abbreviation\": \"MI\"\n    },\n    {\n        \"name\": \"Minnesota\",\n        \"abbreviation\": \"MN\"\n    },\n    {\n        \"name\": \"Mississippi\",\n        \"abbreviation\": \"MS\"\n    },\n    {\n        \"name\": \"Missouri\",\n        \"abbreviation\": \"MO\"\n    },\n    {\n        \"name\": \"Montana\",\n        \"abbreviation\": \"MT\"\n    },\n    {\n        \"name\": \"Nebraska\",\n        \"abbreviation\": \"NE\"\n    },\n    {\n        \"name\": \"Nevada\",\n        \"abbreviation\": \"NV\"\n    },\n    {\n        \"name\": \"New Hampshire\",\n        \"abbreviation\": \"NH\"\n    },\n    {\n        \"name\": \"New Jersey\",\n        \"abbreviation\": \"NJ\"\n    },\n    {\n        \"name\": \"New Mexico\",\n        \"abbreviation\": \"NM\"\n    },\n    {\n        \"name\": \"New York\",\n        \"abbreviation\": \"NY\"\n    },\n    {\n        \"name\": \"North Carolina\",\n        \"abbreviation\": \"NC\"\n    },\n    {\n        \"name\": \"North Dakota\",\n        \"abbreviation\": \"ND\"\n    },\n    {\n        \"name\": \"Ohio\",\n        \"abbreviation\": \"OH\"\n    },\n    {\n        \"name\": \"Oklahoma\",\n        \"abbreviation\": \"OK\"\n    },\n    {\n        \"name\": \"Oregon\",\n        \"abbreviation\": \"OR\"\n    },\n    {\n        \"name\": \"Pennsylvania\",\n        \"abbreviation\": \"PA\"\n    },\n    {\n        \"name\": \"Rhode Island\",\n        \"abbreviation\": \"RI\"\n    },\n    {\n        \"name\": \"South Carolina\",\n        \"abbreviation\": \"SC\"\n    },\n    {\n        \"name\": \"South Dakota\",\n        \"abbreviation\": \"SD\"\n    },\n    {\n        \"name\": \"Tennessee\",\n        \"abbreviation\": \"TN\"\n    },\n    {\n        \"name\": \"Texas\",\n        \"abbreviation\": \"TX\"\n    },\n    {\n        \"name\": \"Utah\",\n        \"abbreviation\": \"UT\"\n    },\n    {\n        \"name\": \"Vermont\",\n        \"abbreviation\": \"VT\"\n    },\n    {\n        \"name\": \"Virginia\",\n        \"abbreviation\": \"VA\"\n    },\n    {\n        \"name\": \"Washington\",\n        \"abbreviation\": \"WA\"\n    },\n    {\n        \"name\": \"West Virginia\",\n        \"abbreviation\": \"WV\"\n    },\n    {\n        \"name\": \"Wisconsin\",\n        \"abbreviation\": \"WI\"\n    },\n    {\n        \"name\": \"Wyoming\",\n        \"abbreviation\": \"WY\"\n    }\n]",
-						"key": "stateJsonList",
-						"type": "hidden",
-						"input": true,
-						"tableView": false,
-						"hideOnChildrenHidden": false
-					}, {
-						"label": "State",
-						"widget": "choicesjs",
-						"tableView": true,
-						"dataSrc": "custom",
-						"data": {
-							"values": [{
-								"label": "",
-								"value": ""
-							}],
-							"custom": "values = data.stateJsonList;"
-						},
-						"template": "<span>{{ item.name }}</span>",
-						"selectThreshold": 0.3,
-						"clearOnHide": false,
-						"validate": {
-							"required": true
-						},
-						"key": "state",
-						"type": "select",
-						"indexeddb": {
-							"filter": {}
-						},
-						"input": true,
-						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"isNew": false
-					}, {
-						"label": "StateHidden",
-						"calculateValue": "value = data.state.name",
-						"key": "stateHidden",
-						"type": "hidden",
-						"input": true,
-						"tableView": false
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"width": 3,
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "ZIP Code",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"validate": {
-							"required": true,
-							"custom": "valid = (input!=null && input !='')?(input.toString().length === 5) ? true : 'ZIP code must be of 5 digit':true;\n"
-						},
-						"key": "zipCode1IC",
-						"type": "number",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"width": 3,
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "Email",
-						"tableView": true,
-						"validate": {
-							"required": true
-						},
-						"key": "iCEmail",
-						"type": "email",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"width": 3,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "Effective Date",
-						"format": "yyyy-MM-dd",
-						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"timePicker": {
-							"showMeridian": false
-						},
-						"validate": {
-							"required": true
-						},
-						"key": "effectiveDate",
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"locale": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "yyyy-MM-dd",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": true,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"width": 3,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 3
-				}],
-				"key": "columns2CertificateHolderInformation",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Vendor #\t",
-						"mask": false,
-						"spellcheck": true,
-						"tableView": false,
-						"delimiter": false,
-						"requireDecimal": false,
-						"inputFormat": "plain",
-						"key": "vendorNumber",
-						"type": "number",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 3,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "Company Name",
-						"tableView": true,
-						"key": "companyName",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 3,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 3
-				}, {
-					"components": [{
-						"label": "Please select the facility",
-						"placeholder": "Please select",
-						"tableView": true,
-						"data": {
-							"values": [{
-								"label": "<b>Bay Region:</b> Concord – CCR",
-								"value": "bBayRegionBConcordCcr"
-							}, {
-								"label": "Hayward – HAY",
-								"value": "haywardHay"
-							}, {
-								"label": "San Jose – SJC",
-								"value": "sanJoseSjc"
-							}, {
-								"label": "San Francisco – SFO",
-								"value": "sanFranciscoSfo"
-							}, {
-								"label": "<b>Central Region:</b> Bakersfield – BFL",
-								"value": "bCentralRegionBBakersfieldBfl"
-							}, {
-								"label": "Fresno – FAT",
-								"value": "fresnoFat"
-							}, {
-								"label": "Monterey – MRY",
-								"value": "montereyMry"
-							}, {
-								"label": "Petaluma – PET",
-								"value": "petalumaPet"
-							}, {
-								"label": "Sacramento – SAC",
-								"value": "sacramentoSac"
-							}, {
-								"label": "Santa Maria – SMX",
-								"value": "santaMariaSmx"
-							}, {
-								"label": "Stockton – STK",
-								"value": "stocktonStk"
-							}, {
-								"label": "Visalia - VIS",
-								"value": "visaliaVis"
-							}, {
-								"label": "<b>Pacific Region:</b> Commerce – COM",
-								"value": "bPacificRegionBCommerceCom"
-							}, {
-								"label": "Los Angeles – LAX",
-								"value": "losAngelesLax"
-							}, {
-								"label": "Orange – ORG",
-								"value": "orangeOrg"
-							}, {
-								"label": "San Diego – SAN",
-								"value": "sanDiegoSan"
-							}, {
-								"label": "<b>Coast Region:</b> Burbank – BUR",
-								"value": "bCoastRegionBBurbankBur"
-							}, {
-								"label": "Ontario – ONT",
-								"value": "ontarioOnt"
-							}, {
-								"label": "Redland - RDL",
-								"value": "redlandRdl"
-							}, {
-								"label": "<b>Southwest Region:</b> Buckeye – BKY",
-								"value": "bSouthwestRegionBBuckeyeBky"
-							}, {
-								"label": "Hebron – CVG",
-								"value": "hebronCvg"
-							}, {
-								"label": "Denver – DIA",
-								"value": "denverDia"
-							}, {
-								"label": "Phoenix – PHX",
-								"value": "phoenixPhx"
-							}, {
-								"label": "Reno – RNO",
-								"value": "renoRno"
-							}, {
-								"label": "Tucson – TUC",
-								"value": "tucsonTuc"
-							}, {
-								"label": "Utah – UTA",
-								"value": "utahUta"
-							}, {
-								"label": "Las Vegas – VEG",
-								"value": "lasVegasVeg"
-							}, {
-								"label": "<b>Northwest Region:</b> Boise – BOI",
-								"value": "bNorthwestRegionBBoiseBoi"
-							}, {
-								"label": "Seattle – SEA",
-								"value": "seattleSea"
-							}, {
-								"label": "Tacoma – TAC",
-								"value": "tacomaTac"
-							}, {
-								"label": "Vancouver – VAN",
-								"value": "vancouverVan"
-							}, {
-								"label": "Stokane – GEG",
-								"value": "stokaneGeg"
-							}, {
-								"label": "<b>EMS:</b> Sioux Falls – FSD",
-								"value": "bEmsBSiouxFallsFsd"
-							}, {
-								"label": "Minneapolis – MSP",
-								"value": "minneapolisMsp"
-							}, {
-								"label": "Omaha – OMA",
-								"value": "omahaOma"
-							}, {
-								"label": "Lincoln – LIN",
-								"value": "lincolnLin"
-							}]
-						},
-						"selectThreshold": 0.3,
-						"key": "pleaseSelectTheFacility",
-						"type": "select",
-						"indexeddb": {
-							"filter": {}
-						},
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"width": 6,
-					"currentWidth": 6
-				}],
-				"key": "columns2",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}]
-		}]
-	}, {
-		"title": "Driver and Unit Information",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false,
-		"hideLabel": true,
-		"key": "driverUnitInfo",
-		"type": "panel",
-		"label": "Driver and Unit Info",
-		"input": false,
-		"tableView": false,
-		"components": [{
-			"label": "Driver Details",
-			"reorder": false,
-			"addAnother": "Add Another Driver",
-			"addAnotherPosition": "bottom",
-			"defaultOpen": false,
-			"layoutFixed": false,
-			"enableRowGroups": false,
-			"initEmpty": false,
-			"tableView": false,
-			"defaultValue": [{
-				"nameDriverUnit": "",
-				"driverLastName": "",
-				"street1DriverUnitInfo": "",
-				"city1DriverUnitInfo": "",
-				"stateDriverUnitInfo": {},
-				"driverEmail": "",
-				"pleaseSelectDriverType": {
-					"": false,
-					"rsp": false,
-					"rspEmployee": false
-				},
-				"rspContactInformation": "",
-				"fmcsaMc": "",
-				"dot": ""
-			}],
-			"key": "dataGrid",
-			"type": "datagrid",
-			"input": true,
-			"components": [{
-				"label": "Driver Info",
-				"hideLabel": true,
-				"key": "driverInfo",
-				"type": "well",
-				"input": false,
-				"tableView": false,
-				"components": [{
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "First Name",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "nameDriverUnit",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"width": 3,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "Last Name",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "driverLastName",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"width": 3,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "Street",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "street1DriverUnitInfo",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"size": "md",
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"width": 3,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "City",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "city1DriverUnitInfo",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"size": "md",
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"currentWidth": 3
-					}],
-					"key": "columns1CerticateHolderInformation1",
-					"type": "columns",
-					"input": false,
-					"tableView": false
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "State",
-							"widget": "choicesjs",
-							"tableView": true,
-							"dataSrc": "custom",
-							"data": {
-								"values": [{
-									"label": "",
-									"value": ""
-								}],
-								"custom": "values = data.stateJsonList;"
-							},
-							"template": "<span>{{ item.name }}</span>",
-							"refreshOn": "country",
-							"clearOnRefresh": true,
-							"selectThreshold": 0.3,
-							"clearOnHide": false,
-							"validate": {
-								"required": true
-							},
-							"key": "stateDriverUnitInfo",
-							"type": "select",
-							"indexeddb": {
-								"filter": {}
-							},
-							"input": true,
-							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"isNew": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"width": 3,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "ZIP Code",
-							"mask": false,
-							"spellcheck": true,
-							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"validate": {
-								"required": true,
-								"custom": "valid = (input!=null && input !='')?(input.toString().length === 5) ? true : 'ZIP code must be of 5 digit':true;\n"
-							},
-							"key": "zipCode1DriverUnitInfo",
-							"type": "number",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"width": 3,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "Email",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "driverEmail",
-							"type": "email",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"size": "md",
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "Please select driver type",
-							"optionsLabelPosition": "right",
-							"tableView": false,
-							"values": [{
-								"label": "RSP",
-								"value": "rsp",
-								"shortcut": ""
-							}, {
-								"label": "RSP EMPLOYEE",
-								"value": "rspEmployee",
-								"shortcut": ""
-							}],
-							"key": "pleaseSelectDriverType",
-							"type": "selectboxes",
-							"input": true,
-							"inputType": "checkbox",
-							"defaultValue": {
-								"": false
-							},
-							"hideOnChildrenHidden": false
-						}],
-						"size": "md",
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"currentWidth": 3
-					}],
-					"key": "columns2CertificateHolderInformation1",
-					"type": "columns",
-					"input": false,
-					"tableView": false
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "RSP Contact Information",
-							"tableView": true,
-							"key": "rspContactInformation",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "FMCSA MC #",
-							"tableView": true,
-							"key": "fmcsaMc",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "DOT #",
-							"tableView": true,
-							"key": "dot",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"size": "md",
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"currentWidth": 3
-					}, {
-						"components": [],
-						"size": "md",
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"currentWidth": 3
-					}],
-					"key": "columns3",
-					"type": "columns",
-					"input": false,
-					"tableView": false
-				}]
-			}]
-		}, {
-			"label": "Driver Email",
-			"hideLabel": true,
-			"disabled": true,
-			"tableView": true,
-			"defaultValue": "Please Note : Driver email must be unique",
-			"redrawOn": "iCEmail",
-			"validateOn": "blur",
-			"validate": {
-				"custom": "if (data.dataGrid) {\n  if (data.dataGrid.length > 0) {\n    valid =\n      data.dataGrid.length == new Set(data.dataGrid.map((i) => \ti.driverEmail)).size\n        ? true\n        : \"You cannot have the same email more than once.\";\n  } else {\n    valid = true;\n  }\n}"
-			},
-			"key": "driverEmailWarning",
-			"type": "textfield",
-			"input": true
-		}, {
-			"label": "Unit Details",
-			"reorder": false,
-			"addAnother": "Add Another Unit",
-			"addAnotherPosition": "bottom",
-			"defaultOpen": false,
-			"layoutFixed": false,
-			"enableRowGroups": false,
-			"initEmpty": false,
-			"tableView": false,
-			"defaultValue": [{
-				"vinDriverInfo": "",
-				"makeVin": "",
-				"modelVin": ""
-			}],
-			"key": "dataGrid1",
-			"type": "datagrid",
-			"input": true,
-			"components": [{
-				"label": "Unit details",
-				"hideLabel": true,
-				"key": "unitDetails",
-				"type": "well",
-				"input": false,
-				"tableView": false,
-				"components": [{
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "VIN",
-							"tableView": true,
-							"validate": {
-								"custom": "if(input!=null && input !=''){\nvalid = (/^[A-HJ-NPR-Z0-9]{17}$/.test(input)) ? true : 'VIN number is of length 17 and comprises only of uppercase letters and digits';\n}\n"
-							},
-							"key": "vinDriverInfo",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"currentWidth": 6
-					}, {
-						"components": [],
-						"width": 6,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"currentWidth": 6
-					}],
-					"key": "columns1",
-					"type": "columns",
-					"input": false,
-					"tableView": false
-				}, {
-					"label": "Columns",
-					"columns": [{
-						"components": [{
-							"label": "Year",
-							"mask": false,
-							"spellcheck": true,
-							"tableView": false,
-							"delimiter": false,
-							"requireDecimal": false,
-							"inputFormat": "plain",
-							"validate": {
-								"custom": "valid = (input!=null && input !='')?(input.toString().length === 4) ? true : 'Year must be of 4 digit':true;\n"
-							},
-							"key": "yearVin",
-							"type": "number",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"currentWidth": 4
-					}, {
-						"components": [{
-							"label": "Make",
-							"tableView": true,
-							"key": "makeVin",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"currentWidth": 4
-					}, {
-						"components": [{
-							"label": "Model",
-							"tableView": true,
-							"key": "modelVin",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"size": "md",
-						"width": 4,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"currentWidth": 4
-					}],
-					"key": "columns",
-					"type": "columns",
-					"input": false,
-					"tableView": false
-				}]
-			}],
-			"hideOnChildrenHidden": false
-		}]
-	}, {
-		"title": "Insurance Requirements",
-		"theme": "primary",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false,
-		"key": "insurances",
-		"type": "panel",
-		"label": "Insurance",
-		"input": false,
-		"tableView": false,
-		"components": [{
-			"title": "Auto Liability",
-			"theme": "primary",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"hideLabel": true,
-			"key": "autoLiabilityInsurances",
-			"type": "panel",
-			"label": "Auto Liability",
-			"input": false,
-			"tableView": false,
-			"components": [{
-				"label": "<p><strong><span style=\"font-size:16px;\">Auto Liability</span></strong></p>",
-				"tableView": false,
-				"defaultValue": false,
-				"key": "autoLiability",
-				"type": "checkbox",
-				"input": true
-			}, {
-				"label": "HTML",
-				"attrs": [{
-					"attr": "",
-					"value": ""
-				}],
-				"content": "<ul>\r\n\t<li>Minimum Limits Required - $1M CSL (Combined Single Limits)</li>\r\n\t<li><strong>Additional Insured/Certificate Holder: </strong></li>\r\n\t<li><strong>Express Messenger Systems INC </strong></li>\r\n</ul>\r\n\r\n<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DBA: OnTrac</strong></p>\r\n\r\n<p>&nbsp; &nbsp; <strong>&nbsp; Coverage Selections Accepted:</strong></p>\r\n\r\n<ul style=\"margin-left: 40px;\">\r\n\t<li>Any Auto No need to list any scheduled/HNOA vehiclesScheduled</li>\r\n</ul>\r\n\r\n<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; or</p>\r\n\r\n<ul style=\"margin-left: 40px;\">\r\n\t<li>Owned Autos, Hired Autos, and&nbsp;</li>\r\n</ul>\r\n\r\n<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Non-Owned Autos (All 3 Required) List all scheduled vehicles &amp; those covered by HNOA.</p>\r\n",
-				"refreshOnChange": false,
-				"key": "html1",
-				"type": "htmlelement",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "autoLiabilityHidden",
-				"calculateValue": "if(data.autoLiability == 0) {\r\n    value = \"Non-Compliant\";\r\n} else {\r\n    value = \"Compliant\"\r\n}",
-				"key": "autoLiabilityHidden",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}]
-		}, {
-			"title": "Cargo Insurance",
-			"theme": "primary",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"hideLabel": true,
-			"key": "cargoInsuranceInsurances",
-			"type": "panel",
-			"label": "Cargo Insurance",
-			"input": false,
-			"tableView": false,
-			"components": [{
-				"label": "<p><strong><span style=\"font-size:16px;\">Cargo Insurance</span></strong></p>",
-				"tableView": false,
-				"defaultValue": false,
-				"key": "cargoInsurance",
-				"type": "checkbox",
-				"input": true
-			}, {
-				"label": "HTML",
-				"attrs": [{
-					"attr": "",
-					"value": ""
-				}],
-				"content": "<ul>\r\n\t<li>Minimum Limits Required - $25,000/occurrence</li>\r\n\t<li><strong>Additional Insured/Certificate Holder: </strong></li>\r\n\t<li><strong>Express Messenger Systems INC&nbsp;</strong></li>\r\n</ul>\r\n\r\n<p style=\"margin-left: 40px;\"><strong><u></u>DBA:&nbsp;OnTrac</strong></p>\r\n\r\n<p><strong>&nbsp; &nbsp; &nbsp; Other types of policies accepted in lieu of cargo insurance:</strong></p>\r\n\r\n<ul style=\"margin-left: 40px;\">\r\n\t<li>An Inland Marine policy qualifies (if maintaining a warehouse)</li>\r\n\t<li>Warehouse Legal Liability policy</li>\r\n\t<li>Property of Others coverage</li>\r\n</ul>\r\n",
-				"refreshOnChange": false,
-				"key": "html1CargoInsurance",
-				"type": "htmlelement",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "cargoLiabilityHidden",
-				"calculateValue": "if(data.cargoInsurance == 0) {\n    value = \"Non-Compliant\";\n} else {\n    value = \"Compliant\"\n}",
-				"key": "cargoLiabilityHidden",
-				"type": "hidden",
-				"input": true,
-				"tableView": false
-			}]
-		}, {
-			"label": "status",
-			"customDefaultValue": "value = 'Non-Compliant'",
-			"key": "status",
-			"type": "hidden",
-			"input": true,
-			"tableView": false
-		}]
-	}, {
-		"title": "Insurance Details",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false,
-		"key": "page4",
-		"type": "panel",
-		"label": "Attachments",
-		"input": false,
-		"tableView": false,
-		"components": [{
-			"title": "Auto Liability",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"key": "autoLiability1",
-			"type": "panel",
-			"label": "Panel",
-			"input": false,
-			"tableView": false,
-			"components": [{
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Auto Insurance Company",
-						"tableView": true,
-						"key": "autoInsuranceCompany",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [{
-						"label": "Auto Policy #",
-						"tableView": true,
-						"key": "autoPolicy",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [{
-						"label": "Auto Insurance Expiration Date",
-						"format": "yyyy-MM-dd",
-						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"key": "autoInsuranceExpirationDate",
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"locale": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "yyyy-MM-dd",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": false,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 4
-				}],
-				"key": "columns4",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Non-owned And Hired Auto Insurance Company",
-						"tableView": true,
-						"key": "nonOwnedAndHiredAutoInsuranceCompany",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [{
-						"label": "Text Field Non-owned And Hired Auto Insurance Policy #",
-						"tableView": true,
-						"key": "textFieldNonOwnedAndHiredAutoInsurancePolicy",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [{
-						"label": "Non-owned And Hired Auto Insurance Expiration Date",
-						"format": "yyyy-MM-dd",
-						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"key": "nonOwnedAndHiredAutoInsuranceExpirationDate",
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"locale": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "yyyy-MM-dd",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": false,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 4
-				}],
-				"key": "columns5",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Auto Insurance Effective Date",
-						"format": "yyyy-MM-dd",
-						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"key": "autoInsuranceEffectiveDate",
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"locale": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "yyyy-MM-dd",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": false,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [],
-					"size": "md",
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 4
-				}],
-				"key": "columns7",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}]
-		}, {
-			"title": "Cargo Liability",
-			"breadcrumbClickable": true,
-			"buttonSettings": {
-				"previous": true,
-				"cancel": true,
-				"next": true
-			},
-			"collapsible": false,
-			"key": "cargoLiability",
-			"type": "panel",
-			"label": "Panel",
-			"input": false,
-			"tableView": false,
-			"components": [{
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Cargo Insurance Company",
-						"tableView": true,
-						"key": "cargoInsuranceCompany",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [{
-						"label": "Cargo Insurance Policy #",
-						"tableView": true,
-						"key": "cargoInsurancePolicy",
-						"type": "textfield",
-						"input": true,
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [{
-						"label": "Cargo Insurance Expiration Date",
-						"format": "yyyy-MM-dd",
-						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"key": "cargoInsuranceExpirationDate",
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"locale": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "yyyy-MM-dd",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": false,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"size": "md",
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 4
-				}],
-				"key": "columns6",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}, {
-				"label": "Columns",
-				"columns": [{
-					"components": [{
-						"label": "Cargo Insurance Effective Date",
-						"format": "yyyy-MM-dd",
-						"tableView": false,
-						"enableMinDateInput": false,
-						"datePicker": {
-							"disableWeekends": false,
-							"disableWeekdays": false
-						},
-						"enableMaxDateInput": false,
-						"enableTime": false,
-						"key": "cargoInsuranceEffectiveDate",
-						"type": "datetime",
-						"input": true,
-						"widget": {
-							"type": "calendar",
-							"displayInTimezone": "viewer",
-							"locale": "en",
-							"useLocaleSettings": false,
-							"allowInput": true,
-							"mode": "single",
-							"enableTime": false,
-							"noCalendar": false,
-							"format": "yyyy-MM-dd",
-							"hourIncrement": 1,
-							"minuteIncrement": 1,
-							"time_24hr": false,
-							"minDate": null,
-							"disableWeekends": false,
-							"disableWeekdays": false,
-							"maxDate": null
-						},
-						"hideOnChildrenHidden": false
-					}],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [],
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"size": "md",
-					"currentWidth": 4
-				}, {
-					"components": [],
-					"size": "md",
-					"width": 4,
-					"offset": 0,
-					"push": 0,
-					"pull": 0,
-					"currentWidth": 4
-				}],
-				"key": "columns8",
-				"type": "columns",
-				"input": false,
-				"tableView": false
-			}]
-		}]
-	}, {
-		"title": "Attachments",
-		"breadcrumbClickable": true,
-		"buttonSettings": {
-			"previous": true,
-			"cancel": true,
-			"next": true
-		},
-		"collapsible": false,
-		"key": "page4",
-		"type": "panel",
-		"label": "Page 4",
-		"input": false,
-		"tableView": false,
-		"components": [{
-			"label": "Documents",
-			"description": "The total file size must not exceed 10MB and the accepted file types are .pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost.",
-			"tableView": false,
-			"storage": "url",
-			"webcam": false,
-			"fileTypes": [{
-				"label": "",
-				"value": ""
-			}],
-			"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost ",
-			"fileMaxSize": "10MB",
-			"multiple": true,
-			"key": "documents",
-			"type": "file",
-			"url": "/file/attachment",
-			"input": true
-		}]
-	}],
-	"revisions": "current",
-	"_vid": 111,
-	"title": "HUB Compliance Checklist",
-	"display": "wizard",
-	"access": [{
-		"roles": ["5dd3b1795ecd1efceaa1ac2c", "5dd3b1795ecd1e1b5fa1ac2d", "5dd3b1795ecd1e43eaa1ac2e"],
-		"type": "read_all"
-	}],
-	"submissionAccess": [],
-	"controller": "var s = document.createElement(\"script\");\ns.src = \"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\";\ns.onload = function (e) {\n  var appendCustomButtonTimer = setInterval(() => {\n    if (\n      document.getElementById(\n        \"formio_loader_e26bd719-f47f-455b-9be4-9b26c18a0b78\"\n      )\n    ) {\n      var dataGridDeleteIcons =\n        document.getElementsByClassName(\"fa-times-circle-o\");\n      dataGridDeleteIcons = Array.from(dataGridDeleteIcons);\n      if (dataGridDeleteIcons.length > 0) {\n        dataGridDeleteIcons.map((item) => {\n          item.classList.add(\"fa-times-circle\");\n          item.classList.remove(\"fa-times-circle-o\");\n        });\n      }\n    } else {\n      appendCustomButtonTimer ? clearInterval(appendCustomButtonTimer) : null;\n    }\n  }, 1000);\n};\ndocument.head.appendChild(s);\n",
-	"properties": {
-		"submission_commands": "[{ \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"CheckCompliance\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"ICEmailValidation\" }, { \t\"command\": \"fileSave\", \t\"entity_name\": \"Compliance\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"OnTracPDFGeneration\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"ComplianceMail\" }]",
-		"showPrevious": "true",
-		"showCancel": "true"
-	},
-	"settings": {},
-	"name": "hubComplianceChecklist",
-	"path": "hubcompliancechecklist",
-	"project": "5dd3b1795ecd1e1c6da1ac2b",
-	"created": "2021-04-22T04:57:04.358Z",
-	"modified": "2021-06-29T10:28:01.987Z",
-	"machineName": "insuranceprocurement-eoxvantage:hubComplianceChecklist"
+    "_id": "60ed1ed0a1ef1d8380c32d09",
+    "type": "form",
+    "tags": [],
+    "owner": "5d934bbfa6b700b319f8ad1d",
+    "components": [{
+        "title": "Independent Contractor Information",
+        "theme": "primary",
+        "breadcrumbClickable": true,
+        "buttonSettings": {
+            "previous": true,
+            "cancel": true,
+            "next": true
+        },
+        "collapsible": false,
+        "key": "Panel1CertificateHolderInformation",
+        "type": "panel",
+        "label": "Independent Carrier Information",
+        "input": false,
+        "tableView": false,
+        "components": [{
+            "input": true,
+            "key": "name",
+            "tableView": false,
+            "label": "name",
+            "calculateValue": "value = data.iCFirstName + \" \" + data.IcLastName;",
+            "type": "hidden"
+        }, {
+            "label": "identifier_field",
+            "defaultValue": "iCEmail",
+            "calculateValue": "value = 'iCEmail';",
+            "key": "identifier_field",
+            "type": "hidden",
+            "input": true,
+            "tableView": true,
+            "lockKey": true,
+            "hideOnChildrenHidden": false
+        }, {
+            "title": "Independent Contractor Information",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+                "previous": true,
+                "cancel": true,
+                "next": true
+            },
+            "collapsible": false,
+            "hideLabel": true,
+            "key": "certificateHolderInformation",
+            "type": "panel",
+            "label": "Independent Carrier Information",
+            "input": false,
+            "tableView": false,
+            "components": [{
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "First Name",
+                        "tableView": true,
+                        "validate": {
+                            "required": true
+                        },
+                        "key": "iCFirstName",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "width": 3,
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "Last Name",
+                        "tableView": true,
+                        "validate": {
+                            "required": true
+                        },
+                        "key": "IcLastName",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "width": 3,
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "Street",
+                        "tableView": true,
+                        "validate": {
+                            "required": true
+                        },
+                        "key": "street1IC",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "width": 3,
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "City",
+                        "tableView": true,
+                        "validate": {
+                            "required": true
+                        },
+                        "key": "city1IC",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 3
+                }],
+                "key": "columns1CerticateHolderInformation",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "State Json",
+                        "customDefaultValue": "value =  [\n    {\n        \"name\": \"Alabama\",\n        \"abbreviation\": \"AL\"\n    },\n    {\n        \"name\": \"Arizona\",\n        \"abbreviation\": \"AZ\"\n    },\n    {\n        \"name\": \"Arkansas\",\n        \"abbreviation\": \"AR\"\n    },\n    {\n        \"name\": \"California\",\n        \"abbreviation\": \"CA\"\n    },\n    {\n        \"name\": \"Colorado\",\n        \"abbreviation\": \"CO\"\n    },\n    {\n        \"name\": \"Connecticut\",\n        \"abbreviation\": \"CT\"\n    },\n    {\n        \"name\": \"Delaware\",\n        \"abbreviation\": \"DE\"\n    },\n    {\n        \"name\": \"District Of Columbia\",\n        \"abbreviation\": \"DC\"\n    },\n    {\n        \"name\": \"Florida\",\n        \"abbreviation\": \"FL\"\n    },\n    {\n        \"name\": \"Georgia\",\n        \"abbreviation\": \"GA\"\n    },\n    {\n        \"name\": \"Hawaii\",\n        \"abbreviation\": \"HI\"\n    },\n    {\n        \"name\": \"Idaho\",\n        \"abbreviation\": \"ID\"\n    },\n    {\n        \"name\": \"Illinois\",\n        \"abbreviation\": \"IL\"\n    },\n    {\n        \"name\": \"Indiana\",\n        \"abbreviation\": \"IN\"\n    },\n    {\n        \"name\": \"Iowa\",\n        \"abbreviation\": \"IA\"\n    },\n    {\n        \"name\": \"Kansas\",\n        \"abbreviation\": \"KS\"\n    },\n    {\n        \"name\": \"Kentucky\",\n        \"abbreviation\": \"KY\"\n    },\n    {\n        \"name\": \"Louisiana\",\n        \"abbreviation\": \"LA\"\n    },\n    {\n        \"name\": \"Maine\",\n        \"abbreviation\": \"ME\"\n    },\n    {\n        \"name\": \"Maryland\",\n        \"abbreviation\": \"MD\"\n    },\n    {\n        \"name\": \"Massachusetts\",\n        \"abbreviation\": \"MA\"\n    },\n    {\n        \"name\": \"Michigan\",\n        \"abbreviation\": \"MI\"\n    },\n    {\n        \"name\": \"Minnesota\",\n        \"abbreviation\": \"MN\"\n    },\n    {\n        \"name\": \"Mississippi\",\n        \"abbreviation\": \"MS\"\n    },\n    {\n        \"name\": \"Missouri\",\n        \"abbreviation\": \"MO\"\n    },\n    {\n        \"name\": \"Montana\",\n        \"abbreviation\": \"MT\"\n    },\n    {\n        \"name\": \"Nebraska\",\n        \"abbreviation\": \"NE\"\n    },\n    {\n        \"name\": \"Nevada\",\n        \"abbreviation\": \"NV\"\n    },\n    {\n        \"name\": \"New Hampshire\",\n        \"abbreviation\": \"NH\"\n    },\n    {\n        \"name\": \"New Jersey\",\n        \"abbreviation\": \"NJ\"\n    },\n    {\n        \"name\": \"New Mexico\",\n        \"abbreviation\": \"NM\"\n    },\n    {\n        \"name\": \"New York\",\n        \"abbreviation\": \"NY\"\n    },\n    {\n        \"name\": \"North Carolina\",\n        \"abbreviation\": \"NC\"\n    },\n    {\n        \"name\": \"North Dakota\",\n        \"abbreviation\": \"ND\"\n    },\n    {\n        \"name\": \"Ohio\",\n        \"abbreviation\": \"OH\"\n    },\n    {\n        \"name\": \"Oklahoma\",\n        \"abbreviation\": \"OK\"\n    },\n    {\n        \"name\": \"Oregon\",\n        \"abbreviation\": \"OR\"\n    },\n    {\n        \"name\": \"Pennsylvania\",\n        \"abbreviation\": \"PA\"\n    },\n    {\n        \"name\": \"Rhode Island\",\n        \"abbreviation\": \"RI\"\n    },\n    {\n        \"name\": \"South Carolina\",\n        \"abbreviation\": \"SC\"\n    },\n    {\n        \"name\": \"South Dakota\",\n        \"abbreviation\": \"SD\"\n    },\n    {\n        \"name\": \"Tennessee\",\n        \"abbreviation\": \"TN\"\n    },\n    {\n        \"name\": \"Texas\",\n        \"abbreviation\": \"TX\"\n    },\n    {\n        \"name\": \"Utah\",\n        \"abbreviation\": \"UT\"\n    },\n    {\n        \"name\": \"Vermont\",\n        \"abbreviation\": \"VT\"\n    },\n    {\n        \"name\": \"Virginia\",\n        \"abbreviation\": \"VA\"\n    },\n    {\n        \"name\": \"Washington\",\n        \"abbreviation\": \"WA\"\n    },\n    {\n        \"name\": \"West Virginia\",\n        \"abbreviation\": \"WV\"\n    },\n    {\n        \"name\": \"Wisconsin\",\n        \"abbreviation\": \"WI\"\n    },\n    {\n        \"name\": \"Wyoming\",\n        \"abbreviation\": \"WY\"\n    }\n]",
+                        "calculateValue": "value =  [\n    {\n        \"name\": \"Alabama\",\n        \"abbreviation\": \"AL\"\n    },\n    {\n        \"name\": \"Arizona\",\n        \"abbreviation\": \"AZ\"\n    },\n    {\n        \"name\": \"Arkansas\",\n        \"abbreviation\": \"AR\"\n    },\n    {\n        \"name\": \"California\",\n        \"abbreviation\": \"CA\"\n    },\n    {\n        \"name\": \"Colorado\",\n        \"abbreviation\": \"CO\"\n    },\n    {\n        \"name\": \"Connecticut\",\n        \"abbreviation\": \"CT\"\n    },\n    {\n        \"name\": \"Delaware\",\n        \"abbreviation\": \"DE\"\n    },\n    {\n        \"name\": \"District Of Columbia\",\n        \"abbreviation\": \"DC\"\n    },\n    {\n        \"name\": \"Florida\",\n        \"abbreviation\": \"FL\"\n    },\n    {\n        \"name\": \"Georgia\",\n        \"abbreviation\": \"GA\"\n    },\n    {\n        \"name\": \"Hawaii\",\n        \"abbreviation\": \"HI\"\n    },\n    {\n        \"name\": \"Idaho\",\n        \"abbreviation\": \"ID\"\n    },\n    {\n        \"name\": \"Illinois\",\n        \"abbreviation\": \"IL\"\n    },\n    {\n        \"name\": \"Indiana\",\n        \"abbreviation\": \"IN\"\n    },\n    {\n        \"name\": \"Iowa\",\n        \"abbreviation\": \"IA\"\n    },\n    {\n        \"name\": \"Kansas\",\n        \"abbreviation\": \"KS\"\n    },\n    {\n        \"name\": \"Kentucky\",\n        \"abbreviation\": \"KY\"\n    },\n    {\n        \"name\": \"Louisiana\",\n        \"abbreviation\": \"LA\"\n    },\n    {\n        \"name\": \"Maine\",\n        \"abbreviation\": \"ME\"\n    },\n    {\n        \"name\": \"Maryland\",\n        \"abbreviation\": \"MD\"\n    },\n    {\n        \"name\": \"Massachusetts\",\n        \"abbreviation\": \"MA\"\n    },\n    {\n        \"name\": \"Michigan\",\n        \"abbreviation\": \"MI\"\n    },\n    {\n        \"name\": \"Minnesota\",\n        \"abbreviation\": \"MN\"\n    },\n    {\n        \"name\": \"Mississippi\",\n        \"abbreviation\": \"MS\"\n    },\n    {\n        \"name\": \"Missouri\",\n        \"abbreviation\": \"MO\"\n    },\n    {\n        \"name\": \"Montana\",\n        \"abbreviation\": \"MT\"\n    },\n    {\n        \"name\": \"Nebraska\",\n        \"abbreviation\": \"NE\"\n    },\n    {\n        \"name\": \"Nevada\",\n        \"abbreviation\": \"NV\"\n    },\n    {\n        \"name\": \"New Hampshire\",\n        \"abbreviation\": \"NH\"\n    },\n    {\n        \"name\": \"New Jersey\",\n        \"abbreviation\": \"NJ\"\n    },\n    {\n        \"name\": \"New Mexico\",\n        \"abbreviation\": \"NM\"\n    },\n    {\n        \"name\": \"New York\",\n        \"abbreviation\": \"NY\"\n    },\n    {\n        \"name\": \"North Carolina\",\n        \"abbreviation\": \"NC\"\n    },\n    {\n        \"name\": \"North Dakota\",\n        \"abbreviation\": \"ND\"\n    },\n    {\n        \"name\": \"Ohio\",\n        \"abbreviation\": \"OH\"\n    },\n    {\n        \"name\": \"Oklahoma\",\n        \"abbreviation\": \"OK\"\n    },\n    {\n        \"name\": \"Oregon\",\n        \"abbreviation\": \"OR\"\n    },\n    {\n        \"name\": \"Pennsylvania\",\n        \"abbreviation\": \"PA\"\n    },\n    {\n        \"name\": \"Rhode Island\",\n        \"abbreviation\": \"RI\"\n    },\n    {\n        \"name\": \"South Carolina\",\n        \"abbreviation\": \"SC\"\n    },\n    {\n        \"name\": \"South Dakota\",\n        \"abbreviation\": \"SD\"\n    },\n    {\n        \"name\": \"Tennessee\",\n        \"abbreviation\": \"TN\"\n    },\n    {\n        \"name\": \"Texas\",\n        \"abbreviation\": \"TX\"\n    },\n    {\n        \"name\": \"Utah\",\n        \"abbreviation\": \"UT\"\n    },\n    {\n        \"name\": \"Vermont\",\n        \"abbreviation\": \"VT\"\n    },\n    {\n        \"name\": \"Virginia\",\n        \"abbreviation\": \"VA\"\n    },\n    {\n        \"name\": \"Washington\",\n        \"abbreviation\": \"WA\"\n    },\n    {\n        \"name\": \"West Virginia\",\n        \"abbreviation\": \"WV\"\n    },\n    {\n        \"name\": \"Wisconsin\",\n        \"abbreviation\": \"WI\"\n    },\n    {\n        \"name\": \"Wyoming\",\n        \"abbreviation\": \"WY\"\n    }\n]",
+                        "key": "stateJsonList",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false,
+                        "hideOnChildrenHidden": false
+                    }, {
+                        "label": "State",
+                        "widget": "choicesjs",
+                        "tableView": true,
+                        "dataSrc": "custom",
+                        "data": {
+                            "custom": "values = data.stateJsonList;"
+                        },
+                        "template": "<span>{{ item.name }}</span>",
+                        "selectThreshold": 0.3,
+                        "clearOnHide": false,
+                        "validate": {
+                            "required": true
+                        },
+                        "key": "state",
+                        "type": "select",
+                        "input": true,
+                        "lockKey": true,
+                        "hideOnChildrenHidden": false,
+                        "isNew": false
+                    }, {
+                        "label": "StateHidden",
+                        "calculateValue": "value = data.state.name",
+                        "key": "stateHidden",
+                        "type": "hidden",
+                        "input": true,
+                        "tableView": false
+                    }],
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "width": 3,
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "ZIP Code",
+                        "mask": false,
+                        "spellcheck": true,
+                        "tableView": false,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "validate": {
+                            "required": true,
+                            "custom": "valid = (input!=null && input !='')?(input.toString().length === 5) ? true : 'ZIP code must be of 5 digit':true;\n"
+                        },
+                        "key": "zipCode1IC",
+                        "type": "number",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "width": 3,
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "Email",
+                        "tableView": true,
+                        "validate": {
+                            "required": true
+                        },
+                        "key": "iCEmail",
+                        "type": "email",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "Effective Date",
+                        "format": "yyyy-MM-dd",
+                        "tableView": false,
+                        "enableMinDateInput": false,
+                        "datePicker": {
+                            "disableWeekends": false,
+                            "disableWeekdays": false
+                        },
+                        "enableMaxDateInput": false,
+                        "enableTime": false,
+                        "timePicker": {
+                            "showMeridian": false
+                        },
+                        "validate": {
+                            "required": true
+                        },
+                        "key": "effectiveDate",
+                        "type": "datetime",
+                        "input": true,
+                        "widget": {
+                            "type": "calendar",
+                            "displayInTimezone": "viewer",
+                            "locale": "en",
+                            "useLocaleSettings": false,
+                            "allowInput": true,
+                            "mode": "single",
+                            "enableTime": false,
+                            "noCalendar": false,
+                            "format": "yyyy-MM-dd",
+                            "hourIncrement": 1,
+                            "minuteIncrement": 1,
+                            "time_24hr": true,
+                            "minDate": null,
+                            "disableWeekends": false,
+                            "disableWeekdays": false,
+                            "maxDate": null
+                        },
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 3
+                }],
+                "key": "columns2CertificateHolderInformation",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Vendor #\t",
+                        "mask": false,
+                        "spellcheck": true,
+                        "tableView": false,
+                        "delimiter": false,
+                        "requireDecimal": false,
+                        "inputFormat": "plain",
+                        "key": "vendorNumber",
+                        "type": "number",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "Company Name",
+                        "tableView": true,
+                        "key": "companyName",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 3,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 3
+                }, {
+                    "components": [{
+                        "label": "Please select the facility",
+                        "placeholder": "Please select",
+                        "tableView": true,
+                        "data": {
+                            "values": [{
+                                "label": "<b>Bay Region:</b> Concord – CCR",
+                                "value": "bBayRegionBConcordCcr"
+                            }, {
+                                "label": "Hayward – HAY",
+                                "value": "haywardHay"
+                            }, {
+                                "label": "San Jose – SJC",
+                                "value": "sanJoseSjc"
+                            }, {
+                                "label": "San Francisco – SFO",
+                                "value": "sanFranciscoSfo"
+                            }, {
+                                "label": "<b>Central Region:</b> Bakersfield – BFL",
+                                "value": "bCentralRegionBBakersfieldBfl"
+                            }, {
+                                "label": "Fresno – FAT",
+                                "value": "fresnoFat"
+                            }, {
+                                "label": "Monterey – MRY",
+                                "value": "montereyMry"
+                            }, {
+                                "label": "Petaluma – PET",
+                                "value": "petalumaPet"
+                            }, {
+                                "label": "Sacramento – SAC",
+                                "value": "sacramentoSac"
+                            }, {
+                                "label": "Santa Maria – SMX",
+                                "value": "santaMariaSmx"
+                            }, {
+                                "label": "Stockton – STK",
+                                "value": "stocktonStk"
+                            }, {
+                                "label": "Visalia - VIS",
+                                "value": "visaliaVis"
+                            }, {
+                                "label": "<b>Pacific Region:</b> Commerce – COM",
+                                "value": "bPacificRegionBCommerceCom"
+                            }, {
+                                "label": "Los Angeles – LAX",
+                                "value": "losAngelesLax"
+                            }, {
+                                "label": "Orange – ORG",
+                                "value": "orangeOrg"
+                            }, {
+                                "label": "San Diego – SAN",
+                                "value": "sanDiegoSan"
+                            }, {
+                                "label": "<b>Coast Region:</b> Burbank – BUR",
+                                "value": "bCoastRegionBBurbankBur"
+                            }, {
+                                "label": "Ontario – ONT",
+                                "value": "ontarioOnt"
+                            }, {
+                                "label": "Redland - RDL",
+                                "value": "redlandRdl"
+                            }, {
+                                "label": "<b>Southwest Region:</b> Buckeye – BKY",
+                                "value": "bSouthwestRegionBBuckeyeBky"
+                            }, {
+                                "label": "Hebron – CVG",
+                                "value": "hebronCvg"
+                            }, {
+                                "label": "Denver – DIA",
+                                "value": "denverDia"
+                            }, {
+                                "label": "Phoenix – PHX",
+                                "value": "phoenixPhx"
+                            }, {
+                                "label": "Reno – RNO",
+                                "value": "renoRno"
+                            }, {
+                                "label": "Tucson – TUC",
+                                "value": "tucsonTuc"
+                            }, {
+                                "label": "Utah – UTA",
+                                "value": "utahUta"
+                            }, {
+                                "label": "Las Vegas – VEG",
+                                "value": "lasVegasVeg"
+                            }, {
+                                "label": "<b>Northwest Region:</b> Boise – BOI",
+                                "value": "bNorthwestRegionBBoiseBoi"
+                            }, {
+                                "label": "Seattle – SEA",
+                                "value": "seattleSea"
+                            }, {
+                                "label": "Tacoma – TAC",
+                                "value": "tacomaTac"
+                            }, {
+                                "label": "Vancouver – VAN",
+                                "value": "vancouverVan"
+                            }, {
+                                "label": "Stokane – GEG",
+                                "value": "stokaneGeg"
+                            }, {
+                                "label": "<b>EMS:</b> Sioux Falls – FSD",
+                                "value": "bEmsBSiouxFallsFsd"
+                            }, {
+                                "label": "Minneapolis – MSP",
+                                "value": "minneapolisMsp"
+                            }, {
+                                "label": "Omaha – OMA",
+                                "value": "omahaOma"
+                            }, {
+                                "label": "Lincoln – LIN",
+                                "value": "lincolnLin"
+                            }]
+                        },
+                        "selectThreshold": 0.3,
+                        "key": "pleaseSelectTheFacility",
+                        "type": "select",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "width": 6,
+                    "currentWidth": 6
+                }],
+                "key": "columns2",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }]
+        }]
+    }, {
+        "title": "Driver and Unit Information",
+        "breadcrumbClickable": true,
+        "buttonSettings": {
+            "previous": true,
+            "cancel": true,
+            "next": true
+        },
+        "collapsible": false,
+        "hideLabel": true,
+        "key": "driverUnitInfo",
+        "type": "panel",
+        "label": "Driver and Unit Info",
+        "input": false,
+        "tableView": false,
+        "components": [{
+            "label": "Driver Details",
+            "reorder": false,
+            "addAnother": "Add Another Driver",
+            "addAnotherPosition": "bottom",
+            "defaultOpen": false,
+            "layoutFixed": false,
+            "enableRowGroups": false,
+            "initEmpty": false,
+            "tableView": false,
+            "defaultValue": [{
+                "nameDriverUnit": "",
+                "driverLastName": "",
+                "street1DriverUnitInfo": "",
+                "city1DriverUnitInfo": "",
+                "stateDriverUnitInfo": {},
+                "driverEmail": "",
+                "pleaseSelectDriverType": {
+                    "": false,
+                    "rsp": false,
+                    "rspEmployee": false
+                },
+                "rspContactInformation": "",
+                "fmcsaMc": "",
+                "dot": ""
+            }],
+            "key": "dataGrid",
+            "type": "datagrid",
+            "input": true,
+            "components": [{
+                "label": "Driver Info",
+                "hideLabel": true,
+                "key": "driverInfo",
+                "type": "well",
+                "input": false,
+                "tableView": false,
+                "components": [{
+                    "label": "Columns",
+                    "columns": [{
+                        "components": [{
+                            "label": "First Name",
+                            "tableView": true,
+                            "validate": {
+                                "required": true
+                            },
+                            "key": "nameDriverUnit",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "width": 3,
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "Last Name",
+                            "tableView": true,
+                            "validate": {
+                                "required": true
+                            },
+                            "key": "driverLastName",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "width": 3,
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "Street",
+                            "tableView": true,
+                            "validate": {
+                                "required": true
+                            },
+                            "key": "street1DriverUnitInfo",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "size": "md",
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "width": 3,
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "City",
+                            "tableView": true,
+                            "validate": {
+                                "required": true
+                            },
+                            "key": "city1DriverUnitInfo",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "size": "md",
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "currentWidth": 3
+                    }],
+                    "key": "columns1CerticateHolderInformation1",
+                    "type": "columns",
+                    "input": false,
+                    "tableView": false
+                }, {
+                    "label": "Columns",
+                    "columns": [{
+                        "components": [{
+                            "label": "State",
+                            "widget": "choicesjs",
+                            "tableView": true,
+                            "dataSrc": "custom",
+                            "data": {
+                                "custom": "values = data.stateJsonList;"
+                            },
+                            "template": "<span>{{ item.name }}</span>",
+                            "refreshOn": "country",
+                            "clearOnRefresh": true,
+                            "selectThreshold": 0.3,
+                            "clearOnHide": false,
+                            "validate": {
+                                "required": true
+                            },
+                            "key": "stateDriverUnitInfo",
+                            "type": "select",
+                            "input": true,
+                            "lockKey": true,
+                            "hideOnChildrenHidden": false,
+                            "isNew": false
+                        }],
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "width": 3,
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "ZIP Code",
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "validate": {
+                                "required": true,
+                                "custom": "valid = (input!=null && input !='')?(input.toString().length === 5) ? true : 'ZIP code must be of 5 digit':true;\n"
+                            },
+                            "key": "zipCode1DriverUnitInfo",
+                            "type": "number",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "width": 3,
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "Email",
+                            "tableView": true,
+                            "validate": {
+                                "required": true
+                            },
+                            "key": "driverEmail",
+                            "type": "email",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "size": "md",
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "Please select driver type",
+                            "optionsLabelPosition": "right",
+                            "tableView": false,
+                            "values": [{
+                                "label": "RSP",
+                                "value": "rsp",
+                                "shortcut": ""
+                            }, {
+                                "label": "RSP EMPLOYEE",
+                                "value": "rspEmployee",
+                                "shortcut": ""
+                            }],
+                            "key": "pleaseSelectDriverType",
+                            "type": "selectboxes",
+                            "input": true,
+                            "inputType": "checkbox",
+                            "defaultValue": {
+                                "": false
+                            },
+                            "hideOnChildrenHidden": false
+                        }],
+                        "size": "md",
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "currentWidth": 3
+                    }],
+                    "key": "columns2CertificateHolderInformation1",
+                    "type": "columns",
+                    "input": false,
+                    "tableView": false
+                }, {
+                    "label": "Columns",
+                    "columns": [{
+                        "components": [{
+                            "label": "RSP Contact Information",
+                            "tableView": true,
+                            "key": "rspContactInformation",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "FMCSA MC #",
+                            "tableView": true,
+                            "key": "fmcsaMc",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "currentWidth": 3
+                    }, {
+                        "components": [{
+                            "label": "DOT #",
+                            "tableView": true,
+                            "key": "dot",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "size": "md",
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "currentWidth": 3
+                    }, {
+                        "components": [],
+                        "size": "md",
+                        "width": 3,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "currentWidth": 3
+                    }],
+                    "key": "columns3",
+                    "type": "columns",
+                    "input": false,
+                    "tableView": false
+                }]
+            }]
+        }, {
+            "label": "Driver Email",
+            "hideLabel": true,
+            "disabled": true,
+            "tableView": true,
+            "defaultValue": "Please Note : Driver email must be unique",
+            "redrawOn": "iCEmail",
+            "validateOn": "blur",
+            "validate": {
+                "custom": "if (data.dataGrid) {\n  if (data.dataGrid.length > 0) {\n    valid =\n      data.dataGrid.length == new Set(data.dataGrid.map((i) => \ti.driverEmail)).size\n        ? true\n        : \"You cannot have the same email more than once.\";\n  } else {\n    valid = true;\n  }\n}"
+            },
+            "key": "driverEmailWarning",
+            "type": "textfield",
+            "input": true
+        }, {
+            "label": "Unit Details",
+            "reorder": false,
+            "addAnother": "Add Another Unit",
+            "addAnotherPosition": "bottom",
+            "defaultOpen": false,
+            "layoutFixed": false,
+            "enableRowGroups": false,
+            "initEmpty": false,
+            "tableView": false,
+            "defaultValue": [{
+                "vinDriverInfo": "",
+                "makeVin": "",
+                "modelVin": ""
+            }],
+            "key": "dataGrid1",
+            "type": "datagrid",
+            "input": true,
+            "components": [{
+                "label": "Unit details",
+                "hideLabel": true,
+                "key": "unitDetails",
+                "type": "well",
+                "input": false,
+                "tableView": false,
+                "components": [{
+                    "label": "Columns",
+                    "columns": [{
+                        "components": [{
+                            "label": "VIN",
+                            "tableView": true,
+                            "validate": {
+                                "custom": "if(input!=null && input !=''){\nvalid = (/^[A-HJ-NPR-Z0-9]{17}$/.test(input)) ? true : 'VIN number is of length 17 and comprises only of uppercase letters and digits';\n}\n"
+                            },
+                            "key": "vinDriverInfo",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "width": 6,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "currentWidth": 6
+                    }, {
+                        "components": [],
+                        "width": 6,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "currentWidth": 6
+                    }],
+                    "key": "columns1",
+                    "type": "columns",
+                    "input": false,
+                    "tableView": false
+                }, {
+                    "label": "Columns",
+                    "columns": [{
+                        "components": [{
+                            "label": "Year",
+                            "mask": false,
+                            "spellcheck": true,
+                            "tableView": false,
+                            "delimiter": false,
+                            "requireDecimal": false,
+                            "inputFormat": "plain",
+                            "validate": {
+                                "custom": "valid = (input!=null && input !='')?(input.toString().length === 4) ? true : 'Year must be of 4 digit':true;\n"
+                            },
+                            "key": "yearVin",
+                            "type": "number",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "width": 4,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "currentWidth": 4
+                    }, {
+                        "components": [{
+                            "label": "Make",
+                            "tableView": true,
+                            "key": "makeVin",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "width": 4,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "size": "md",
+                        "currentWidth": 4
+                    }, {
+                        "components": [{
+                            "label": "Model",
+                            "tableView": true,
+                            "key": "modelVin",
+                            "type": "textfield",
+                            "input": true,
+                            "hideOnChildrenHidden": false
+                        }],
+                        "size": "md",
+                        "width": 4,
+                        "offset": 0,
+                        "push": 0,
+                        "pull": 0,
+                        "currentWidth": 4
+                    }],
+                    "key": "columns",
+                    "type": "columns",
+                    "input": false,
+                    "tableView": false
+                }]
+            }],
+            "hideOnChildrenHidden": false
+        }]
+    }, {
+        "title": "Insurance Requirements",
+        "theme": "primary",
+        "breadcrumbClickable": true,
+        "buttonSettings": {
+            "previous": true,
+            "cancel": true,
+            "next": true
+        },
+        "collapsible": false,
+        "key": "insurances",
+        "type": "panel",
+        "label": "Insurance",
+        "input": false,
+        "tableView": false,
+        "components": [{
+            "label": "Great news! Your Certificate of Insurance is Compliant. ",
+            "key": "certificateOfInsuranceIsCompliant",
+            "type": "hidden",
+            "input": true,
+            "tableView": false
+        }, {
+            "label": "Your Certificate of Insurance is deficient in the following areas: Please refer to Sample COI",
+            "key": "certificateOfInsuranceIsDeficient",
+            "type": "hidden",
+            "input": true,
+            "tableView": false
+        }, {
+            "label": "HTML",
+            "attrs": [{
+                "attr": "",
+                "value": ""
+            }],
+            "content": "Notice of Cancellation required for ALL policies",
+            "refreshOnChange": false,
+            "key": "html",
+            "type": "htmlelement",
+            "input": false,
+            "tableView": false
+        }, {
+            "label": "Columns",
+            "columns": [{
+                "components": [{
+                    "label": "Auto",
+                    "tableView": false,
+                    "defaultValue": false,
+                    "key": "auto",
+                    "type": "checkbox",
+                    "input": true
+                }],
+                "width": 6,
+                "offset": 0,
+                "push": 0,
+                "pull": 0,
+                "size": "md",
+                "currentWidth": 6
+            }, {
+                "components": [{
+                    "label": "Motor Truck Cargo",
+                    "tableView": false,
+                    "defaultValue": false,
+                    "key": "motorTruckCargo",
+                    "type": "checkbox",
+                    "input": true
+                }],
+                "width": 6,
+                "offset": 0,
+                "push": 0,
+                "pull": 0,
+                "size": "md",
+                "currentWidth": 6
+            }],
+            "key": "columns",
+            "type": "columns",
+            "input": false,
+            "tableView": false
+        }, {
+            "label": "HTML",
+            "attrs": [{
+                "attr": "",
+                "value": ""
+            }],
+            "content": "Auto Liability",
+            "refreshOnChange": false,
+            "key": "html1",
+            "type": "htmlelement",
+            "input": false,
+            "tableView": false
+        }, {
+            "label": "Table",
+            "cellAlignment": "left",
+            "key": "table",
+            "type": "table",
+            "numRows": 2,
+            "numCols": 2,
+            "input": false,
+            "tableView": false,
+            "rows": [
+                [{
+                    "components": [{
+                        "label": "$1,000,000 Combined Single Limit",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "CombinedSingleLimit",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }, {
+                    "components": [{
+                        "label": "Addl. Ins. box checked on COI  ",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "addlInsBoxCheckedOnCoi",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Any Auto",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "anyAuto",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }, {
+                    "components": []
+                }]
+            ]
+        }, {
+            "label": "Table",
+            "cellAlignment": "left",
+            "key": "table1",
+            "type": "table",
+            "numRows": 1,
+            "numCols": 1,
+            "input": false,
+            "tableView": false,
+            "rows": [
+                [{
+                    "components": [{
+                        "label": " Scheduled or Owned Auto",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "scheduledOrOwnedAuto",
+                        "type": "checkbox",
+                        "input": true
+                    }, {
+                        "label": "Table",
+                        "cellAlignment": "left",
+                        "key": "table2",
+                        "type": "table",
+                        "numCols": 1,
+                        "input": false,
+                        "tableView": false,
+                        "rows": [
+                            [{
+                                "components": [{
+                                    "label": "VIN Listed",
+                                    "tableView": false,
+                                    "defaultValue": false,
+                                    "key": "vinListed",
+                                    "type": "checkbox",
+                                    "input": true
+                                }]
+                            }],
+                            [{
+                                "components": [{
+                                    "label": "Hired",
+                                    "tableView": false,
+                                    "defaultValue": false,
+                                    "key": "hired",
+                                    "type": "checkbox",
+                                    "input": true
+                                }]
+                            }],
+                            [{
+                                "components": [{
+                                    "label": "Non-Owned",
+                                    "tableView": false,
+                                    "defaultValue": false,
+                                    "key": "nonOwned",
+                                    "type": "checkbox",
+                                    "input": true
+                                }]
+                            }]
+                        ]
+                    }]
+                }]
+            ]
+        }, {
+            "label": "HTML",
+            "attrs": [{
+                "attr": "",
+                "value": ""
+            }],
+            "content": "Motor Truck Cargo",
+            "refreshOnChange": false,
+            "key": "html2",
+            "type": "htmlelement",
+            "input": false,
+            "tableView": false
+        }, {
+            "label": "Table",
+            "cellAlignment": "left",
+            "key": "table3",
+            "type": "table",
+            "numRows": 2,
+            "numCols": 1,
+            "input": false,
+            "tableView": false,
+            "rows": [
+                [{
+                    "components": [{
+                        "label": "$25,000 per occurrence",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "PerOccurrence",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Addl. Ins. box checked on COI",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "addlInsBoxCheckedOnCoi1",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }]
+            ]
+        }, {
+            "label": "HTML",
+            "attrs": [{
+                "attr": "",
+                "value": ""
+            }],
+            "content": "Certificate Holder must read as below & COI must be signed",
+            "refreshOnChange": false,
+            "key": "html3",
+            "type": "htmlelement",
+            "input": false,
+            "tableView": false
+        }, {
+            "label": "Columns",
+            "columns": [{
+                "components": [{
+                    "label": "OnTrac Logistics Inc DBA OnTrac 2501 s Price Rd STE 201. Chandler, AZ, 85286",
+                    "tableView": false,
+                    "defaultValue": false,
+                    "key": "onTracLogistics",
+                    "type": "checkbox",
+                    "input": true
+                }],
+                "width": 6,
+                "offset": 0,
+                "push": 0,
+                "pull": 0,
+                "size": "md",
+                "currentWidth": 6
+            }, {
+                "components": [{
+                    "label": "Signed COI",
+                    "tableView": false,
+                    "defaultValue": false,
+                    "key": "signedCoi",
+                    "type": "checkbox",
+                    "input": true
+                }],
+                "width": 6,
+                "offset": 0,
+                "push": 0,
+                "pull": 0,
+                "size": "md",
+                "currentWidth": 6
+            }],
+            "key": "columns1",
+            "type": "columns",
+            "input": false,
+            "tableView": false
+        }, {
+            "label": "HTML",
+            "attrs": [{
+                "attr": "",
+                "value": ""
+            }],
+            "content": "Compliance",
+            "refreshOnChange": false,
+            "key": "html4",
+            "type": "htmlelement",
+            "input": false,
+            "tableView": false
+        }, {
+            "label": "Table",
+            "cellAlignment": "left",
+            "key": "table4",
+            "type": "table",
+            "numRows": 7,
+            "numCols": 1,
+            "input": false,
+            "tableView": false,
+            "rows": [
+                [{
+                    "components": [{
+                        "label": "ACORD 25 Version",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "acord25Version",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Policies are Effective",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "policiesAreEffective",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Insured Name Listed",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "insuredNameListed",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Insured Address Completed",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "insuredAddressCompleted",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Policy Number Listed",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "policyNumberListed",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Letter described as per the Insurance Company from Insurer affording coverages",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "letterDescribed",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }],
+                [{
+                    "components": [{
+                        "label": "Specified Number of Days listed for Notice of Cancellation ",
+                        "tableView": false,
+                        "defaultValue": false,
+                        "key": "specifiedNumber",
+                        "type": "checkbox",
+                        "input": true
+                    }]
+                }]
+            ]
+        }]
+    }, {
+        "title": "Insurance Details",
+        "breadcrumbClickable": true,
+        "buttonSettings": {
+            "previous": true,
+            "cancel": true,
+            "next": true
+        },
+        "collapsible": false,
+        "key": "page4",
+        "type": "panel",
+        "label": "Attachments",
+        "input": false,
+        "tableView": false,
+        "components": [{
+            "title": "Auto Liability",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+                "previous": true,
+                "cancel": true,
+                "next": true
+            },
+            "collapsible": false,
+            "key": "autoLiability1",
+            "type": "panel",
+            "label": "Panel",
+            "input": false,
+            "tableView": false,
+            "components": [{
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Auto Insurance Company",
+                        "tableView": true,
+                        "key": "autoInsuranceCompany",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Auto Policy #",
+                        "tableView": true,
+                        "key": "autoPolicy",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Auto Insurance Expiration Date",
+                        "format": "yyyy-MM-dd",
+                        "tableView": false,
+                        "enableMinDateInput": false,
+                        "datePicker": {
+                            "disableWeekends": false,
+                            "disableWeekdays": false
+                        },
+                        "enableMaxDateInput": false,
+                        "enableTime": false,
+                        "key": "autoInsuranceExpirationDate",
+                        "type": "datetime",
+                        "input": true,
+                        "widget": {
+                            "type": "calendar",
+                            "displayInTimezone": "viewer",
+                            "locale": "en",
+                            "useLocaleSettings": false,
+                            "allowInput": true,
+                            "mode": "single",
+                            "enableTime": false,
+                            "noCalendar": false,
+                            "format": "yyyy-MM-dd",
+                            "hourIncrement": 1,
+                            "minuteIncrement": 1,
+                            "time_24hr": false,
+                            "minDate": null,
+                            "disableWeekends": false,
+                            "disableWeekdays": false,
+                            "maxDate": null
+                        },
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 4
+                }],
+                "key": "columns4",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Non-owned And Hired Auto Insurance Company",
+                        "tableView": true,
+                        "key": "nonOwnedAndHiredAutoInsuranceCompany",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Text Field Non-owned And Hired Auto Insurance Policy #",
+                        "tableView": true,
+                        "key": "textFieldNonOwnedAndHiredAutoInsurancePolicy",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Non-owned And Hired Auto Insurance Expiration Date",
+                        "format": "yyyy-MM-dd",
+                        "tableView": false,
+                        "enableMinDateInput": false,
+                        "datePicker": {
+                            "disableWeekends": false,
+                            "disableWeekdays": false
+                        },
+                        "enableMaxDateInput": false,
+                        "enableTime": false,
+                        "key": "nonOwnedAndHiredAutoInsuranceExpirationDate",
+                        "type": "datetime",
+                        "input": true,
+                        "widget": {
+                            "type": "calendar",
+                            "displayInTimezone": "viewer",
+                            "locale": "en",
+                            "useLocaleSettings": false,
+                            "allowInput": true,
+                            "mode": "single",
+                            "enableTime": false,
+                            "noCalendar": false,
+                            "format": "yyyy-MM-dd",
+                            "hourIncrement": 1,
+                            "minuteIncrement": 1,
+                            "time_24hr": false,
+                            "minDate": null,
+                            "disableWeekends": false,
+                            "disableWeekdays": false,
+                            "maxDate": null
+                        },
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 4
+                }],
+                "key": "columns5",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Auto Insurance Effective Date",
+                        "format": "yyyy-MM-dd",
+                        "tableView": false,
+                        "enableMinDateInput": false,
+                        "datePicker": {
+                            "disableWeekends": false,
+                            "disableWeekdays": false
+                        },
+                        "enableMaxDateInput": false,
+                        "enableTime": false,
+                        "key": "autoInsuranceEffectiveDate",
+                        "type": "datetime",
+                        "input": true,
+                        "widget": {
+                            "type": "calendar",
+                            "displayInTimezone": "viewer",
+                            "locale": "en",
+                            "useLocaleSettings": false,
+                            "allowInput": true,
+                            "mode": "single",
+                            "enableTime": false,
+                            "noCalendar": false,
+                            "format": "yyyy-MM-dd",
+                            "hourIncrement": 1,
+                            "minuteIncrement": 1,
+                            "time_24hr": false,
+                            "minDate": null,
+                            "disableWeekends": false,
+                            "disableWeekdays": false,
+                            "maxDate": null
+                        },
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [],
+                    "size": "md",
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 4
+                }],
+                "key": "columns7",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }]
+        }, {
+            "title": "Cargo Liability",
+            "breadcrumbClickable": true,
+            "buttonSettings": {
+                "previous": true,
+                "cancel": true,
+                "next": true
+            },
+            "collapsible": false,
+            "key": "cargoLiability",
+            "type": "panel",
+            "label": "Panel",
+            "input": false,
+            "tableView": false,
+            "components": [{
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Cargo Insurance Company",
+                        "tableView": true,
+                        "key": "cargoInsuranceCompany",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Cargo Insurance Policy #",
+                        "tableView": true,
+                        "key": "cargoInsurancePolicy",
+                        "type": "textfield",
+                        "input": true,
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [{
+                        "label": "Cargo Insurance Expiration Date",
+                        "format": "yyyy-MM-dd",
+                        "tableView": false,
+                        "enableMinDateInput": false,
+                        "datePicker": {
+                            "disableWeekends": false,
+                            "disableWeekdays": false
+                        },
+                        "enableMaxDateInput": false,
+                        "enableTime": false,
+                        "key": "cargoInsuranceExpirationDate",
+                        "type": "datetime",
+                        "input": true,
+                        "widget": {
+                            "type": "calendar",
+                            "displayInTimezone": "viewer",
+                            "locale": "en",
+                            "useLocaleSettings": false,
+                            "allowInput": true,
+                            "mode": "single",
+                            "enableTime": false,
+                            "noCalendar": false,
+                            "format": "yyyy-MM-dd",
+                            "hourIncrement": 1,
+                            "minuteIncrement": 1,
+                            "time_24hr": false,
+                            "minDate": null,
+                            "disableWeekends": false,
+                            "disableWeekdays": false,
+                            "maxDate": null
+                        },
+                        "hideOnChildrenHidden": false
+                    }],
+                    "size": "md",
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 4
+                }],
+                "key": "columns6",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }, {
+                "label": "Columns",
+                "columns": [{
+                    "components": [{
+                        "label": "Cargo Insurance Effective Date",
+                        "format": "yyyy-MM-dd",
+                        "tableView": false,
+                        "enableMinDateInput": false,
+                        "datePicker": {
+                            "disableWeekends": false,
+                            "disableWeekdays": false
+                        },
+                        "enableMaxDateInput": false,
+                        "enableTime": false,
+                        "key": "cargoInsuranceEffectiveDate",
+                        "type": "datetime",
+                        "input": true,
+                        "widget": {
+                            "type": "calendar",
+                            "displayInTimezone": "viewer",
+                            "locale": "en",
+                            "useLocaleSettings": false,
+                            "allowInput": true,
+                            "mode": "single",
+                            "enableTime": false,
+                            "noCalendar": false,
+                            "format": "yyyy-MM-dd",
+                            "hourIncrement": 1,
+                            "minuteIncrement": 1,
+                            "time_24hr": false,
+                            "minDate": null,
+                            "disableWeekends": false,
+                            "disableWeekdays": false,
+                            "maxDate": null
+                        },
+                        "hideOnChildrenHidden": false
+                    }],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [],
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "size": "md",
+                    "currentWidth": 4
+                }, {
+                    "components": [],
+                    "size": "md",
+                    "width": 4,
+                    "offset": 0,
+                    "push": 0,
+                    "pull": 0,
+                    "currentWidth": 4
+                }],
+                "key": "columns8",
+                "type": "columns",
+                "input": false,
+                "tableView": false
+            }]
+        }]
+    }, {
+        "title": "Attachments",
+        "breadcrumbClickable": true,
+        "buttonSettings": {
+            "previous": true,
+            "cancel": true,
+            "next": true
+        },
+        "collapsible": false,
+        "key": "page4",
+        "type": "panel",
+        "label": "Page 4",
+        "input": false,
+        "tableView": false,
+        "components": [{
+            "label": "Documents",
+            "description": "The total file size must not exceed 10MB and the accepted file types are .pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost.",
+            "tableView": false,
+            "storage": "url",
+            "webcam": false,
+            "fileTypes": [{
+                "label": "",
+                "value": ""
+            }],
+            "filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls,.pst,.txt,.ost ",
+            "fileMaxSize": "10MB",
+            "multiple": true,
+            "key": "documents",
+            "type": "file",
+            "url": "/file/attachment",
+            "input": true
+        }]
+    }],
+    "revisions": "",
+    "_vid": 0,
+    "title": "vivekCompliance2",
+    "display": "wizard",
+    "access": [{
+        "roles": ["5dd3b1795ecd1efceaa1ac2c", "5dd3b1795ecd1e1b5fa1ac2d", "5dd3b1795ecd1e43eaa1ac2e"],
+        "type": "read_all"
+    }],
+    "submissionAccess": [],
+    "controller": "",
+    "properties": {
+        "submission_commands": "[{ \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"CheckCompliance\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"ICEmailValidation\" }, { \t\"command\": \"fileSave\", \t\"entity_name\": \"Compliance\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"ComplianceChecklistPDFGeneration\" }, { \t\"command\": \"delegate\", \t\"entity_name\": \"Compliance\", \t\"delegate\": \"ComplianceMail\" }]",
+        "showPrevious": "true",
+        "showCancel": "true"
+    },
+    "settings": {},
+    "name": "hubComplianceChecklist",
+    "path": "vivekcompliance2",
+    "project": "5dd3b1795ecd1e1c6da1ac2b",
+    "created": "2021-07-13T05:04:16.368Z",
+    "modified": "2021-07-21T06:56:56.280Z",
+    "machineName": "insuranceprocurement-eoxvantage:vivekCompliance2"
 }
