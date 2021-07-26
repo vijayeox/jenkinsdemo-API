@@ -70,6 +70,10 @@ return [
         'jobUrl' => 'http://localhost:8085/',
         'authToken' => ''
     ],
+    'foley' => [
+        'username' => 'foley',
+        'password' => 'h+MfHWZhND64FpTmoKwy8Q==::3157db2c39b1c896a95904d1a0e7555e'
+    ],
     'esign' => [
         'clientid' => '6l3lpgsbrha13u8rdg9t5hq3au',
         'clientsecret' => '3uvdithse6p3qmjvv4s3k1mcjt33p06f9iiein5sbmka9prdcqj',

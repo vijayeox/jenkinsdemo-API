@@ -2,16 +2,26 @@
 namespace Callback\Service;
 
 use Exception;
+use Oxzion\AccessDeniedException;
+use Oxzion\Encryption\Crypto;
 use Oxzion\Service\AbstractService;
 use Oxzion\InvalidParameterException;
 use Oxzion\Prehire\Foley\PrehireImpl;
+use Oxzion\Encryption\TwoWayEncryption;
 
 class PrehireCallbackService extends AbstractService
 {
-    protected $dbAdapter;
+    protected $config;
+
+    public function __construct($config)
+    {
+        parent::__construct($config, null);
+        $this->config = $config;
+    }
 
     public function invokeImplementation($data)
     {
+        $this->validateUser($this->config);
         try {
             $implementationType = $data['implementation'];
             switch($implementationType) {
@@ -25,6 +35,16 @@ class PrehireCallbackService extends AbstractService
             }
         } catch (Exception $e) {
             throw $e;    
+        }
+    }
+
+    private function validateUser($config) {
+        $username = $_SERVER['PHP_AUTH_USER'];
+        $password = $_SERVER['PHP_AUTH_PW'];
+        $storedUsername = $config['foley']['username'];
+        $storedPass = TwoWayEncryption::decrypt($config['foley']['password']);
+        if(($username !== $storedUsername) || ($password !== $storedPass)) {
+            throw new AccessDeniedException('Incorrect credentials entered');
         }
     }
 

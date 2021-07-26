@@ -276,4 +276,9 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
         }
         return null;
     }
+
+    protected function customSuccessResponse($payload,$code = 200) {
+        $this->response->setStatusCode($code);
+        return new JsonModel($payload);
+    }
 }
