@@ -75,6 +75,9 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Service\PrehireCallbackService::class => function ($container) {
+                    return new Service\PrehireCallbackService($container->get('config'));
+                },
             ],
         ];
     }
@@ -103,6 +106,9 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\CommentController::class => function ($container) {
                     return new Controller\CommentController($container->get(Service\CommentsService::class));
+                },
+                Controller\PrehireCallbackController::class => function ($container) {
+                    return new Controller\PrehireCallbackController($container->get(Service\PrehireCallbackService::class));
                 },
             ],
         ];

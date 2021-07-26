@@ -362,10 +362,24 @@ return [
                     ],
                 ],
             ],
+            'PrehireCallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/prehire/service/:implementation',
+                    'constraints' => [
+                        'implementation' => '[a-zA-Z]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\PrehireCallbackController::class,
+                        'method' => 'POST',
+                        'action' => 'execute',
+                    ],
+                ],
+            ],
         ],
     ],
     
-     'view_manager' => [
+    'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
         'strategies' => ['ViewJsonStrategy'],
