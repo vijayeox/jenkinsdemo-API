@@ -5,23 +5,10 @@ use Exception;
 use Oxzion\Service\AbstractService;
 use Oxzion\InvalidParameterException;
 use Oxzion\Prehire\Foley\PrehireImpl;
-use Oxzion\Utils\RestClient;
-use Zend\Log\Logger;
 
 class PrehireCallbackService extends AbstractService
 {
     protected $dbAdapter;
-
-    public function setRestClient($restClient)
-    {
-        $this->restClient = $restClient;
-    }
-
-    public function __construct($config)
-    {
-        parent::__construct($config, null);
-        $this->restClient = new RestClient($this->config['task']['taskServerUrl'], array('auth' => array($this->config['task']['username'], $this->config['task']['authToken'])));
-    }
 
     public function invokeImplementation($data)
     {
