@@ -71,8 +71,7 @@ return [
         'authToken' => ''
     ],
     'foley' => [
-        'username' => 'foley',
-        'password' => 'h+MfHWZhND64FpTmoKwy8Q==::3157db2c39b1c896a95904d1a0e7555e'
+        'apiKey' => '783d9d78-0b54-4163-b26b-26f47322e07f'
     ],
     'esign' => [
         'clientid' => '6l3lpgsbrha13u8rdg9t5hq3au',

@@ -31,9 +31,10 @@ class PrehireCallbackController extends AbstractApiControllerHelper
     public function executeAction()
     {
         $params = array_merge($this->extractPostData(),$this->params()->fromRoute());
+        $key = $this->request->getHeaders('apikey')->getFieldValue();
         $this->log->info("Prehire execute Params- " . json_encode($params));
         try {
-            $this->prehireCallbackService->invokeImplementation($params);
+            $this->prehireCallbackService->invokeImplementation($params,$key);
         } catch(Exception $e) {
             $this->log->error($e->getMessage(), $e);
             return $this->exceptionToResponse($e);

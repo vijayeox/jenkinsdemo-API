@@ -19,9 +19,9 @@ class PrehireCallbackService extends AbstractService
         $this->config = $config;
     }
 
-    public function invokeImplementation($data)
+    public function invokeImplementation($data,$key)
     {
-        $this->validateUser($this->config);
+        $this->validateUser($this->config,$key);
         try {
             $implementationType = $data['implementation'];
             switch($implementationType) {
@@ -38,12 +38,9 @@ class PrehireCallbackService extends AbstractService
         }
     }
 
-    private function validateUser($config) {
-        $username = $_SERVER['PHP_AUTH_USER'];
-        $password = $_SERVER['PHP_AUTH_PW'];
-        $storedUsername = $config['foley']['username'];
-        $storedPass = TwoWayEncryption::decrypt($config['foley']['password']);
-        if(($username !== $storedUsername) || ($password !== $storedPass)) {
+    private function validateUser($config,$key) {
+        $checkKey = $config['foley']['apiKey'];
+        if($checkKey !== $key) {
             throw new AccessDeniedException('Incorrect credentials entered');
         }
     }
