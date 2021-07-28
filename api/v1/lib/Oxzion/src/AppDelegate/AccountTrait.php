@@ -3,6 +3,7 @@ namespace Oxzion\AppDelegate;
 
 use Oxzion\Service\AccountService;
 use Oxzion\Service\BusinessParticipantService;
+use Oxzion\Service\ApiCallService;
 use Logger;
 
 trait AccountTrait
@@ -10,7 +11,8 @@ trait AccountTrait
     protected $logger;
     private $accountService;
     private $businessParticipantService;
-    
+    private $apiCallService;
+
     public function __construct()
     {
         $this->logger = Logger::getLogger(__CLASS__);
@@ -28,6 +30,12 @@ trait AccountTrait
         $this->businessParticipantService = $businessParticipantService;
     }
 
+    public function setApiCallService(ApiCallService $apiCallService)
+    {
+        $this->logger->info("SET VENDOR API CALL SERVICE");
+        $this->apiCallService = $apiCallService;
+    }
+
     protected function registerAccount(&$data)
     {
         return $this->accountService->registerAccount($data);
@@ -39,5 +47,9 @@ trait AccountTrait
 
     protected function getAccountByName($name) {
         return $this->accountService->getAccountByName($name);
+    }
+
+    protected function getVendorApiResponse($endpoint, $params) {
+        return $this->apiCallService->getVendorApiResponse($endpoint, $params);
     }
 }

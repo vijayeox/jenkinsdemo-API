@@ -361,6 +361,12 @@ class Module
                         $container->get(Model\AddressTable::class)
                     );
                 },
+                Service\ApiCallService::class => function ($container) {
+                    return new Service\ApiCallService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
                 Model\AddressTable::class => function ($container) {
                     return new Model\AddressTable(
                         $container->get(Model\AddressTableGateway::class)
@@ -556,7 +562,8 @@ class Module
                         $container->get(Service\AccountService::class),
                         $container->get(Service\BusinessParticipantService::class),
                         $container->get(\Analytics\Service\QueryService::class),
-                        $container->get(Insurance\InsuranceService::class)
+                        $container->get(Insurance\InsuranceService::class),
+                        $container->get(Service\ApiCallService::class)
                 );
                 },
                 Document\DocumentBuilder::class => function ($container) {

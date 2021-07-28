@@ -52,4 +52,8 @@ trait UserContextTrait
     public function getUserDataByIdentifier($appId, $identifier, $identifierField){
         return $this->userService->getUserDataByIdentifier($appId, $identifier, $identifierField);
     }
+
+    public function createUser($params, $userData){
+        return $this->userService->createUser($params, $userData);
+    }
 }

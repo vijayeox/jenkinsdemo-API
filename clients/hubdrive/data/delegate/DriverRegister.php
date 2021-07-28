@@ -3,12 +3,14 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\AccountTrait;
-use Oxzion\DelegateException;
+use Oxzion\AppDelegate\UserContextTrait;
+//use Oxzion\DelegateException;
 use Oxzion\Utils\UuidUtil;
 
 class DriverRegister extends AbstractAppDelegate
 {
     use AccountTrait;
+    use UserContextTrait;
     const APPID = 'a4b1f073-fc20-477f-a804-1aa206938c42';
 
     public function __construct()
@@ -21,15 +23,15 @@ class DriverRegister extends AbstractAppDelegate
         $this->logger->info("Executing Driver Registration with data- " . print_r($data, true));
         // Add logs for created by id and producer name who triggered submission
         if(!isset($data['isDriverRegisterationOver']) || ($data['isDriverRegisterationOver'] === false || $data['isDriverRegisterationOver'] === 'false')) {
-            if(isset($data['dataGrid']) && !is_array($data['dataGrid'])){
-                $data['dataGrid'] = json_decode($data['dataGrid'],true);
+            if(isset($data['driverDataGrid']) && !is_array($data['driverDataGrid'])){
+                $data['driverDataGrid'] = json_decode($data['driverDataGrid'],true);
             }
-            foreach ($data['dataGrid'] as $driver) {
+            foreach ($data['driverDataGrid'] as $k=>$driver) {
                 $dataForDriver = array();
                 if (!isset($dataForDriver['uuid'])) {
                     $dataForDriver['uuid'] = UuidUtil::uuid();
                 }
-                $dataForDriver['name'] = $driver['nameDriverUnit']." ".$driver['driverLastName'];
+                /*$dataForDriver['name'] = $driver['nameDriverUnit']." ".$driver['driverLastName'];
                 $dataForDriver['email'] = $driver['driverEmail'];
                 $dataForDriver['firstname'] = $driver['nameDriverUnit'];
                 $dataForDriver['lastname'] = $driver['driverLastName'];
@@ -47,14 +49,33 @@ class DriverRegister extends AbstractAppDelegate
                 }
                 if (!isset($dataForDriver['preferences'])) {
                     $dataForDriver['preferences'] = '{}';
+                }*/
+                $dataForDriver['name'] = $driver['driverFirstName']." ".$driver['driverLastName'];
+                $dataForDriver['email'] = isset($driver['driverEmail']) ? $driver['driverEmail'] : $driver['driverFirstName']."@abc.com";
+                $dataForDriver['firstname'] = $driver['driverFirstName'];
+                $dataForDriver['lastname'] = $driver['driverLastName'];
+                $dataForDriver['username'] = $driver['driverFirstName'];
+                if (!isset($dataForDriver['contact'])) {
+                    $dataForDriver['contact'] = array();
+                    $dataForDriver['contact']['username'] = $driver['driverFirstName']; //isset($driver['driverEmail']) ? str_replace('@', '.', $driver['driverEmail']) : 'testuser'.$k;
+                    $dataForDriver['contact']['firstname'] = $driver['driverFirstName'];
+                    $dataForDriver['contact']['lastname'] = $driver['driverLastName'];
+                    $dataForDriver['contact']['email'] = isset($driver['driverEmail']) ? $driver['driverEmail'] : $driver['driverFirstName']."@abc.com";
+                }
+                if (!isset($dataForDriver['preferences'])) {
+                    $dataForDriver['preferences'] = '{}';
                 }
                 $dataForDriver['app_id'] = self::APPID;
                 $dataForDriver['type'] = 'INDIVIDUAL';
-                $exceptionOnFailure = $this->registerAccount($dataForDriver);
+                $params['accountId'] = $data['buyerAccountId'];
+                $response = $this->createUser($params, $dataForDriver);
+                //$driver[$k]['driveruuid'] = $dataForDriver['uuid'];
+                //$this->logger->info("After driver registration---".print_r($response,true));
                 // if ($exceptionOnFailure == 1) {
                 //     throw new DelegateException("Username/Email Used","record.exists");
                 // }
             }
+            //$data['driverDataGrid'][$k] = $driver;
         }
         $data['isDriverRegisterationOver'] = true;
         return $data;

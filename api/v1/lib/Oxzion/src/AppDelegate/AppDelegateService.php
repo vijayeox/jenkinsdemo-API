@@ -24,6 +24,7 @@ use Oxzion\EntityNotFoundException;
 use Oxzion\Service\BusinessParticipantService;
 use \Analytics\Service\QueryService;
 use oxzion\Insurance\InsuranceService;
+use Oxzion\Service\ApiCallService;
 
 class AppDelegateService extends AbstractService
 {
@@ -51,7 +52,8 @@ class AppDelegateService extends AbstractService
         AccountService $accountService,
         BusinessParticipantService $businessParticipantService,
         QueryService $queryService,
-        InsuranceService $insuranceService
+        InsuranceService $insuranceService,
+        ApiCallService $apiCallService
     )
     {
         $this->templateService = $templateService;
@@ -73,6 +75,7 @@ class AppDelegateService extends AbstractService
         $this->businessParticipantService = $businessParticipantService;
         $this->queryService = $queryService;
         $this->insuranceService = $insuranceService;
+        $this->apiCallService = $apiCallService;
     }
 
     public function setPersistence($appId, $persistence)
@@ -97,7 +100,7 @@ class AppDelegateService extends AbstractService
 
     public function setAppDelegateService()
     {
-        $appDelegateService = new AppDelegateService($this->config, $this->dbAdapter, $this->documentBuilder, $this->templateService, $this->messageProducer, $this->fileService, $this->workflowInstanceService, $this->activityInstanceService, $this->userService, $this->commentService, $this->esignService, $this->fieldService, $this->accountService,$this->businessParticipantService, $this->queryService,$this->insuranceService );
+        $appDelegateService = new AppDelegateService($this->config, $this->dbAdapter, $this->documentBuilder, $this->templateService, $this->messageProducer, $this->fileService, $this->workflowInstanceService, $this->activityInstanceService, $this->userService, $this->commentService, $this->esignService, $this->fieldService, $this->accountService,$this->businessParticipantService, $this->queryService,$this->insuranceService, $this->apiCallService);
         return $appDelegateService;
     }
 
@@ -183,6 +186,9 @@ class AppDelegateService extends AbstractService
                 }
                 if (method_exists($obj, "setAppDelegateService")) {
                     $obj->setAppDelegateService($this->setAppDelegateService());
+                }
+                if (method_exists($obj, "setApiCallService")) {
+                    $obj->setApiCallService($this->apiCallService);
                 }
                 $persistenceService = $this->getPersistence($appId);
 
