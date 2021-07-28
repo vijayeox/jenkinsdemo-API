@@ -4,6 +4,8 @@
  */
 namespace PaymentGateway\Controller;
 
+use Zend\Http\Response;
+use Zend\View\Model\ViewModel;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Service\PaymentService;
 use Oxzion\ValidationException;
@@ -46,5 +48,14 @@ class PaymentCallbackController extends AbstractAPIControllerHelper
         // }
         $this->log->info("Exit webhookcallback with data ".print_r($data, true));
         return $this->getSuccessResponseWithData($data, 200);
+    }
+
+    public function ftniCallbackAction()
+    {
+        $data = $this->extractPostData();
+        $this->log->info("Entered ftni callback with data ").print_r($data,true);
+        
+        $view =  new ViewModel();
+        return $view->setTemplate("/payment-callback/ftni-callback/index.phtml");
     }
 }

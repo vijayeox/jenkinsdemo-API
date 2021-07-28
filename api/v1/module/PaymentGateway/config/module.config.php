@@ -67,11 +67,27 @@ return [
                     ],
                 ],
             ],
+            'ftniPaymentCallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/ftni/callback',
+                    'defaults' => [
+                        'controller' => Controller\PaymentCallbackController::class,
+                        'method' => 'POST',
+                        'action' => 'ftniCallback'
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
         'strategies' => ['ViewJsonStrategy'],
+        'template_path_stack' => array(
+            'paymentCallback' => __DIR__ . '/../view',
+        )
+
+   
     ],
 ];
