@@ -89,6 +89,10 @@ return [
         "userName" => "vantage.agora",
         "tripleDESEncryptedPassword" => "9srGG5hflGT0aDrgsxs3GQ=="
     ],
+    'zendrive' => [
+        'zendriveServerUrl' => 'https://staging-hub.wla.zendrive.com/api/v1/',
+        'authToken' => 'ZfudDKB4.Y7Cxcu0gMRut51mVx3HRXOs3KL3tssSz'
+    ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'ENTITY_FOLDER'=>__DIR__.'/../../data/entity/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
