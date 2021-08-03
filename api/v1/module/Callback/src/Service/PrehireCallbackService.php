@@ -8,15 +8,18 @@ use Oxzion\Service\AbstractService;
 use Oxzion\InvalidParameterException;
 use Oxzion\Prehire\Foley\PrehireImpl;
 use Oxzion\Encryption\TwoWayEncryption;
+use Prehire\Service\PrehireService;
 
 class PrehireCallbackService extends AbstractService
 {
     protected $config;
+    protected $prehireService;
 
-    public function __construct($config)
+    public function __construct($config,PrehireService $prehireService)
     {
         parent::__construct($config, null);
         $this->config = $config;
+        $this->prehireService = $prehireService;
     }
 
     public function invokeImplementation($data)
@@ -26,7 +29,7 @@ class PrehireCallbackService extends AbstractService
             $implementationType = $data['implementation'];
             switch($implementationType) {
                 case 'foley':
-                    $implementation = new PrehireImpl();
+                    $implementation = new PrehireImpl($this->prehireService);
                     $implementation->executeProcess($data);
                     break;
                 default:
@@ -39,6 +42,9 @@ class PrehireCallbackService extends AbstractService
     }
 
     private function validateUser($config) {
+        if(!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+            throw new AccessDeniedException('Incorrect Authentication type');
+        }
         $username = $_SERVER['PHP_AUTH_USER'];
         $password = $_SERVER['PHP_AUTH_PW'];
         $storedUsername = $config['foley']['username'];

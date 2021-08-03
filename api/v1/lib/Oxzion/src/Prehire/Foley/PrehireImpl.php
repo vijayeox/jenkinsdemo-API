@@ -3,13 +3,20 @@ namespace Oxzion\Prehire\Foley;
 
 use Oxzion\Prehire\PrehireInterface;
 use Oxzion\InvalidParameterException;
+use Prehire\Service\PrehireService;
 
 class PrehireImpl implements PrehireInterface
 {
 
+    private $prehireService;
+    public function __construct(PrehireService $prehireService)
+    {
+        $this->prehireService = $prehireService;
+    }
+
     public function executeProcess($data)
     {
-        $requestType = null;
+        $requestType = $applicantId = null;
         if(isset($data['request']['requesttype'])) {
             $requestType = $data['request']['requesttype'];
         } 
@@ -22,23 +29,32 @@ class PrehireImpl implements PrehireInterface
         switch($requestType) {
             case 'MVRStatus':
                 $this->getMVRUpdate($data['request']);
+                $applicantId = $data['request']['driver_applicant']['id'];
                 break;
             case 'CH':
                 $this->getClearingHouseUpdate($data['request']);
+                $applicantId = $data['request']['driver_applicant']['id'];
                 break;
             case 'DrugTestStatus':
                 $this->getDrugTestResultUpdate($data['request']);
+                $applicantId = $data['request']['driver_applicant']['id'];
                 break;
             case 'BGCStatus':
                 $this->getBackgroundCheckUpdate($data['request']);
+                $applicantId = $data['request']['driver_applicant']['id'];
                 break;
             case 'DTAuthFormDissemination':
                 $this->getDrugTestOrderConfirmationAndAuthForm($data['order_confirmation']);
+                $applicantId = $data['order_confirmation']['driver_applicant']['id'];
                 break;
             default:
                 throw new InvalidParameterException('Incorrect Request Type '.$requestType);
         }
-        $data['requestType'] = $requestType;
+        $dataToSave['request'] = json_encode($data);
+        $dataToSave['implementation'] = $data['implementation'];
+        $dataToSave['request_type'] = $requestType;
+        $dataToSave['referenceId'] = $applicantId;
+        $this->prehireService->createRequest($dataToSave);
     }
 
     private function getMVRUpdate($data)

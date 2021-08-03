@@ -42,5 +42,6 @@ return [
     'Import',
     'Ims',
     'Kra',
-    'Profile'
+    'Profile',
+    'Prehire'
 ];
