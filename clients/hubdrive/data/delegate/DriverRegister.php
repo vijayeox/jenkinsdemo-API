@@ -62,20 +62,21 @@ class DriverRegister extends AbstractAppDelegate
                     $dataForDriver['contact']['lastname'] = $driver['driverLastName'];
                     $dataForDriver['contact']['email'] = isset($driver['driverEmail']) ? $driver['driverEmail'] : $driver['driverFirstName']."@abc.com";
                 }
-                if (!isset($dataForDriver['preferences'])) {
+                /*if (!isset($dataForDriver['preferences'])) {
                     $dataForDriver['preferences'] = '{}';
-                }
+                }*/
                 $dataForDriver['app_id'] = self::APPID;
                 $dataForDriver['type'] = 'INDIVIDUAL';
                 $params['accountId'] = $data['buyerAccountId'];
                 $response = $this->createUser($params, $dataForDriver);
-                //$driver[$k]['driveruuid'] = $dataForDriver['uuid'];
-                //$this->logger->info("After driver registration---".print_r($response,true));
+                $driver['driveruuid'] = $dataForDriver['uuid'];
+                $data['driverDataGrid'][$k] = $driver;
+                $this->logger->info("After driver registration---".print_r($driver,true));
                 // if ($exceptionOnFailure == 1) {
                 //     throw new DelegateException("Username/Email Used","record.exists");
                 // }
             }
-            //$data['driverDataGrid'][$k] = $driver;
+            //$data['driverDataGrid'] = $driver;
         }
         $data['isDriverRegisterationOver'] = true;
         return $data;
