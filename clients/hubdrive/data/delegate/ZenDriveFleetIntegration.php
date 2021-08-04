@@ -45,30 +45,34 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             //create a table called ic_info in hubdrive db and save ic name, email, phone, uuid, fleet_api_key
             $fleetArr = array('name' => $fleet_name, 'fleet_id' => $fleet_id , 'phonenumber' => $fleet_phonenumber,'fleet_api_key'=> $fleet_api_key,'email'=>$fleet_email);
             
-            $columns = "(`ic_name`,`email`,`ph_number`,`uuid`,`fleet_api_key`)";
+            $columns = "(`ic_name`,`email`,`ph_number`,`uuid`,`zendrive_fleet_api_key`)";
             $values = "VALUES (:name,:email,:phonenumber,:fleet_id,:fleet_api_key)";
             $insertQuery = "INSERT INTO ic_info ".$columns.$values;
-            $this->logger->info("in zendrive delegate api response3- " . print_r($insertQuery,true));
-            $unitSelect = $persistenceService->insertQuery($insertQuery, $fleetArr);
-            $this->logger->info("in zendrive delegate api response4- " . print_r($unitSelect,true));
+            $this->logger->info("in zendrive delegate insert query- " . print_r($insertQuery,true));
+            $icInsert = $persistenceService->insertQuery($insertQuery, $fleetArr);
+            $ic_id = $icInsert->getGeneratedValue();
+
+            if(isset($data['driverDataGrid'])){
+                $driverData = json_decode($data['driverDataGrid'], true);
+                if(is_array($driverData) && count($driverData) >= 1)
+                    $this->addDriver($driverData, $ic_id, $fleet_id, $persistenceService);
+            }
             
-            
-            $this->addDriver($data, $persistenceService);
             return $data;
         }
         
     
     }
 
-    private function addDriver($datafordriver, Persistence $persistenceService){
-        $fleet_id = $datafordriver['buyerAccountId'];
+    private function addDriver($driverData, $ic_id, $fleet_id, Persistence $persistenceService){
+        //$fleet_id = $driverData['buyerAccountId'];
         $endpoint = 'fleet/'.$fleet_id.'/driver/';
-        $this->logger->info("in zendrive delegate driver api request- " . print_r($datafordriver['driverDataGrid'],true));
-        if(!isset($datafordriver['driverDataGrid']))
+        $this->logger->info("in zendrive delegate driver api request- " . print_r($driverData,true));
+        /*if(!isset($datafordriver['driverDataGrid']))
             throw new DelegateException("Driver Data Does Not Exist","no.user.record.exists");
         $driverData = json_decode($datafordriver['driverDataGrid'], true);
         if(!is_array($driverData) || count($driverData) < 1)
-            throw new DelegateException("Driver Data Invalid Format","no.user.record.exists");
+            throw new DelegateException("Driver Data Invalid Format","no.user.record.exists");*/
 
         foreach ($driverData as $k=>$driver) {
             $email  = isset($driver['driverEmail']) ? $driver['driverEmail'] : $driver['driverFirstName']."@abc.com";
@@ -81,15 +85,34 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             $finalresponse = json_decode($parsedResponse['body'],true);
             //$datafordriver['driver'.$k.'key'] = $finalresponse['data']['driver_id'];
             
-            //create a table called ic_driver_mapping in hubdrive db and save driver name, email, uuid, fleet_id,zendrive_driver_id
-            $driverName = $driver['driverFirstName'].' '.$driver['driverLastName'];
-            $driverArr = ['name'=> $driverName,'uuid'=> $driveruuid, 'email'=>$email, 'fleet_id'=>$fleet_id, 'zendrive_driver_id'=>$finalresponse['data']['driver_id']];
+            //entry in driver table and ic_driver_mapping
+            $driverArr = ['uuid'=> $driveruuid,
+                'firstName'    => $driver['driverFirstName'],
+                'middleName'   =>$driver['driverMiddleName'],
+                'lastName'     =>$driver['driverLastName'],
+                'email'         =>$email,
+                //'dateOfBirth'   => (isset($driver['driverDateofBirth']) && $driver['driverDateofBirth']!='')? explode("T",$driver['driverDateofBirth'])[0] :'' ,
+                'ssn'           =>$driver['driverSsn'],
+                'licenseNum'    =>$driver['driverLicense'],
+                //'hasExperience'=>$driver['doesthedriverhave2YearsofcommercialdrivingexperienceinNorthAmerica'],
+                'driverType'   =>$driver['pleaseindicatetypeofdriver'],
+                'paidByOption'=>$driver['pleaseselectthepaidbyoption'],
+                'zendrive_driver_id'=>$finalresponse['data']['driver_id'],
+            ];
             
-            $columns = "(`driver_name`,`uuid`,`fleet_id`,`email`,`zendrive_driver_id`)";
-            $values = "VALUES (:name,:uuid,:fleet_id,:email,:zendrive_driver_id)";
-            $insert = "INSERT INTO ic_driver_mapping ".$columns.$values;
-            $this->logger->info("in query- " . print_r($insert,true));
-            $insertQuery = $persistenceService->insertQuery($insert,$driverArr);
+
+            $drivercolumns = "(`uuid`, `first_name`,`middle_name`,`last_name`,`email`,`ssn`,`license_num`,`driver_type`,`paid_by_option`,`zendrive_driver_id`) ";
+            $drivervalues = "VALUES (:uuid,:firstName,:middleName,:lastName,:email,:ssn,:licenseNum,:driverType,:paidByOption,:zendrive_driver_id)";
+            $driverinsertQuery = "INSERT INTO driver ".$drivercolumns.$drivervalues;
+            $driverSelect = $persistenceService->insertQuery($driverinsertQuery, $driverArr);   
+            $driver_id= $driverSelect->getGeneratedValue();
+
+            $mappingArr = ['driver_id'=>$driver_id, 'ic_id'=>$ic_id];
+            $mappingcolumns = "(`ic_id`,`driver_id`)";
+            $mappingvalues = "VALUES (:ic_id,:driver_id)";
+            $insert = "INSERT INTO ic_driver_mapping ".$mappingcolumns.$mappingvalues;
+            $this->logger->info("mapping query- " . print_r($insert,true));
+            $insertQuery = $persistenceService->insertQuery($insert,$mappingArr);
 
         }
     }

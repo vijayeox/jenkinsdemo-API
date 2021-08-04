@@ -22,9 +22,7 @@ class ApiCall
     {
         try{
             $headers = array('Authorization' => 'Api-Key '.$this->config['authToken']);
-            $this->logger->info("in apicalldelegatefile- params" . json_encode($params));
             $response = $this->restClient->postWithHeader($endpoint, $params, $headers);
-            $this->logger->info("in apicalldelegatefile- params" . json_encode($response));
         }catch (Exception $e) {
             throw new Exception("Zendrive Integration Failed.", 0, $e);
         }
