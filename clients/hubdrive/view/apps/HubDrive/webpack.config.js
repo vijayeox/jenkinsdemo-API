@@ -41,7 +41,9 @@ module.exports = {
       {from:'public/img',to:'img'},
       {from:'public/docs',to:'public/docs'},
       "icon.png",
-      "icon_white.png"
+      "icon_white.png",
+      "transportation.png",
+      "transportation_black.png"
     ]),
     new MiniCssExtractPlugin({
       filename: "[name].css",
