@@ -259,6 +259,8 @@ entity:
         participantRole:
             -
                 businessRole: 'Independent Contractor'
+            -
+                businessRole: 'Insurance Carrier'
         pageContent:
             data:
                 content:
@@ -305,6 +307,8 @@ entity:
         participantRole:
             -
                 businessRole: 'Independent Contractor'
+            -
+                businessRole: 'Insurance Carrier'
         pageContent:
             data:
                 content:
@@ -412,6 +416,8 @@ entity:
         participantRole:
             -
                 businessRole: 'Independent Contractor'
+            -
+                businessRole: 'Insurance Carrier'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
@@ -1305,31 +1311,31 @@ pages:
 menu:
     -
         name: 'Independent Contractor'
-        icon: 'fas fa-list'
+        icon: 'fas fa-address-card'
         page_uuid: 8ebdefa5-531b-4390-9d8b-573d4b412744
         uuid: 00a0c261-4283-4eb3-85db-753692c27172
         privilege: MANAGE_IC
     -
         name: 'Independent Contractor'
-        icon: 'fas fa-list'
+        icon: 'fas fa-address-card'
         page_uuid: 1cc7f23c-539b-488d-97da-1f02f7dc2090
         uuid: 86ebed31-7acf-4a98-993b-830c440d2bca
         privilege: '{"eq" : "MANAGE_EMPLOYEE_READ","neq" : "MANAGE_IC_READ"}'
     -
         name: Compliance
-        icon: 'fas fa-list'
+        icon: 'fal fa-users-cog'
         page_uuid: d81809b0-bd0f-11eb-8529-0242ac130003
         uuid: d8180a96-bd0f-11eb-8529-0242ac130003
         privilege: MANAGE_COMPLIANCE
     -
         name: 'Excess Liability'
-        icon: 'fas fa-list'
+        icon: 'fas fa-street-view'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
         privilege: '{"eq" : "MANAGE_ACCOUNT_MANAGER_READ","neq" : "MANAGE_APP_WRITE"}'
     -
         name: 'Excess Liability'
-        icon: 'fas fa-list'
+        icon: 'fas fa-street-view'
         page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
         privilege: MANAGE_APP_WRITE
