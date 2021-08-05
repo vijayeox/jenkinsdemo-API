@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
           .then(response => {
             if (response.status == 417) {
-              Swal.showValidationMessage(`We do not have an email on your account.<br/>Contact Us at support@eoxvantage.com`);
+              Swal.showValidationMessage(`We do not have an email on your account.<br/>Contact Us at HDOLsupport@hubinternational.com`);
               return;
             }
             if (!response.ok) {
