@@ -114,7 +114,7 @@ class CheckCompliance extends AbstractAppDelegate
         }
         else {
             $data['certificateOfInsuranceIsDeficient']=true;
-            $data['status'] = "Non-Compliant";
+            $data['status'] = "Non Compliant";
             
         }
 
