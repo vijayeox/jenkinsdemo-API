@@ -5,6 +5,7 @@
         <directory>test/OnTarcPDFGenerationTest.php</directory>
         <directory>test/FtniApisTest.php</directory>
         <directory>test/CCandICPDFGenerationTest.php</directory>
+        <directory>test/ZendriveIntegrationTest.php</directory>
         </testsuite>
     </testsuites> 
     <php>

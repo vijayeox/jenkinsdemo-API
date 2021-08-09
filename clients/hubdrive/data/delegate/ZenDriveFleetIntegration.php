@@ -17,7 +17,7 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
     public function __construct()
     {
         parent::__construct();
-        include(__DIR__.'/../zendriveintegration/ZenDriveClient.php');
+        include_once(__DIR__.'/../zendriveintegration/ZenDriveClient.php');
         $this->apicall = new ApiCall();
     }
 
@@ -67,7 +67,7 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
     private function addDriver($driverData, $ic_id, $fleet_id, Persistence $persistenceService){
         //$fleet_id = $driverData['buyerAccountId'];
         $endpoint = 'fleet/'.$fleet_id.'/driver/';
-        $this->logger->info("in zendrive delegate driver api request- " . print_r($driverData,true));
+        $this->logger->info("in zendrive delegate driver api request- " . $endpoint."  ".print_r($driverData,true));
         /*if(!isset($datafordriver['driverDataGrid']))
             throw new DelegateException("Driver Data Does Not Exist","no.user.record.exists");
         $driverData = json_decode($datafordriver['driverDataGrid'], true);
@@ -84,8 +84,13 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             $parsedResponse = json_decode($result,true);
             $finalresponse = json_decode($parsedResponse['body'],true);
             //$datafordriver['driver'.$k.'key'] = $finalresponse['data']['driver_id'];
+            if(!isset($finalresponse['data']['driver_id'])){
+                $this->logger->info("Zendrive Driver Addition Failed For".$driver['driverFirstName']);
+                continue;
+            }
+                
             
-            //entry in driver table and ic_driver_mapping
+                //entry in driver table and ic_driver_mapping
             $driverArr = ['uuid'=> $driveruuid,
                 'firstName'    => $driver['driverFirstName'],
                 'middleName'   =>$driver['driverMiddleName'],
