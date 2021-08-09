@@ -1118,7 +1118,7 @@ pages:
                             filterFormat: YYYY-MM-DD
     -
         name: 'Compliance OI'
-        uuid: 3c8f33e1-5b46-4b7a-a635-648ec9f51cc0
+        uuid: 7a395567-1292-4a79-88e8-927577198b52
         description: Compliance
         pageContent:
             data:
@@ -1377,8 +1377,8 @@ menu:
     -
         name: 'Compliance OI'
         icon: 'fas fa-abacus'
-        page: 'Compliance OI'
-        uuid: 8059a0ad-eafa-418a-b1c0-eae03a4d9c86
+        page_uuid: 7a395567-1292-4a79-88e8-927577198b52
+        uuid: 30de0d23-f5e5-47e6-8511-2305bd1af060
         privilege: MANAGE_COMPLIANCE
     -
         name: 'Excess Liability'
