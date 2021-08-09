@@ -1117,6 +1117,53 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
     -
+        name: 'Compliance OI'
+        uuid: 3c8f33e1-5b46-4b7a-a635-648ec9f51cc0
+        description: Compliance
+        pageContent:
+            data:
+                pagesList:
+                    -
+                        name: Compliance
+                        uuid: ''
+                formsList:
+                    -
+                        name: ''
+                        uuid: ''
+                content:
+                    -
+                        type: DashboardManager
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: caf461ee-2348-4b95-80d3-1bfebbfff85c
+                        url: ''
+                        content:
+                            uuid: caf461ee-2348-4b95-80d3-1bfebbfff85c
+                        useRowData: false
+                        route: ''
+            metadata: {  }
+        content:
+            -
+                type: DashboardManager
+                page_id: ''
+                htmlContent: ''
+                externalDataSource: ''
+                formSource: ''
+                form_name: {  }
+                formUrl: ''
+                urlPostParams: ''
+                dashboard_uuid: caf461ee-2348-4b95-80d3-1bfebbfff85c
+                url: ''
+                content:
+                    uuid: caf461ee-2348-4b95-80d3-1bfebbfff85c
+                useRowData: false
+                route: ''
+    -
         name: 'Excess Liability'
         uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         description: 'Shows a list of Excess Liability'
@@ -1326,6 +1373,12 @@ menu:
         icon: 'fal fa-users-cog'
         page_uuid: d81809b0-bd0f-11eb-8529-0242ac130003
         uuid: d8180a96-bd0f-11eb-8529-0242ac130003
+        privilege: MANAGE_COMPLIANCE
+    -
+        name: 'Compliance OI'
+        icon: 'fas fa-abacus'
+        page: 'Compliance OI'
+        uuid: 8059a0ad-eafa-418a-b1c0-eae03a4d9c86
         privilege: MANAGE_COMPLIANCE
     -
         name: 'Excess Liability'
