@@ -3,6 +3,7 @@ namespace Oxzion\Prehire\Foley;
 
 use Oxzion\Prehire\PrehireInterface;
 use Oxzion\InvalidParameterException;
+use Oxzion\UpdateFailedException;
 use Prehire\Service\PrehireService;
 
 class PrehireImpl implements PrehireInterface
@@ -49,6 +50,9 @@ class PrehireImpl implements PrehireInterface
                 break;
             default:
                 throw new InvalidParameterException('Incorrect Request Type '.$requestType);
+        }
+        if(is_null($applicantId)) {
+            throw new UpdateFailedException('Unable to determine applicant id');
         }
         $dataToSave['request'] = json_encode($data);
         $dataToSave['implementation'] = $data['implementation'];
