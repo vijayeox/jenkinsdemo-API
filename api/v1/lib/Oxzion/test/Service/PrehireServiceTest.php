@@ -9,7 +9,7 @@ use Zend\Db\ResultSet\ResultSet;
 
 class PrehireServiceTest extends AbstractServiceTest
 {
-    private $adapter = NULL;
+    // private $adapter = NULL;
     private $prehireService;
 
     /**
@@ -55,27 +55,64 @@ class PrehireServiceTest extends AbstractServiceTest
         
     }
 
-    public function testcreate(){
-        $data=['uuid'=>'4fd99e8e-758f-11e9-b2d5-68ecc57cde48','user_id'=>170,'referenceId'=>'4fd99e8e-758f-11e9-b2d5-68ecc57cde49','request_type'=>'MVR','request'=>'{something ooooo}','implementation'=>'foley'];
+     public function testgetRequestwithinvalidUuid(){
+            $data=['request_type'=>'MVRS','request'=>'{something hi}'];
+            $uuid='4fd99e8e-758f-11e9-b2d5-68ecc57cde46';
+            try{
+                $delete=$this->prehireService->getPrehireRequestData($uuid);
+                $this->fail("The uuid $uuid provided does not exist");
+            } catch (\Oxzion\EntityNotFoundException $e) {
+                $this->assertNotNull($e);
+            }
+      
+    
+        }
+
+    public function testCreate(){
+        $data=['referenceId'=>'4fd99e8e-758f-11e9-b2d5-68ecc57cde49','request_type'=>'MVR','request'=>'{something ooooo}','implementation'=>'foley'];
         $create=$this->prehireService->createRequest($data);
         // print_r($create);exit;
-        $uuid='4fd99e8e-758f-11e9-b2d5-68ecc57cde48';
-        $sqlQuery = "SELECT * FROM ox_prehire WHERE uuid = '".$uuid."'";
+        $sqlQuery = "SELECT * FROM ox_prehire WHERE uuid = '".$create['uuid']."'";
         $result = $this->runQuery($sqlQuery);
-        $this->assertEquals($create['uuid'],$result[0]['uuid']);
-        //  print_r($result);
+        $this->assertEquals($data['request_type'],$result[0]['request_type']);
+        $this->assertEquals($data['request'],$result[0]['request']);
+        //  print_r($result);exit;
 
     }
 
+    public function testCreateWithInvalidReferenceId(){
+        $data=['referenceId'=>'4fd99e8e-758f-11e9-b2d5-68ecc57cde46','request_type'=>'MVR','request'=>'{something ooooo}','implementation'=>'foley'];
+        try{
+            $delete=$this->prehireService->createRequest($data);
+            $this->fail("Entity not found");
+        } catch (\Oxzion\ValidationException $e) {
+            $this->assertNotNull($e);
+        }
+    }
+
     public function testUpdate(){
-        $data=['request_type'=>'MVRR','request'=>'{something hi}'];
+        $data=['request_type'=>'MVRS','request'=>'{something hi}'];
         $uuid='4fd99e8e-758f-11e9-b2d5-68ecc57cde45';
         $update=$this->prehireService->updateRequest($uuid,$data);
         // print_r($update);exit;
         $sqlQuery = "SELECT * FROM ox_prehire WHERE uuid = '".$uuid."'";
         $result = $this->runQuery($sqlQuery);
-        // print_r($result[0]['uuid']);
         $this->assertEquals($update['uuid'],$result[0]['uuid']);
+        $this->assertEquals($data['request_type'],$result[0]['request_type']);
+        $this->assertEquals($data['request'],$result[0]['request']);
+    }
+    
+    public function testUpdatewithInvalidUuid(){
+        $data=['request_type'=>'MVRS','request'=>'{something hi}'];
+        $uuid='4fd99e8e-758f-11e9-b2d5-68ecc57cde46';
+        try{
+            $delete=$this->prehireService->updateRequest($uuid,$data);
+            $this->fail("Entity not found");
+        } catch (\Oxzion\EntityNotFoundException $e) {
+            $this->assertNotNull($e);
+        }
+  
+
     }
 
     
@@ -87,8 +124,24 @@ class PrehireServiceTest extends AbstractServiceTest
       
 
       $result=$this->runQuery($sqlquery);
+      $result=$this->runQuery($sqlquery);
     
       $this->assertEquals(NULL, $delete);
 
    }
+
+    public function testdeleteWithInvalidUuid(){
+         $uuid='4fd99e8e-758f-11e9-b2d5-68ecc57cde46';
+         try
+         {
+            $delete=$this->prehireService->deleteRequest($uuid);
+           $this->fail("Prehire entry not found");
+         } catch (\Oxzion\ServiceException $e)
+        {
+          $this->assertNotNull($e);
+        }
+
+        }
+
+
 }
