@@ -410,6 +410,10 @@ entity:
                 name: effectiveDate
                 data_type: datetime
                 index: true
+            -
+                name: companyName
+                data_type: text
+                index: true
         identifiers:
             -
                 identifier: iCEmail
@@ -750,6 +754,10 @@ entity:
             -
                 name: email
                 text: Email
+                data_type: text
+                index: true
+            -
+                name: companyName
                 data_type: text
                 index: true
         identifiers:
