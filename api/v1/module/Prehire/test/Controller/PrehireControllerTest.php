@@ -36,7 +36,10 @@ class PrehireControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['request_type'], 'MVR');
-
+        $selectquery="SELECT * FROM ox_prehire WHERE uuid='".$projectId."'";
+        $select = $this->executeQueryTest($selectquery);
+        // print_r($select);exit;
+        $this->assertEquals($content['data']['request_type'],$select[0]['request_type']);
           }
 
     public function testgetPrehireDetailswithInvalidPrehireId(){
@@ -61,6 +64,12 @@ class PrehireControllerTest extends ControllerTest
         $this->assertMatchedRouteName('prehire');
         $this->assertEquals($content['data']['request_type'],'MVRR');
         $this->assertEquals($content['data']['request'],'{something hi}');
+        $selectquery="SELECT * FROM ox_prehire WHERE request_type='MVRR'";
+        $select = $this->executeQueryTest($selectquery);
+        // print_r($select);exit;
+        $this->assertEquals($content['data']['request_type'],$select[0]['request_type']);
+        $this->assertEquals($content['data']['request'],$select[0]['request']);
+
         
         }
         public function testUpdatewithWrongPrehireId()
@@ -82,7 +91,7 @@ class PrehireControllerTest extends ControllerTest
     {
        
         $this->initAuthToken($this->adminUser);
-        $data=['request_type'=>'MVR','request'=>'{something ooooo}','implementation'=>'foley'];
+        $data=['uuid'=>'4fd99e8e-758f-11e9-b2d5-68ecc57cde48','user_id'=>170,'request_type'=>'MVR','request'=>'{something ooooo}','implementation'=>'foley'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/prehire/foley/4fd99e8e-758f-11e9-b2d5-68ecc57cde49', 'POST',$data); 
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -93,7 +102,10 @@ class PrehireControllerTest extends ControllerTest
         $this->assertEquals($content['data']['request_type'],'MVR');
         $this->assertEquals($content['data']['implementation'],'foley');
         $this->assertEquals($content['data']['request'],'{something ooooo}');
-        
+        $selectquery="SELECT * FROM ox_prehire WHERE user_id=170";
+        $select = $this->executeQueryTest($selectquery);
+        // print_r($select);exit;
+        $this->assertEquals($content['data']['uuid'],$select[0]['uuid']);
                
         }
         public function testCreatePrehireWithoutdata()
@@ -114,7 +126,9 @@ class PrehireControllerTest extends ControllerTest
             $this->dispatch('/prehire/foley/4fd99e8e-758f-11e9-b2d5-68ecc57cde47/4fd99e8e-758f-11e9-b2d5-68ecc57cde45','DELETE');
             $content = json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'success');
-            
+            $selectquery="SELECT * FROM ox_prehire WHERE uuid='4fd99e8e-758f-11e9-b2d5-68ecc57cde45'";
+            $select = $this->executeQueryTest($selectquery);
+            // print_r($select);exit;
             
             }
         public function testDeleteWithInvalidPrehireId(){
