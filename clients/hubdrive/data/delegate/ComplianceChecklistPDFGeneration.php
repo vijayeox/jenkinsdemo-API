@@ -23,9 +23,15 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
         $fieldTypeMappingPDF = include(__DIR__ . "/FieldMappingComplianceChecklist.php");
         if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'fleetLineHaul')
             $complianceChecklistPDFTemplate = "OnTrac_Fleet_Checklist";
-        else
-            $complianceChecklistPDFTemplate = "OnTracRSPComplianceChecklistTemplate";
-        
+        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'rsp')
+            $complianceChecklistPDFTemplate = "OnTrac_RSP_Checklist";
+        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'areaServiceProvider')
+            $complianceChecklistPDFTemplate = "OnTrac_ASP_Checklist";
+        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'serviceProvider')
+            $complianceChecklistPDFTemplate = "OnTrac_SP_Checklist";
+        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'pickupDelivery')
+            $complianceChecklistPDFTemplate = "OnTrac_P_D_Checklist";
+            
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
         $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID); 
 
