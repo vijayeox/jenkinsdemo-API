@@ -21,7 +21,11 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $fieldTypeMappingPDF = include(__DIR__ . "/FieldMappingComplianceChecklist.php");
-        $complianceChecklistPDFTemplate = "ComplianceChecklist_OnTrac";
+        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'fleetLineHaul')
+            $complianceChecklistPDFTemplate = "OnTrac_Fleet_Checklist";
+        else
+            $complianceChecklistPDFTemplate = "OnTracRSPComplianceChecklistTemplate";
+        
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
         $orgUuid = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID); 
 
@@ -35,15 +39,21 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
         $documentDestination = $fileDestination['absolutePath'] . $complianceChecklistPDFTemplate . ".pdf";
 
         $form = array();
+        $trueKey = ['certificateOfInsuranceIsCompliant', 'certificateOfInsuranceIsDeficient'];
         foreach($data as $key=>$value) {
-            if($value==true) {
-                if(isset($fieldTypeMappingPDF["checkbox"][$key])) {
+            if(in_array($key, $trueKey) && $value == true){
+                if(isset($fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$key])) {
+                    array_push($form, $key);
+                }
+            }
+            if(!in_array($key, $trueKey) && $value==false) {
+                if(isset($fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$key])) {
                     array_push($form, $key);
                 }
             }
         }
         foreach($form as $i) {
-            $pdfData[$fieldTypeMappingPDF["checkbox"][$i]['fieldname']] = $fieldTypeMappingPDF["checkbox"][$i]["options"]["true"];
+            $pdfData[$fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$i]['fieldname']] = $fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$i]["options"]["true"];
         }
         
         $pdfData = array_filter($pdfData);
@@ -53,6 +63,7 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
             $pdfData,
             $documentDestination
         );
+        $this->logger->info("relative path : " . $fileDestination['relativePath'] );
         $documentpdf = $fileDestination['relativePath'] . $complianceChecklistPDFTemplate . ".pdf";
         array_push(
             $generatedComplianceChecklistPDF,

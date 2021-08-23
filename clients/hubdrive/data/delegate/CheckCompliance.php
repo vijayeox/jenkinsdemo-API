@@ -15,19 +15,65 @@ class CheckCompliance extends AbstractAppDelegate
         $this->logger->info("Executing Check compliance with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
         $nonComp=array();
         $compliant=true;
-        if((isset($data['auto']) && $data['auto'] == true) && (isset($data['motorTruckCargo']) && $data['motorTruckCargo'] == true)) {
-            $notice=true;    
-        }
-        else {
-            if(!$data['auto']==true) {
-                //array_push($nonComp,'Auto');
-                $compliant=false;
+        $drivertype = $data['dataGrid'][0]['pleaseSelectDriverType'];
+
+        if($drivertype == 'areaServiceProvider' || $drivertype == 'serviceProvider' || $drivertype == 'rsp'){
+            if((isset($data['auto']) && $data['auto'] == true) && (isset($data['motorTruckCargo']) && $data['motorTruckCargo'] == true)) {
+                $notice=true;    
             }
-            if(!$data['motorTruckCargo']==true) {
-                $compliant=false;
+            else {
+                if(!$data['auto']==true) {
+                    $compliant=false;
+                }
+                if(!$data['motorTruckCargo']==true) {
+                    $compliant=false;
+                }
+            }
+        }
+        if($drivertype == 'fleetLineHaul'){
+            if((isset($data['auto']) && $data['auto'] == true) && (isset($data['motorTruckCargo']) && $data['motorTruckCargo'] == true) && (isset($data['crimeFidelityEmployeeDishonesty1']) && $data['crimeFidelityEmployeeDishonesty1'] == true) && (isset($data['generalCommercial']) && $data['generalCommercial'] == true) && (isset($data['trailerInterchange']) && $data['trailerInterchange'] == true)) {
+                $notice=true;    
+            }
+            else {
+                if(!$data['auto']==true) {
+                    $compliant=false;
+                }
+                if(!$data['motorTruckCargo']==true) {
+                    $compliant=false;
+                }
+                if(!$data['crimeFidelityEmployeeDishonesty1']==true) {
+                    $compliant=false;
+                }
+                if(!$data['generalCommercial']==true) {
+                    $compliant=false;
+                }
+                if(!$data['trailerInterchange']==true) {
+                    $compliant=false;
+                }
             }
         }
 
+        if($drivertype == 'pickupDelivery'){
+            if((isset($data['auto']) && $data['auto'] == true) && (isset($data['motorTruckCargo']) && $data['motorTruckCargo'] == true) && (isset($data['crimeFidelityEmployeeDishonesty1']) && $data['crimeFidelityEmployeeDishonesty1'] == true) && (isset($data['generalCommercial']) && $data['generalCommercial'] == true) ) {
+                $notice=true;    
+            }
+            else {
+                if(!$data['auto']==true) {
+                    $compliant=false;
+                }
+                if(!$data['motorTruckCargo']==true) {
+                    $compliant=false;
+                }
+                if(!$data['crimeFidelityEmployeeDishonesty1']==true) {
+                    $compliant=false;
+                }
+                if(!$data['generalCommercial']==true) {
+                    $compliant=false;
+                }
+            }
+        }
+
+        
         if((isset($data['CombinedSingleLimit']) && $data['CombinedSingleLimit'] == true) && (isset($data['addlInsBoxCheckedOnCoi']) && $data['addlInsBoxCheckedOnCoi'] == true) && (isset($data['anyAuto']) && $data['anyAuto'] == true)) {
             $autoLiability=true;
         }
