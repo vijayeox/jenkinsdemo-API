@@ -178,10 +178,6 @@ return array(
             "fieldname" => 'RSPMotorTRuckCargoPerOccurrence',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
-        'FLHDishonestyCoveragenoLessThan' => [
-            "fieldname" => 'FLHDishonestyCoveragenoLessThan',
-            "options" => ["true" => "Yes", "false" => "No"]
-        ],
         'onTracLogistics' => [
             "fieldname" => 'onTracLogistics',
             "options" => ["true" => "Yes", "false" => "No"]
@@ -256,14 +252,6 @@ return array(
         ],
         'ASPanyAuto' => [
             "fieldname" => 'RSPanyAuto',
-            "options" => ["true" => "Yes", "false" => "No"]
-        ],
-        'ASPanyAutononOwned' => [
-            "fieldname" => 'ASPanyAutononOwned',
-            "options" => ["true" => "Yes", "false" => "No"]
-        ],
-        'ASPanyAutohiredCoverage' => [
-            "fieldname" => 'ASPanyAutohiredCoverage',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
         'ASPownedAuto' => [
@@ -344,6 +332,238 @@ return array(
         ]
     ]
 ],
+"serviceProvider"=>[
+    "checkbox" => [
+        'auto' => [
+            "fieldname" => 'auto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'motorTruckCargo' => [
+            "fieldname" => 'motorTruckCargo',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPSplitLimitOrCombinedSingleLimitCa' => [
+            "fieldname" => 'SPSplitLimitOrCombinedSingleLimitCa',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPanyAuto' => [
+            "fieldname" => 'SPanyAuto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPaddlInsBoxCheckedOnCoi' => [
+            "fieldname" => 'SPaddlInsBoxCheckedOnCoi',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPownedAuto' => [
+            "fieldname" => 'SPownedAuto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPownedAutononOwned' => [
+            "fieldname" => 'SPownedAutononOwned',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPownedAutohired' => [
+            "fieldname" => 'SPownedAutohired',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPscheduledAuto' => [
+            "fieldname" => 'SPscheduledAuto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPscheduledAutovinListed' => [
+            "fieldname" => 'SPscheduledAutovinListed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'SPMotorTRuckCargoPerOccurrence' => [
+            "fieldname" => 'SPMotorTRuckCargoPerOccurrence',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'onTracLogistics' => [
+            "fieldname" => 'onTracLogistics',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'signedCoi' => [
+            "fieldname" => 'signedCoi',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'acord25Version' => [
+            "fieldname" => 'acord25Version',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'policiesAreEffective' => [
+            "fieldname" => 'policiesAreEffective',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'insuredNameListed' => [
+            "fieldname" => 'insuredNameListed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'insuredAddressCompleted' => [
+            "fieldname" => 'insuredAddressCompleted',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'policyNumberListed' => [
+            "fieldname" => 'policyNumberListed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'letterDescribed' => [
+            "fieldname" => 'letterDescribed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'specifiedNumber' => [
+            "fieldname" => 'specifiedNumber',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea' => [
+            "fieldname" => 'broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'inlandMarineMustSpecifyThatItIncludesCargoInTransit' => [
+            "fieldname" => 'inlandMarineMustSpecifyThatItIncludesCargoInTransit',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'certificateOfInsuranceIsCompliant' => [
+            "fieldname" => 'certificateOfInsuranceIsCompliant',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'certificateOfInsuranceIsDeficient' => [
+            "fieldname" => 'certificateOfInsuranceIsDeficient',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ]
+    ]
+],
+"pickupDelivery"=>[
+    "checkbox" => [
+        'auto' => [
+            "fieldname" => 'auto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'motorTruckCargo' => [
+            "fieldname" => 'motorTruckCargo',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'crimeFidelityEmployeeDishonesty1' => [
+            "fieldname" => 'crimeFidelityEmployeeDishonesty1',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDgeneralCommercial' => [
+            "fieldname" => 'PDgeneralCommercial',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDCombinedSingleLimit' => [
+            "fieldname" => 'PDCombinedSingleLimit',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDanyAuto' => [
+            "fieldname" => 'PDanyAuto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDaddlInsBoxCheckedOnCoi' => [
+            "fieldname" => 'PDaddlInsBoxCheckedOnCoi',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDownedAuto' => [
+            "fieldname" => 'PDownedAuto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDownedAutononOwned' => [
+            "fieldname" => 'PDownedAutononOwned',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDownedAutohired' => [
+            "fieldname" => 'PDownedAutohired',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDscheduledAuto' => [
+            "fieldname" => 'PDscheduledAuto',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDscheduledAutovinListed' => [
+            "fieldname" => 'PDscheduledAutovinListed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDscheduledAutohired' => [
+            "fieldname" => 'PDscheduledAutohired',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDscheduledAutohired' => [
+            "fieldname" => 'PDscheduledAutohired',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDscheduledAutononOwned' => [
+            "fieldname" => 'PDscheduledAutononOwned',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDMotorTRuckCargoPerOccurrence' => [
+            "fieldname" => 'PDMotorTRuckCargoPerOccurrence',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDnoLessThan' => [
+            "fieldname" => 'PDnoLessThan',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'onTracLogistics' => [
+            "fieldname" => 'onTracLogistics',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'signedCoi' => [
+            "fieldname" => 'signedCoi',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDGeneralCommercialCombinedSingleLimit' => [
+            "fieldname" => 'PDGeneralCommercialCombinedSingleLimit',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'PDGeneralCommercialaddlInsBoxCheckedOnCoi' => [
+            "fieldname" => 'PDGeneralCommercialaddlInsBoxCheckedOnCoi',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'acord25Version' => [
+            "fieldname" => 'acord25Version',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'policiesAreEffective' => [
+            "fieldname" => 'policiesAreEffective',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'insuredNameListed' => [
+            "fieldname" => 'insuredNameListed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'insuredAddressCompleted' => [
+            "fieldname" => 'insuredAddressCompleted',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'policyNumberListed' => [
+            "fieldname" => 'policyNumberListed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'letterDescribed' => [
+            "fieldname" => 'letterDescribed',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'specifiedNumber' => [
+            "fieldname" => 'specifiedNumber',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea' => [
+            "fieldname" => 'broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'inlandMarineMustSpecifyThatItIncludesCargoInTransit' => [
+            "fieldname" => 'inlandMarineMustSpecifyThatItIncludesCargoInTransit',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'certificateOfInsuranceIsCompliant' => [
+            "fieldname" => 'certificateOfInsuranceIsCompliant',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'certificateOfInsuranceIsDeficient' => [
+            "fieldname" => 'certificateOfInsuranceIsDeficient',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ]
+    ]
+]
 
     
 
