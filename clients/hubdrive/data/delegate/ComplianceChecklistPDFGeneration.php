@@ -39,10 +39,12 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
         $currentAccount = isset($data['accountId']) ? $data['accountId'] : null;
         $accountId = isset($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
         $this->logger->info("ACCOUT IS ____" . $accountId);
+        
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('orgUuid' => $orgUuid));
         $pdfData = array();
         $generatedComplianceChecklistPDF = array();
         $documentpdf = array();
+        $this->logger->info("filepath ____" . $fileDestination['absolutePath']);
         $documentDestination = $fileDestination['absolutePath'] . $complianceChecklistPDFTemplate . ".pdf";
 
         $form = array();
@@ -64,6 +66,7 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
         }
         
         $pdfData = array_filter($pdfData);
+        $this->logger->info("pdfdataaaa ____" . json_encode($pdfData, true));
         $pdfData['appId'] = $data['appId'];
         $this->documentBuilder->fillPDFForm(
             $complianceChecklistPDFTemplate . ".pdf",
