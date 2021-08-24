@@ -51,6 +51,71 @@ class CheckCompliance extends AbstractAppDelegate
                     $compliant=false;
                 }
             }
+
+            if((isset($data['FLHCombinedSingleLimit']) && $data['FLHCombinedSingleLimit'] == true) && (isset($data['FLHaddlInsBoxCheckedOnCoi']) && $data['FLHaddlInsBoxCheckedOnCoi'] == true) && (isset($data['FLHanyAuto']) && $data['FLHanyAuto'] == true)){
+                $autoLiability=true;
+            }
+            else {
+                if(!$data['FLHCombinedSingleLimit']==true) {
+                    $compliant=false;
+                }
+                if(!$data['FLHaddlInsBoxCheckedOnCoi']==true) {
+                    $compliant=false;
+                }
+                if(!$data['FLHanyAuto']==true) {
+                    $compliant=false;
+                }
+            }
+            
+
+            if((isset($data['FLHownedAuto']) && $data['FLHownedAuto'] == true) && ((isset($data['FLHownedAutoNonowned']) && $data['FLHownedAutoNonowned'] == true) || (isset($data['FLHownedAutohiredCoverage']) && $data['FLHownedAutohiredCoverage'] == true)))
+            {
+                $owned=true;
+            }
+            else {
+                if(!$data['FLHownedAuto']==true) {
+                    $compliant=false;
+                }
+                if((!$data['FLHownedAutoNonowned']==true) && (!$data['FLHownedAutohiredCoverage']==true)) {
+                    $compliant=false;
+                }
+            }
+
+            if((isset($data['FLHscheduledOrOwnedAuto']) && $data['FLHscheduledOrOwnedAuto'] == true) && ((isset($data['FLHvinListed']) && $data['FLHvinListed'] == true) || (isset($data['FLHscheduledAutohiredCoverage']) && $data['FLHscheduledAutohiredCoverage'] == true) ||(isset($data['FLHscheduledAutononOwned']) && $data['FLHscheduledAutononOwned'] == true))) {
+                $scheduled=true;
+            }
+            else {
+                if(!$data['FLHscheduledOrOwnedAuto']==true) {
+                    $compliant=false;
+                }
+                if((!$data['FLHvinListed']==true) && (!$data['FLHscheduledAutohiredCoverage']==true) && (!$data['FLHscheduledAutononOwned']==true)) {
+                    $compliant=false;
+                }
+            }
+
+            if(isset($data['FLHnoLessThan']) && $data['FLHnoLessThan'] == true){
+                $trailer = true;
+            }else{
+                if(!$data['FLHnoLessThan'] == true){
+                    $compliant=false;
+                }
+            }
+
+            if(isset($data['FLHMotorTRuckCargoPerOccurrence']) && $data['FLHMotorTRuckCargoPerOccurrence'] == true){
+                $motorTruck = true;
+            }else{
+                if(!$data['FLHMotorTRuckCargoPerOccurrence'] == true){
+                    $compliant=false;
+                }
+            }
+            
+            if(isset($data['FLHDishonestyCoveragenoLessThan']) && $data['FLHDishonestyCoveragenoLessThan'] == true){
+                $dishonesty = true;
+            }else{
+                if(!$data['FLHDishonestyCoveragenoLessThan'] == true){
+                    $compliant=false;
+                }
+            }
         }
 
         if($drivertype == 'pickupDelivery'){
@@ -72,9 +137,9 @@ class CheckCompliance extends AbstractAppDelegate
                 }
             }
         }
-
+    
         
-        if((isset($data['CombinedSingleLimit']) && $data['CombinedSingleLimit'] == true) && (isset($data['addlInsBoxCheckedOnCoi']) && $data['addlInsBoxCheckedOnCoi'] == true) && (isset($data['anyAuto']) && $data['anyAuto'] == true)) {
+        /*if((isset($data['CombinedSingleLimit']) && $data['CombinedSingleLimit'] == true) && (isset($data['addlInsBoxCheckedOnCoi']) && $data['addlInsBoxCheckedOnCoi'] == true) && (isset($data['anyAuto']) && $data['anyAuto'] == true)) {
             $autoLiability=true;
         }
         else {
@@ -99,7 +164,7 @@ class CheckCompliance extends AbstractAppDelegate
             if((!$data['vinListed']==true) && (!$data['hired']==true) && (!$data['nonOwned']==true)) {
                 $compliant=false;
             }
-        }
+        }*/
         
         if((isset($data['PerOccurrence']) && $data['PerOccurrence'] == true) && (isset($data['addlInsBoxCheckedOnCoi1']) && $data['addlInsBoxCheckedOnCoi1'] == true)) {
             $cargo=true;

@@ -21,6 +21,7 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $fieldTypeMappingPDF = include(__DIR__ . "/FieldMappingComplianceChecklist.php");
+        
         if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'fleetLineHaul')
             $complianceChecklistPDFTemplate = "OnTrac_Fleet_Checklist";
         if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'rsp')
