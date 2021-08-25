@@ -6,6 +6,7 @@ use TCPDF;
 use Knp\Snappy\Pdf;
 use setasign\Fpdi\Tcpdf\Fpdi;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\ArrayUtils;
 use mikehaertl\pdftk\Pdf as PDFTK;
 use Logger;
 use Exception;
@@ -102,7 +103,9 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $myProjectDirectory = __DIR__."/../../../..";
         if (isset($data)) {
             foreach ($data as $key => $value) {
-                $docData = json_decode($value, true);
+                if(is_string($value) && ArrayUtils::isJson($value)) {
+                    $docData = json_decode($value, true);
+                }
                 if (is_array($docData)) {
                     unset($data[$key]);
                 }
