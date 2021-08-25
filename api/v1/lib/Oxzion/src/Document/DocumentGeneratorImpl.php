@@ -105,6 +105,8 @@ class DocumentGeneratorImpl implements DocumentGenerator
             foreach ($data as $key => $value) {
                 if(is_string($value) && ArrayUtils::isJson($value)) {
                     $docData = json_decode($value, true);
+                } else {
+                    $docData = $value;
                 }
                 if (is_array($docData)) {
                     unset($data[$key]);

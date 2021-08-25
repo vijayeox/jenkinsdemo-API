@@ -131,11 +131,14 @@
 
             <strong>City/State/Zip: </strong><span class="underline">{$csz}</span>
             <br>
-            {if $corporation == false || $corporation == "false"}
-                {$checked=""}
+            {if $corporation == true || $corporation == "true"}
+                <input id="Corporation" type="checkbox" name="Corporation" checked readonly />
+                <label for="Corporation">Corporation</label>
+            {else}
+                <input id="Corporation" type="checkbox" name="Corporation" readonly />
+                <label for="Corporation">Corporation</label>
             {/if}
-            <input id="Corporation" type="checkbox" name="Corporation" {$checked} readonly />
-            <label for="Corporation">Corporation</label>
+            
 
             {if $partnership == true || $partnership == "true"}
                 <input id="Partnership" type="checkbox" name="Partnership" checked readonly />
