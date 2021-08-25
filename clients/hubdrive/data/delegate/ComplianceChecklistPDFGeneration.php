@@ -66,7 +66,7 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
         }
         
         $pdfData = array_filter($pdfData);
-        $this->logger->info("pdfdataaaa ____" . json_encode($pdfData, true));
+        //$this->logger->info("pdfdataaaa ____" . json_encode($pdfData, true));
         $pdfData['appId'] = $data['appId'];
         $this->documentBuilder->fillPDFForm(
             $complianceChecklistPDFTemplate . ".pdf",
