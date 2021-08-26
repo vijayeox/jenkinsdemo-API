@@ -53,9 +53,8 @@ class CheckCompliance extends AbstractAppDelegate
                     $compliant=false;
                 }
             }
-            
-
-            if((isset($data['FLHownedAuto']) && $data['FLHownedAuto'] == true) && ((isset($data['FLHownedAutoNonowned']) && $data['FLHownedAutoNonowned'] == true) || (isset($data['FLHownedAutohiredCoverage']) && $data['FLHownedAutohiredCoverage'] == true)))
+            //&& ((isset($data['FLHownedAutoNonowned']) && $data['FLHownedAutoNonowned'] == true) || (isset($data['FLHownedAutohiredCoverage']) && $data['FLHownedAutohiredCoverage'] == true))
+            if((isset($data['FLHownedAuto']) && $data['FLHownedAuto'] == true))
             {
                 $owned=true;
             }
@@ -63,21 +62,21 @@ class CheckCompliance extends AbstractAppDelegate
                 if(!$data['FLHownedAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['FLHownedAutoNonowned']==true) && (!$data['FLHownedAutohiredCoverage']==true)) {
+                /*if((!$data['FLHownedAutoNonowned']==true) && (!$data['FLHownedAutohiredCoverage']==true)) {
                     $compliant=false;
-                }
+                }*/
             }
-            
-            if((isset($data['FLHscheduledAuto']) && $data['FLHscheduledAuto'] == true) && ((isset($data['FLHvinListed']) && $data['FLHvinListed'] == true) || (isset($data['FLHscheduledAutohiredCoverage']) && $data['FLHscheduledAutohiredCoverage'] == true) ||(isset($data['FLHscheduledAutononOwned']) && $data['FLHscheduledAutononOwned'] == true))) {
+            //&& ((isset($data['FLHvinListed']) && $data['FLHvinListed'] == true) || (isset($data['FLHscheduledAutohiredCoverage']) && $data['FLHscheduledAutohiredCoverage'] == true) ||(isset($data['FLHscheduledAutononOwned']) && $data['FLHscheduledAutononOwned'] == true))
+            if((isset($data['FLHscheduledAuto']) && $data['FLHscheduledAuto'] == true) ) {
                 $scheduled=true;
             }
             else {
                 if(!$data['FLHscheduledAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['FLHvinListed']==true) && (!$data['FLHscheduledAutohiredCoverage']==true) && (!$data['FLHscheduledAutononOwned']==true)) {
+                /*if((!$data['FLHvinListed']==true) && (!$data['FLHscheduledAutohiredCoverage']==true) && (!$data['FLHscheduledAutononOwned']==true)) {
                     $compliant=false;
-                }
+                }*/
             }
 
             if(isset($data['FLHnoLessThan']) && $data['FLHnoLessThan'] == true){
@@ -100,6 +99,22 @@ class CheckCompliance extends AbstractAppDelegate
                 $dishonesty = true;
             }else{
                 if(!$data['FLHDishonestyCoveragenoLessThan'] == true){
+                    $compliant=false;
+                }
+            }
+
+            if(isset($data['FLHGeneralCommercialCombinedSingleLimit']) && $data['FLHGeneralCommercialCombinedSingleLimit'] == true){
+                $generalcommercialsingle = true;
+            }else{
+                if(!$data['FLHGeneralCommercialCombinedSingleLimit'] == true){
+                    $compliant=false;
+                }
+            }
+            
+            if(isset($data['FLHGeneralCommercialaddlInsBoxCheckedOnCoi']) && $data['FLHGeneralCommercialaddlInsBoxCheckedOnCoi'] == true){
+                $generalcommercialadd = true;
+            }else{
+                if(!$data['FLHGeneralCommercialaddlInsBoxCheckedOnCoi'] == true){
                     $compliant=false;
                 }
             }
@@ -138,8 +153,8 @@ class CheckCompliance extends AbstractAppDelegate
                     $compliant=false;
                 }
             }
-            
-            if((isset($data['PDownedAuto']) && $data['PDownedAuto'] == true) && ((isset($data['PDownedAutononOwned']) && $data['PDownedAutononOwned'] == true) || (isset($data['PDownedAutohired']) && $data['PDownedAutohired'] == true)))
+            //&& ((isset($data['PDownedAutononOwned']) && $data['PDownedAutononOwned'] == true) || (isset($data['PDownedAutohired']) && $data['PDownedAutohired'] == true))
+            if((isset($data['PDownedAuto']) && $data['PDownedAuto'] == true) )
             {
                 $owned=true;
             }
@@ -147,21 +162,21 @@ class CheckCompliance extends AbstractAppDelegate
                 if(!$data['PDownedAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['PDownedAutononOwned']==true) && (!$data['PDownedAutohired']==true)) {
+                /*if((!$data['PDownedAutononOwned']==true) && (!$data['PDownedAutohired']==true)) {
                     $compliant=false;
-                }
+                }*/
             }
-            
-            if((isset($data['PDscheduledAuto']) && $data['PDscheduledAuto'] == true) && ((isset($data['PDscheduledAutovinListed']) && $data['PDscheduledAutovinListed'] == true) || (isset($data['PDscheduledAutohired']) && $data['PDscheduledAutohired'] == true) ||(isset($data['PDscheduledAutononOwned']) && $data['PDscheduledAutononOwned'] == true))) {
+            //&& ((isset($data['PDscheduledAutovinListed']) && $data['PDscheduledAutovinListed'] == true) || (isset($data['PDscheduledAutohired']) && $data['PDscheduledAutohired'] == true) ||(isset($data['PDscheduledAutononOwned']) && $data['PDscheduledAutononOwned'] == true))
+            if((isset($data['PDscheduledAuto']) && $data['PDscheduledAuto'] == true) ) {
                 $scheduled=true;
             }
             else {
                 if(!$data['PDscheduledAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['PDscheduledAutovinListed']==true) && (!$data['PDscheduledAutohired']==true) && (!$data['PDscheduledAutononOwned']==true)) {
+                /*if((!$data['PDscheduledAutovinListed']==true) && (!$data['PDscheduledAutohired']==true) && (!$data['PDscheduledAutononOwned']==true)) {
                     $compliant=false;
-                }
+                }*/
             }
 
             if(isset($data['PDMotorTRuckCargoPerOccurrence']) && $data['PDMotorTRuckCargoPerOccurrence'] == true){
@@ -176,6 +191,22 @@ class CheckCompliance extends AbstractAppDelegate
                 $dishonesty = true;
             }else{
                 if(!$data['PDnoLessThan'] == true){
+                    $compliant=false;
+                }
+            }
+
+            if(isset($data['PDGeneralCommercialCombinedSingleLimit']) && $data['PDGeneralCommercialCombinedSingleLimit'] == true){
+                $generalcommercialsingle = true;
+            }else{
+                if(!$data['PDGeneralCommercialCombinedSingleLimit'] == true){
+                    $compliant=false;
+                }
+            }
+            
+            if(isset($data['PDGeneralCommercialaddlInsBoxCheckedOnCoi']) && $data['PDGeneralCommercialaddlInsBoxCheckedOnCoi'] == true){
+                $generalcommercialadd = true;
+            }else{
+                if(!$data['PDGeneralCommercialaddlInsBoxCheckedOnCoi'] == true){
                     $compliant=false;
                 }
             }
@@ -208,8 +239,8 @@ class CheckCompliance extends AbstractAppDelegate
                     $compliant=false;
                 }
             }
-            
-            if((isset($data['ASPownedAuto']) && $data['ASPownedAuto'] == true) && ((isset($data['ASPownedAutononOwned']) && $data['ASPownedAutononOwned'] == true) || (isset($data['ASPownedAutohired']) && $data['ASPownedAutohired'] == true)))
+            //&& ((isset($data['ASPownedAutononOwned']) && $data['ASPownedAutononOwned'] == true) || (isset($data['ASPownedAutohired']) && $data['ASPownedAutohired'] == true))
+            if((isset($data['ASPownedAuto']) && $data['ASPownedAuto'] == true) )
             {
                 $owned=true;
             }
@@ -217,21 +248,21 @@ class CheckCompliance extends AbstractAppDelegate
                 if(!$data['ASPownedAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['ASPownedAutononOwned']==true) && (!$data['ASPownedAutohired']==true)) {
+                /*if((!$data['ASPownedAutononOwned']==true) && (!$data['ASPownedAutohired']==true)) {
                     $compliant=false;
-                }
+                }*/
             }
-            
-            if((isset($data['ASPscheduledAuto']) && $data['ASPscheduledAuto'] == true) && ((isset($data['ASPvinListed']) && $data['ASPvinListed'] == true) )) {
+            //&& ((isset($data['ASPvinListed']) && $data['ASPvinListed'] == true) )
+            if((isset($data['ASPscheduledAuto']) && $data['ASPscheduledAuto'] == true) ) {
                 $scheduled=true;
             }
             else {
                 if(!$data['ASPscheduledAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['ASPvinListed']==true) ) {
+                /*if((!$data['ASPvinListed']==true) ) {
                     $compliant=false;
-                }
+                }*/
             }
 
             if(isset($data['ASPMotorTRuckCargoPerOccurrence']) && $data['ASPMotorTRuckCargoPerOccurrence'] == true){
@@ -270,8 +301,8 @@ class CheckCompliance extends AbstractAppDelegate
                     $compliant=false;
                 }
             }
-            
-            if((isset($data['SPownedAuto']) && $data['SPownedAuto'] == true) && ((isset($data['SPownedAutononOwned']) && $data['SPownedAutononOwned'] == true) || (isset($data['SPownedAutohired']) && $data['SPownedAutohired'] == true)))
+            //&& ((isset($data['SPownedAutononOwned']) && $data['SPownedAutononOwned'] == true) || (isset($data['SPownedAutohired']) && $data['SPownedAutohired'] == true))
+            if((isset($data['SPownedAuto']) && $data['SPownedAuto'] == true) )
             {
                 $owned=true;
             }
@@ -279,21 +310,21 @@ class CheckCompliance extends AbstractAppDelegate
                 if(!$data['SPownedAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['SPownedAutononOwned']==true) && (!$data['SPownedAutohired']==true)) {
+                /*if((!$data['SPownedAutononOwned']==true) && (!$data['SPownedAutohired']==true)) {
                     $compliant=false;
-                }
+                }*/
             }
-            
-            if((isset($data['SPscheduledAuto']) && $data['SPscheduledAuto'] == true) && ((isset($data['SPscheduledAutovinListed']) && $data['SPscheduledAutovinListed'] == true) )) {
+            //&& ((isset($data['SPscheduledAutovinListed']) && $data['SPscheduledAutovinListed'] == true) )
+            if((isset($data['SPscheduledAuto']) && $data['SPscheduledAuto'] == true) ) {
                 $scheduled=true;
             }
             else {
                 if(!$data['SPscheduledAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['SPscheduledAutovinListed']==true) ) {
+                /*if((!$data['SPscheduledAutovinListed']==true) ) {
                     $compliant=false;
-                }
+                }*/
             }
 
             if(isset($data['SPMotorTRuckCargoPerOccurrence']) && $data['SPMotorTRuckCargoPerOccurrence'] == true){
@@ -332,17 +363,17 @@ class CheckCompliance extends AbstractAppDelegate
                     $compliant=false;
                 }
             }
-            
-            if((isset($data['RSPscheduledOrOwnedAuto']) && $data['RSPscheduledOrOwnedAuto'] == true) && ((isset($data['RSPscheduledOrOwnedAutovinListed']) && $data['RSPscheduledOrOwnedAutovinListed'] == true) || (isset($data['RSPscheduledOrOwnedAutohired']) && $data['RSPscheduledOrOwnedAutohired'] == true) ||(isset($data['RSPscheduledOrOwnedAutononOwned']) && $data['RSPscheduledOrOwnedAutononOwned'] == true))) {
+            //&& ((isset($data['RSPscheduledOrOwnedAutovinListed']) && $data['RSPscheduledOrOwnedAutovinListed'] == true) || (isset($data['RSPscheduledOrOwnedAutohired']) && $data['RSPscheduledOrOwnedAutohired'] == true) ||(isset($data['RSPscheduledOrOwnedAutononOwned']) && $data['RSPscheduledOrOwnedAutononOwned'] == true))
+            if((isset($data['RSPscheduledOrOwnedAuto']) && $data['RSPscheduledOrOwnedAuto'] == true) ) {
                 $scheduled=true;
             }
             else {
-                if(!$data['PDscheduledAuto']==true) {
+                if(!$data['RSPscheduledOrOwnedAuto']==true) {
                     $compliant=false;
                 }
-                if((!$data['RSPscheduledOrOwnedAutovinListed']==true) && (!$data['RSPscheduledOrOwnedAutohired']==true) && (!$data['RSPscheduledOrOwnedAutononOwned']==true)) {
+                /*if((!$data['RSPscheduledOrOwnedAutovinListed']==true) && (!$data['RSPscheduledOrOwnedAutohired']==true) && (!$data['RSPscheduledOrOwnedAutononOwned']==true)) {
                     $compliant=false;
-                }
+                }*/
             }
 
             if(isset($data['RSPMotorTRuckCargoPerOccurrence']) && $data['RSPMotorTRuckCargoPerOccurrence'] == true){
