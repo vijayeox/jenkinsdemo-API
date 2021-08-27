@@ -198,7 +198,11 @@
             {/if}
             <br>
 
-            <strong>US DOT#: </strong><span class="underline">{$usDot}</span>
+            {if isset($usDot)}
+                <strong>US DOT#: </strong><span class="underline">{$usDot}</span>
+            {else}
+                <strong>US DOT#: </strong><span class="underline"> </span>
+            {/if}
             <strong>MC Docket: </strong><span class="underline">{$mcDocket}</span><br>
 
             <strong>ELD Provider: </strong><span class="underline">{$eldProvider}</span>
@@ -299,7 +303,9 @@
                     {$carier}
                 </td>
                 <td>
-                    {$currency}
+                    {if isset($currency)}
+                        {$currency}
+                    {/if}
                 </td>
             </tr>
             <tr>
@@ -316,7 +322,9 @@
                     {$carrier2}
                 </td>
                 <td>
-                    {$currency1}
+                    {if isset($currency1)}
+                        {$currency1}
+                    {/if}
                 </td>
             </tr>
             <tr>
@@ -333,7 +341,9 @@
                     {$carrier3}
                 </td>
                 <td>
-                    {$currency2}
+                    {if isset($currency2)}
+                        {$currency2}
+                    {/if}
                 </td>
             </tr>
             <tr>
@@ -350,7 +360,9 @@
                     {$carrier4}
                 </td>
                 <td>
-                    {$currency3}
+                    {if isset($currency3)}
+                        {$currency3}
+                    {/if}
                 </td>
             </tr>
         </table>
@@ -710,7 +722,7 @@
             {foreach from=$dataGrid item=item key=key}
                 <tr>
                     <td>{$key+1}</td>
-                    <td>{$item.address1},{$item.city1},{$item.state1.name},{$item.zipCode1}</td>
+            <td>{$item.address1},{$item.city1},{if isset($item.state1.name)}{$item.state1.name}{/if},{if isset($item.zipCode1)}{$item.zipCode1}{/if}</td>
                     <td>{$item.unitsEachLocation}</td>
                 </tr>
             {/foreach}
