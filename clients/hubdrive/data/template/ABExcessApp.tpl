@@ -10,6 +10,12 @@
             text-align: left;
         }
 
+        td{
+            vertical-align: top;
+            text-align: left;
+            margin: 4px;
+        }
+
         .section_black {
             background-color: #000;
             color: #bad421;
@@ -227,85 +233,85 @@
 
                 <strong>City/State/Zip: </strong><span class="underline">{$csz}</span>
                 <br>
-                <div class="mt-4 mb-4">
-                    {if $corporation == true || $corporation == "true"}
-                        <input id="Corporation" type="checkbox" name="Corporation" checked readonly />
-                        <label for="Corporation">Corporation</label>
-                    {else}
-                        <input id="Corporation" type="checkbox" name="Corporation" readonly />
-                        <label for="Corporation">Corporation</label>
-                    {/if}
-
-
-                    {if $partnership == true || $partnership == "true"}
-                        <input id="Partnership" type="checkbox" name="Partnership" checked readonly />
-                        <label for="Partnership">Partnership</label>
-                    {else}
-                        <input id="Partnership" type="checkbox" name="Partnership" readonly />
-                        <label for="Partnership">Partnership</label>
-                    {/if}
-
-                    {if $proprietorship == true || $proprietorship == "true"}
-                        <input id="Proprietorship" type="checkbox" name="Proprietorship" checked readonly />
-                        <label for="Proprietorship">Proprietorship</label>
-                    {else}
-                        <input id="Proprietorship" type="checkbox" name="Proprietorship" readonly />
-                        <label for="Proprietorship">Proprietorship</label>
-                    {/if}
-
-                    {if $llc == true || $llc == "true"}
-                        <input id="LLC" type="checkbox" name="LLC" checked readonly />
-                        <label for="LLC">LLC</label>
-                    {else}
-                        <input id="LLC" type="checkbox" name="LLC" readonly />
-                        <label for="LLC">LLC</label>
-                    {/if}
-                    <br>
-
-                    {if $commonCarrier == true || $commonCarrier == "true"}
-                        <input id="Common Carrier" type="checkbox" name="Common Carrier" checked readonly />
-                        <label for="Common Carrier">Common Carrier</label>
-                    {else}
-                        <input id="Common Carrier" type="checkbox" name="Common Carrier" readonly />
-                        <label for="Common Carrier">Common Carrier</label>
-                    {/if}
-
-                    {if $contractCarrier == true || $contractCarrier == "true"}
-                        <input id="Contract Carrier" type="checkbox" name="Contract Carrier" checked readonly />
-                        <label for="Contract Carrier">Contract Carrier</label>
-                    {else}
-                        <input id="Contract Carrier" type="checkbox" name="Contract Carrier" readonly />
-                        <label for="Contract Carrier">Contract Carrier</label>
-                    {/if}
-
-                    {if $privateCarrier == true || $privateCarrier == "true"}
-                        <input id="Private Carrier" type="checkbox" name="Private Carrier" checked readonly />
-                        <label for="Private Carrier">Private Carrier</label>
-                    {else}
-                        <input id="Private Carrier" type="checkbox" name="Private Carrier" readonly />
-                        <label for="Private Carrier">Private Carrier</label>
-                    {/if}
-
-                    {if $freightBroker == true || $freightBroker == "true"}
-                        <input id="Freight Broker" type="checkbox" name="Freight Broker" checked readonly />
-                        <label for="Freight Broker">Freight Broker</label>
-                    {else}
-                        <input id="Freight Broker" type="checkbox" name="Freight Broker" readonly />
-                        <label for="Freight Broker">Freight Broker</label>
-                    {/if}
-                    <br>
-                </div>
-                
-
-                {if isset($usDot)}
-                    <strong>US DOT#: </strong><span class="underline">{$usDot}</span>
+            <div class="mt-4 mb-4">
+                {if $corporation == true || $corporation == "true"}
+                    <input id="Corporation" type="checkbox" name="Corporation" checked readonly />
+                    <label for="Corporation">Corporation</label>
                 {else}
-                    <strong>US DOT#: </strong><span class="underline"> </span>
+                    <input id="Corporation" type="checkbox" name="Corporation" readonly />
+                    <label for="Corporation">Corporation</label>
                 {/if}
-                <strong>MC Docket: </strong><span class="underline">{$mcDocket}</span><br>
 
-                <strong>ELD Provider: </strong><span class="underline">{$eldProvider}</span>
-                <strong>ELD Account #: </strong><span class="underline">{$eldAccountNumber}</span><br>
+
+                {if $partnership == true || $partnership == "true"}
+                    <input id="Partnership" type="checkbox" name="Partnership" checked readonly />
+                    <label for="Partnership">Partnership</label>
+                {else}
+                    <input id="Partnership" type="checkbox" name="Partnership" readonly />
+                    <label for="Partnership">Partnership</label>
+                {/if}
+
+                {if $proprietorship == true || $proprietorship == "true"}
+                    <input id="Proprietorship" type="checkbox" name="Proprietorship" checked readonly />
+                    <label for="Proprietorship">Proprietorship</label>
+                {else}
+                    <input id="Proprietorship" type="checkbox" name="Proprietorship" readonly />
+                    <label for="Proprietorship">Proprietorship</label>
+                {/if}
+
+                {if $llc == true || $llc == "true"}
+                    <input id="LLC" type="checkbox" name="LLC" checked readonly />
+                    <label for="LLC">LLC</label>
+                {else}
+                    <input id="LLC" type="checkbox" name="LLC" readonly />
+                    <label for="LLC">LLC</label>
+                {/if}
+                <br>
+
+                {if $commonCarrier == true || $commonCarrier == "true"}
+                    <input id="Common Carrier" type="checkbox" name="Common Carrier" checked readonly />
+                    <label for="Common Carrier">Common Carrier</label>
+                {else}
+                    <input id="Common Carrier" type="checkbox" name="Common Carrier" readonly />
+                    <label for="Common Carrier">Common Carrier</label>
+                {/if}
+
+                {if $contractCarrier == true || $contractCarrier == "true"}
+                    <input id="Contract Carrier" type="checkbox" name="Contract Carrier" checked readonly />
+                    <label for="Contract Carrier">Contract Carrier</label>
+                {else}
+                    <input id="Contract Carrier" type="checkbox" name="Contract Carrier" readonly />
+                    <label for="Contract Carrier">Contract Carrier</label>
+                {/if}
+
+                {if $privateCarrier == true || $privateCarrier == "true"}
+                    <input id="Private Carrier" type="checkbox" name="Private Carrier" checked readonly />
+                    <label for="Private Carrier">Private Carrier</label>
+                {else}
+                    <input id="Private Carrier" type="checkbox" name="Private Carrier" readonly />
+                    <label for="Private Carrier">Private Carrier</label>
+                {/if}
+
+                {if $freightBroker == true || $freightBroker == "true"}
+                    <input id="Freight Broker" type="checkbox" name="Freight Broker" checked readonly />
+                    <label for="Freight Broker">Freight Broker</label>
+                {else}
+                    <input id="Freight Broker" type="checkbox" name="Freight Broker" readonly />
+                    <label for="Freight Broker">Freight Broker</label>
+                {/if}
+                <br>
+            </div>
+
+
+            {if isset($usDot)}
+                <strong>US DOT#: </strong><span class="underline">{$usDot}</span>
+            {else}
+                <strong>US DOT#: </strong><span class="underline"> </span>
+            {/if}
+            <strong>MC Docket: </strong><span class="underline">{$mcDocket}</span><br>
+
+            <strong>ELD Provider: </strong><span class="underline">{$eldProvider}</span>
+            <strong>ELD Account #: </strong><span class="underline">{$eldAccountNumber}</span><br>
             </p>
             <p>
                 <strong>AGENT INFORMATION</strong><br>
