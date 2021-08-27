@@ -1062,17 +1062,13 @@ class AppService extends AbstractService
             $this->logger->info("linkkk---$link");
             $source = rtrim($path, "/") . "/data/template";
             if (!$update) {
-                $this->logger->info("RSP1---$link");
                 if (!file_exists($link)) {
                     FileUtils::createDirectory($link);
                 }
                 FileUtils::chmod_r($link, 0777);
                 FileUtils::copyDir($source, $link);
             } else {
-                FileUtils::chmod_r($source, 0777);
-                $this->logger->info("RSP2---$source");
                 FileUtils::copyOnlyNewFiles($source, $link);
-
             }
         }
     }
