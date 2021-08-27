@@ -240,7 +240,10 @@
             {/if}
         </p>
         <p>
-            If No, advises what limit is this quote excess of: {$select5}
+            If No, advises what limit is this quote excess of: 
+            {if isset($ifNoAdviseWhatLimitIsThisQuoteExcessOf)}
+                <span class="underline">{$ifNoAdviseWhatLimitIsThisQuoteExcessOf}</span>
+            {/if}
         </p>
         <p>
             <strong>Coverage(s) Requested:</strong><br>
@@ -405,6 +408,13 @@
                         $
                     {/if}
                 </td>
+                <td>
+                    {if isset($limit1)}
+                        <span class="underline">${$limit1}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
             </tr>
             <tr>
                 <td>
@@ -439,6 +449,13 @@
                         $
                     {/if}
                 </td>
+                <td>
+                    {if isset($limit2)}
+                        <span class="underline">${$limit2}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
             </tr>
             <tr>
                 <td>
@@ -467,6 +484,13 @@
                 <td>
                     {if isset($premium3)}
                         <span class="underline">${$premium3}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
+                <td>
+                    {if isset($limit3)}
+                        <span class="underline">${$limit3}</span>
                     {else}
                         $
                     {/if}
@@ -504,6 +528,13 @@
                         $
                     {/if}
                 </td>
+                <td>
+                    {if isset($limit4)}
+                        <span class="underline">${$limit4}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
             </tr>
             <tr>
                 <td>
@@ -530,8 +561,15 @@
                     {/if}
                 </td>
                 <td>
-                    {if isset($premium6)}
-                        <span class="underline">${$premium6}</span>
+                    {if isset($premium5)}
+                        <span class="underline">${$premium5}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
+                <td>
+                    {if isset($limit5)}
+                        <span class="underline">${$limit5}</span>
                     {else}
                         $
                     {/if}
@@ -563,6 +601,13 @@
                 <td>
                     {if isset($premium6)}
                         <span class="underline">${$premium6}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
+                <td>
+                    {if isset($limit6)}
+                        <span class="underline">${$limit6}</span>
                     {else}
                         $
                     {/if}
@@ -599,6 +644,13 @@
                         $
                     {/if}
                 </td>
+                <td>
+                    {if isset($limit7)}
+                        <span class="underline">${$limit7}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
             </tr>
             <tr>
                 <td>
@@ -627,6 +679,13 @@
                 <td>
                     {if isset($premium9)}
                         <span class="underline">${$premium9}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
+                <td>
+                    {if isset($limit9)}
+                        <span class="underline">${$limit9}</span>
                     {else}
                         $
                     {/if}
@@ -663,6 +722,13 @@
                         $
                     {/if}
                 </td>
+                <td>
+                    {if isset($limit8)}
+                        <span class="underline">${$limit8}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
             </tr>
             <tr>
                 <td>
@@ -691,6 +757,13 @@
                 <td>
                     {if isset($premium10)}
                         <span class="underline">${$premium10}</span>
+                    {else}
+                        $
+                    {/if}
+                </td>
+                <td>
+                    {if isset($limit10)}
+                        <span class="underline">${$limit10}</span>
                     {else}
                         $
                     {/if}
@@ -854,6 +927,16 @@
                 <td>
                     {if isset($noOfCargoVan)}
                         {$noOfCargoVan}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Other</td>
+                <td>
+                    {if isset($otherContent)}
+                        {$otherContent}
                     {/if}
                 </td>
             </tr>
@@ -2439,7 +2522,11 @@
         </tr>
         <tr>
             <td>7</td>
-            <td>What action is taken when drivers develop unacceptable records?</td>
+            <td>What action is taken when drivers develop unacceptable records? 
+            {if isset($whatActionIsTakenWhenDriversDevelopUnacceptableRecords)}
+                <span class="underline">{$whatActionIsTakenWhenDriversDevelopUnacceptableRecords}</span>
+            {/if}
+            </td>
         </tr>
     </table>
     <div id="inline">
