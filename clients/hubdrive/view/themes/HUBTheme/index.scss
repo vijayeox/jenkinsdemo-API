@@ -113,15 +113,52 @@ html {
   max-width: 100%;
 }
 
+
 .osjs-window-title {
+  height: auto !important;
   padding: 0;
-  padding-left: 0;
-  font-size: 14px;
+  color: white;
+  flex-grow: 0;
+  margin-right: 1rem;
 }
 
 .osjs-window-icon {
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 64px;
+  max-width: 100%;
 }
+
+.osjs-window-breadcrumb {
+  display: flex;
+  line-height: 0;
+  flex-grow: 25;
+  height: auto !important;
+  align-items: baseline;
+  gap: 0.25rem;
+  // white-space:nowrap !important;
+  white-space: nowrap;
+  .disabledBreadcrumb {
+    > a {
+      > i {
+        margin-right: 5px;
+      }
+    }
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  .activeBreadcrumb {
+    > a {
+      > i {
+        margin-right: 5px;
+      }
+    }
+    text-decoration: underline;
+  }
+}
+
 
 .osjs-gui-menu {
   ul {
@@ -344,13 +381,13 @@ label {
   font-size: small;
 }
 
-.osjs-window-breadcrumb {
-  display: flex;
-  line-height: 0;
-  flex-grow: 25;
-  height: auto !important;
-  align-items: baseline;
-}
+// .osjs-window-breadcrumb {
+//   display: flex;
+//   line-height: 0;
+//   flex-grow: 25;
+//   height: auto !important;
+//   align-items: baseline;
+// }
 
 .PageRender .breadcrumbs-item a {
   font-size: 20px;
