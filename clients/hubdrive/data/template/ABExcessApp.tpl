@@ -10,10 +10,15 @@
             text-align: left;
         }
 
-        td{
+        td {
             vertical-align: top;
             text-align: left;
             margin: 4px;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 4px;
         }
 
         .section_black {
@@ -86,7 +91,8 @@
         }
 
         .underlined {
-            text-decoration: underline;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #242424;
         }
 
         .continued {
@@ -196,9 +202,10 @@
         }
 
         .underline {
-            text-decoration: underline;
             margin-right: 2%;
-            margin-right: 2%;
+            margin-left: 2%;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #242424;
         }
 
         .to-be-deleted {
@@ -906,7 +913,7 @@
                 </tr>
                 {foreach from=$dataGrid item=item key=key}
                     <tr>
-                        <td>{$key+1}</td>
+                        <td>{$key+1}.</td>
                         <td>{$item.address1},{$item.city1},{if isset($item.state1.name)}{$item.state1.name}{/if},{if isset($item.zipCode1)}{$item.zipCode1}{/if}
                         </td>
                         <td>{$item.unitsEachLocation}</td>
@@ -1044,8 +1051,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
+
                     <td>Other</td>
                     <td>
                         {if isset($otherContent)}
@@ -1074,28 +1080,13 @@
             <strong>Overall Description of Commodities Hauled:</strong><br>
             <table>
                 <tr>
-                    <th><strong>Mileage & Revenues</strong>
-                    <th>
-                    <th><strong>Trucking
-                            Revenue</strong>
-                    <th>
-                    <th><strong>Brokerage
-                            Revenue</strong>
-                    <th>
-                    <th><strong>Total Miles</strong>
-                    <th>
-                    <th><strong># Company
-                            Owned
-                            Power Units</strong>
-                    <th>
-                    <th><strong># Owner/
-                            Operator
-                            Units</strong>
-                    <th>
-                    <th><strong>#
-                            Subhaulers</strong>
-                    <th>
-                        <hr />
+                    <th><strong>Mileage & Revenues</strong></th>
+                    <th><strong>Trucking Revenue</strong></th>
+                    <th><strong>Brokerage Revenue</strong></th>
+                    <th><strong>Total Miles</strong></th>
+                    <th><strong># Company Owned Power Units</strong></th>
+                    <th><strong># Owner/ Operator Units</strong></th>
+                    <th><strong># Subhaulers</strong></th>
                 </tr>
                 <tr>
                     <td>Projection (next 12 mos.)</td>
@@ -1372,7 +1363,7 @@
             <strong>General Questions for ALL Operations:</strong>
             <table>
                 <tr>
-                    <td>1</td>
+                    <td>1.</td>
                     <td>Insurance been cancelled or non-renewed in the last 5 years for any reason?</td>
                     {if isset($survey1['insuranceBeenCancelledOrNonRenewedInTheLast5YearsForAnyReason'])}
                         <td>
@@ -1409,7 +1400,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td>2.</td>
                     <td>Involved in the fracking industry?</td>
                     {if isset($survey1['involvedInTheFrackingIndustry'])}
                         <td>
@@ -1446,7 +1437,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>3</td>
+                    <td>3.</td>
                     <td>Have any interline, intermodal or interchange arrangements?</td>
                     {if isset($survey1['haveAnyInterlineIntermodalOrInterchangeArrangements'])}
                         <td>
@@ -1483,7 +1474,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>4</td>
+                    <td>4.</td>
                     <td>Haul any noxious, caustic, toxic, flammable or explosive commodities?</td>
                     {if isset($survey1['haulAnyNoxiousCausticToxicFlammableOrExplosiveCommodities'])}
                         <td>
@@ -1520,7 +1511,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>5</td>
+                    <td>5.</td>
                     <td>Operate as a broker or freight forwarder?</td>
                     {if isset($survey1['operateAsABrokerOrFreightForwarder'])}
                         <td>
@@ -1557,44 +1548,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>5</td>
-                    <td>Operate as a broker or freight forwarder?</td>
-                    {if isset($survey1['operateAsABrokerOrFreightForwarder'])}
-                        <td>
-                            {if $survey1.operateAsABrokerOrFreightForwarder == "yes"}
-                                <input id="operateAsABrokerOrFreightForwarder" type="checkbox"
-                                    name="operateAsABrokerOrFreightForwarder" checked readonly />
-                                <label for="operateAsABrokerOrFreightForwarder">Y</label>
-                            {else}
-                                <input id="operateAsABrokerOrFreightForwarder" type="checkbox"
-                                    name="operateAsABrokerOrFreightForwarder" readonly />
-                                <label for="operateAsABrokerOrFreightForwarder">Y</label>
-                            {/if}
-                        </td>
-                        <td>
-                            {if $survey1.operateAsABrokerOrFreightForwarder == "no"}
-                                <input id="operateAsABrokerOrFreightForwarder" type="checkbox"
-                                    name="operateAsABrokerOrFreightForwarder" checked readonly />
-                                <label for="operateAsABrokerOrFreightForwarder">N</label>
-                            {else}
-                                <input id="operateAsABrokerOrFreightForwarder" type="checkbox"
-                                    name="operateAsABrokerOrFreightForwarder" readonly />
-                                <label for="operateAsABrokerOrFreightForwarder">N</label>
-                            {/if}
-                        </td>
-                    {else}
-                        <td>
-                            <input id="operateAsABrokerOrFreightForwarder" type="checkbox"
-                                name="operateAsABrokerOrFreightForwarder" readonly />
-                            <label for="operateAsABrokerOrFreightForwarder">Y</label>
-                            <input id="operateAsABrokerOrFreightForwarder" type="checkbox"
-                                name="operateAsABrokerOrFreightForwarder" readonly />
-                            <label for="operateAsABrokerOrFreightForwarder">N</label>
-                        </td>
-                    {/if}
-                </tr>
-                <tr>
-                    <td>6</td>
+                    <td>6.</td>
                     <td>Any other operations under control or authority?</td>
                     {if $anyOtherOperationsUnderControlOrAuthority == "yes"}
                         <td>
@@ -1644,11 +1598,10 @@
                             {/if}
                         </span>
                     </td>
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td>7</td>
+                    <td>7.</td>
                     <td>Team Drivers?</td>
                     {if isset($survey1['teamDrivers'])}
                         <td>
@@ -1679,7 +1632,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>8</td>
+                    <td>8.</td>
                     <td>Haul Doubles or Triples?</td>
                     {if isset($survey1['haulDoublesOrTriples'])}
                         <td>
@@ -1710,7 +1663,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>9</td>
+                    <td>9.</td>
                     <td>Do you loan, lease or rent vehicles to others with or without drivers?</td>
                     {if isset($survey1['doYouLoanLeaseOrRentVehiclesToOthersWithOrWithoutDrivers'])}
                         <td>
@@ -1747,7 +1700,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>10</td>
+                    <td>10.</td>
                     <td>Brokerage authority? (if yes, answer a., b., and c.)</td>
                     {if $brokerageAuthority == "yes"}
                         <td>
@@ -1785,8 +1738,7 @@
                             <span class="underline">{$ofOperations}</span>
                         </td>
                     {/if}
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
                     <td></td>
@@ -1869,7 +1821,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>11</td>
+                    <td>11.</td>
                     <td>Passengers Allowed?</td>
                     {if isset($isInsuranceVerifiedWithTheseContracts1)}
                         {if $isInsuranceVerifiedWithTheseContracts1 == "yes"}
@@ -2115,7 +2067,7 @@
             <strong>If Owner/Operators are used:</strong><br>
             <table>
                 <tr>
-                    <td>1</td>
+                    <td>1.</td>
                     <td>Are permanent/exclusive lease agreements used?</td>
                     {if isset($survey2['arePermanentExclusiveLeaseAgreementsUsed'])}
                         <td>
@@ -2152,7 +2104,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td>2.</td>
                     <td>Are drivers subject to the same driver training as company drivers?</td>
                     {if isset($survey2['areOwnerOperatorDriversSubjectToTheSameDriverTrainingAsCompanyDrivers'])}
                         <td>
@@ -2195,7 +2147,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>3</td>
+                    <td>3.</td>
                     <td>Are trip lease agreements used?</td>
                     {if isset($survey2['areTripLeaseAgreementsUsed'])}
                         <td>
@@ -2232,7 +2184,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>4</td>
+                    <td>4.</td>
                     <td>Are driver files maintained by the insured?</td>
                     {if isset($survey2['areOwnerOperatorDriverFilesMaintainedByTheInsured'])}
                         <td>
@@ -2269,7 +2221,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>5</td>
+                    <td>5.</td>
                     <td>Is equipment inspected by the insured?</td>
                     {if isset($survey2['isEquipmentInspectedByTheInsured'])}
                         <td>
@@ -2306,7 +2258,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>6</td>
+                    <td>6.</td>
                     <td>Are drivers subject to the same maintenance program as the owned equipment?</td>
                     {if isset($survey2['areDriversSubjectToTheSameMaintenanceProgramAsTheOwnedEquipment'])}
                         <td>
@@ -2343,7 +2295,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>7</td>
+                    <td>7.</td>
                     <td>Are all owner/operators required to carry at least $500,000 non-trucking liability?</td>
                     {if isset($survey2['areAllOwnerOperatorsRequiredToCarryAtLeast500000NonTruckingLiability'])}
                         <td>
@@ -2382,7 +2334,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>8</td>
+                    <td>8.</td>
                     <td>Are certificates on file?</td>
                     {if isset($survey2['areCertificatesOnFile'])}
                         <td>
@@ -2415,7 +2367,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>9</td>
+                    <td>9.</td>
                     <td>Is the insured listed as an additional insured?</td>
                     {if isset($survey2['isTheInsuredListedAsAnAdditionalInsured'])}
                         <td>
@@ -2466,7 +2418,7 @@
             <strong>Please provide your driver training program.</strong><br>
             <table>
                 <tr>
-                    <td>1</td>
+                    <td>1.</td>
                     <td>Is a background check performed prior to hiring?</td>
                     {if isset($survey3['isABackgroundCheckPerformedPriorToHiring'])}
                         <td>
@@ -2503,7 +2455,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td>2.</td>
                     <td>Do you allow drivers with major violations?</td>
                     {if isset($survey3['doYouAllowDriversWithMajorViolations'])}
                         <td>
@@ -2540,7 +2492,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>3</td>
+                    <td>3.</td>
                     <td>Do you order MVRs prior to hiring?</td>
                     {if isset($survey3['doYouOrderMvRsPriorToHiring'])}
                         <td>
@@ -2577,7 +2529,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>4</td>
+                    <td>4.</td>
                     <td>
                         How often are MVRs reviewed?
                         {if isset($howOftenAreMvRsReviewed)}
@@ -2586,7 +2538,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>5</td>
+                    <td>5.</td>
                     <td>Are driver files updated annually with information including new MVRs?</td>
                     {if isset($survey3['areDriverFilesUpdatedAnnuallyWithInformationIncludingNewMvRs'])}
                         <td>
@@ -2623,7 +2575,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>6</td>
+                    <td>6.</td>
                     <td>Do you exclude drivers with citations for DWI, DUI, or reckless operations?</td>
                     {if isset($survey3['doYouExcludeDriversWithCitationsForDwiDuiOrRecklessOperations'])}
                         <td>
@@ -2660,7 +2612,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>7</td>
+                    <td>7.</td>
                     <td>What action is taken when drivers develop unacceptable records?
                         {if isset($whatActionIsTakenWhenDriversDevelopUnacceptableRecords)}
                             <span class="underline">{$whatActionIsTakenWhenDriversDevelopUnacceptableRecords}</span>
@@ -2681,7 +2633,7 @@
         <div id="sectionContent">
             <table>
                 <tr>
-                    <td>1</td>
+                    <td>1.</td>
                     <td>Is there a written maintenance program?</td>
                     {if isset($survey4['isThereAWrittenMaintenanceProgram'])}
                         <td>
@@ -2718,51 +2670,43 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td>2.</td>
                     <td>
                         Name of Maintenance Manager:
                         {if isset($nameOfMaintenanceManager)}
                             {$nameOfMaintenanceManager}
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>3</td>
+                    <td>3.</td>
                     <td>
                         Years with company:
                         {if isset($yearsWithCompany)}
                             {$yearsWithCompany}
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>4</td>
+                    <td>4.</td>
                     <td>
                         Years in maintenance:
                         {if isset($yearsInMaintenance)}
                             {$yearsInMaintenance}
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>5</td>
+                    <td>5.</td>
                     <td>
                         # of full-time maintenance personnel:
                         {if isset($ofFullTimeMaintenancePersonnel)}
                             {$ofFullTimeMaintenancePersonnel}
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>6</td>
+                    <td>6.</td>
                     <td>
                         Maintenance program is provided for: (Check all that apply)<br>
                         {if isset($companyVehicles) && $companyVehicles == true}
@@ -2787,11 +2731,9 @@
                             <label for="openToThePublic">Open to the public</label>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>7</td>
+                    <td>7.</td>
                     <td>
                         Vehicle Maintenance is: (Check all that apply)<br>
                         {if isset($internal) && $internal == true}
@@ -2816,11 +2758,9 @@
                             <label for="both">Both</label>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>8</td>
+                    <td>8.</td>
                     <td>
                         Indicate which of the following you have: (Check all that apply)<br>
                         {if isset($partsDepartment) && $partsDepartment == true}
@@ -2854,11 +2794,9 @@
                             <label for="controlledInspectionReports">Controlled inspection reports</label>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>9</td>
+                    <td>9.</td>
                     <td>Are pre/post trip inspections made regularly?</td>
                     {if isset($survey4['arePrePostTripInspectionsMadeRegularly'])}
                         <td>
@@ -2895,7 +2833,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>10</td>
+                    <td>10.</td>
                     <td>Are all maintenance records on file?</td>
                     {if isset($survey4['areAllMaintenanceRecordsOnFile'])}
                         <td>
@@ -2932,7 +2870,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>11</td>
+                    <td>11.</td>
                     <td>Are re-treads used?</td>
                     {if isset($survey4['areReTreadsUsed'])}
                         <td>
@@ -2978,62 +2916,57 @@
             <strong>Attach copy of safety program</strong><br>
             <table>
                 <tr>
-                    <td>1</td>
+                    <td>1.</td>
                     <td>
                         Name of Safety Director:
                         {if isset($nameOfSafetyDirector)}
                             <span class="underline">{$nameOfSafetyDirector}</span>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td>2.</td>
                     <td>
                         Years with company:
                         {if isset($yearsWithCompany1)}
                             <span class="underline">{$yearsWithCompany1}</span>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td>3</td>
+                    <td>3.</td>
                     <td>
                         Years in safety field:
                         {if isset($yearsInSafetyField)}
                             <span class="underline">{$yearsInSafetyField}</span>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td>4</td>
+                    <td>4.</td>
                     <td>
                         Safety director reports to:
                         {if isset($safetyDirectorReportsTo)}
                             <span class="underline">{$safetyDirectorReportsTo}</span>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td>5</td>
+                    <td>5.</td>
                     <td>
                         % of time spent on Safety:
                         {if isset($ofTimeSpentOnSafety)}
                             <span class="underline">{$ofTimeSpentOnSafety}</span>%
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td>6</td>
+                    <td>6.</td>
                     <td>Do you have a safety award program?</td>
                     {if isset($survey5['doYouHaveASafetyAwardPrograms'])}
                         <td>
@@ -3070,18 +3003,17 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>7</td>
+                    <td>7.</td>
                     <td>
                         How often are safety meetings held?
                         {if isset($howOftenAreSafetyMeetingsHeld)}
                             <span class="underline">{$howOftenAreSafetyMeetingsHeld}</span>
                         {/if}
                     </td>
-                    <td></td>
-                    <td></td>
+
                 </tr>
                 <tr>
-                    <td>8</td>
+                    <td>8.</td>
                     <td>Are safety meetings mandatory?</td>
                     {if isset($survey5['areSafetyMeetingsMandatory'])}
                         <td>
@@ -3118,7 +3050,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>9</td>
+                    <td>9.</td>
                     <td>Is remedial training required for drivers with accidents/speeding?</td>
                     {if isset($survey5['isRemedialTrainingRequiredForDriversWithAccidentsSpeeding'])}
                         <td>
@@ -3155,7 +3087,7 @@
                     {/if}
                 </tr>
                 <tr>
-                    <td>10</td>
+                    <td>10.</td>
                     <td>Do you maintain an accident register & conduct periodic accident analysis?</td>
                     {if isset($survey5['doYouMaintainAnAccidentRegisterConductPeriodicAccidentAnalysis'])}
                         <td>
@@ -3320,12 +3252,15 @@
         <div id="sectionContent">
             <table>
                 <tr>
+                    <th>Sl No.</th>
                     <th>Loc.</th>
                     <th>Address</th>
                     <th>Function</th>
+
                     <th>Fenced</th>
                     <th>Guarded</th>
                     <th>Public Access</th>
+
                     <th>Lighted</th>
                     <th># of Employees</th>
                     <th>Owned or Leased</th>
@@ -3333,7 +3268,7 @@
                 {foreach from=$dataGrid1 item=item key=key}
                     <tr>
                         <td>
-                            {$key+1}
+                            {$key+1}.
                         </td>
                         <td>
                             {if isset($item['address7']['display_name'])}
@@ -3616,39 +3551,45 @@
                 </tr>
             </table>
             <p class="continued">SECTION 6: GENERAL LIABILITY, continued</p>
-            <strong>Limits of coverage:</strong><br>
-            General Aggregate Limit (other than products-completed operations):
-            {if isset($generalAggregateLimitOtherThanProductsCompletedOperations)}
-                <span class="underline">{$generalAggregateLimitOtherThanProductsCompletedOperations}<span>
-                    {/if}
-                    <br>
-                    Product-completed Operations Aggregate Limit:
-                    {if isset($productCompletedOperationsAggregateLimit)}
-                        <span class="underline">{$productCompletedOperationsAggregateLimit}<span>
-                            {/if}
-                            <br>
-                            Personal & Advertising Injury Limit:
-                            {if isset($personalAdvertisingInjuryLimit)}
-                                <span class="underline">{$personalAdvertisingInjuryLimit}<span>
-                                    {/if}
-                                    <br>
-                                    Each Occurrence Limit:
-                                    {if isset($eachOccurrenceLimit)}
-                                        <span class="underline">{$eachOccurrenceLimit}<span>
-                                            {/if}
-                                            <br>
-                                            Fire Damage Limit:
-                                            {if isset($fireDamageLimit)}
-                                                <span class="underline">{$fireDamageLimit}<span>
-                                                    {/if}
-                                                    <br>
-                                                    Medical Expense Limit:
-                                                    {if isset($medicalExpenseLimit)}
-                                                        <span class="underline">{$medicalExpenseLimit}<span>
-                                                            {/if}
-                                                            <br>
-        </div>
+            <p>
+                Limits of coverage:<br>
+                General Aggregate Limit (other than products-completed operations):
+                {if isset($generalAggregateLimitOtherThanProductsCompletedOperations)}
+                    <span class="underline">{$generalAggregateLimitOtherThanProductsCompletedOperations}</span>
+                {/if}
+                <br>
 
+                Product-completed Operations Aggregate Limit:
+                {if isset($productCompletedOperationsAggregateLimit)}
+                    <span class="underline">{$productCompletedOperationsAggregateLimit}</span>
+                {/if}
+                <br>
+
+                Personal & Advertising Injury Limit:
+                {if isset($personalAdvertisingInjuryLimit)}
+                    <span class="underline">{$personalAdvertisingInjuryLimit}</span>
+                {/if}
+                <br>
+
+                Each Occurrence Limit:
+                {if isset($eachOccurrenceLimit)}
+                    <span class="underline">{$eachOccurrenceLimit}</span>
+                {/if}
+                <br>
+
+                Fire Damage Limit:
+                {if isset($fireDamageLimit)}
+                    <span class="underline">{$fireDamageLimit}</span>
+                {/if}
+                <br>
+
+                Medical Expense Limit:
+                {if isset($medicalExpenseLimit)}
+                    <span class="underline">{$medicalExpenseLimit}</span>
+                {/if}
+                <br>
+            </p>
+        </div>
     </section>
     {* Section 6 *}
 </body>
