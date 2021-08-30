@@ -670,6 +670,7 @@
 							},
 							"selectThreshold": 0.3,
 							"validate": {
+								"required": true,
 								"onlyAvailableItems": true
 							},
 							"key": "pleaseSelectDriverType",
@@ -1874,7 +1875,15 @@
 			"label": "Table",
 			"cellAlignment": "left",
 			"key": "table10",
+			"conditional": {
+				"show": true,
+				"when": "dataGrid.pleaseSelectDriverType",
+				"eq": "pickupDelivery"
+			},
+			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "table",
+			"numRows": 1,
+			"numCols": 1,
 			"input": false,
 			"tableView": false,
 			"rows": [
@@ -1894,9 +1903,7 @@
 						"input": true
 					}]
 				}]
-			],
-			"numRows": 1,
-			"numCols": 1
+			]
 		}, {
 			"label": "HTML",
 			"attrs": [{
@@ -1919,7 +1926,15 @@
 			"label": "Table",
 			"cellAlignment": "left",
 			"key": "table11",
+			"conditional": {
+				"show": true,
+				"when": "dataGrid.pleaseSelectDriverType",
+				"eq": "fleetLineHaul"
+			},
+			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "table",
+			"numRows": 1,
+			"numCols": 1,
 			"input": false,
 			"tableView": false,
 			"rows": [
@@ -1939,9 +1954,7 @@
 						"input": true
 					}]
 				}]
-			],
-			"numRows": 1,
-			"numCols": 1
+			]
 		}, {
 			"label": "HTML",
 			"attrs": [{
@@ -2006,8 +2019,15 @@
 			"label": "Table",
 			"cellAlignment": "left",
 			"key": "table5",
+			"conditional": {
+				"show": true,
+				"when": "dataGrid.pleaseSelectDriverType",
+				"eq": "fleetLineHaul"
+			},
+			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "table",
 			"numRows": 1,
+			"numCols": 2,
 			"input": false,
 			"tableView": false,
 			"rows": [
@@ -2042,8 +2062,7 @@
 						"input": true
 					}]
 				}]
-			],
-			"numCols": 2
+			]
 		}, {
 			"label": "HTML",
 			"attrs": [{
@@ -2066,7 +2085,15 @@
 			"label": "Table",
 			"cellAlignment": "left",
 			"key": "table8",
+			"conditional": {
+				"show": true,
+				"when": "dataGrid.pleaseSelectDriverType",
+				"eq": "pickupDelivery"
+			},
+			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "table",
+			"numRows": 1,
+			"numCols": 2,
 			"input": false,
 			"tableView": false,
 			"rows": [
@@ -2101,9 +2128,7 @@
 						"input": true
 					}]
 				}]
-			],
-			"numRows": 1,
-			"numCols": 2
+			]
 		}, {
 			"label": "HTML",
 			"attrs": [{
@@ -2126,7 +2151,15 @@
 			"label": "Table",
 			"cellAlignment": "left",
 			"key": "table9",
+			"conditional": {
+				"show": true,
+				"when": "dataGrid.pleaseSelectDriverType",
+				"eq": "true"
+			},
+			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "table",
+			"numRows": 1,
+			"numCols": 1,
 			"input": false,
 			"tableView": false,
 			"rows": [
@@ -2146,9 +2179,7 @@
 						"input": true
 					}]
 				}]
-			],
-			"numRows": 1,
-			"numCols": 1
+			]
 		}, {
 			"label": "HTML",
 			"attrs": [{
@@ -2730,7 +2761,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 204,
+	"_vid": 209,
 	"title": "HUB Compliance Checklist",
 	"display": "wizard",
 	"access": [{
@@ -2749,6 +2780,6 @@
 	"path": "hubcompliancechecklist",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-04-22T04:57:04.358Z",
-	"modified": "2021-08-27T09:27:01.751Z",
+	"modified": "2021-08-30T07:19:40.002Z",
 	"machineName": "insuranceprocurement-eoxvantage:hubComplianceChecklist"
 }
