@@ -457,6 +457,37 @@
 		"input": false,
 		"tableView": false,
 		"components": [{
+			"label": "Please select driver type",
+			"widget": "choicesjs",
+			"tableView": true,
+			"data": {
+				"values": [{
+					"label": "Pickup & Delivery",
+					"value": "pickupDelivery"
+				}, {
+					"label": "Fleet Line Haul",
+					"value": "fleetLineHaul"
+				}, {
+					"label": "Area Service Provider",
+					"value": "areaServiceProvider"
+				}, {
+					"label": "Service Provider",
+					"value": "serviceProvider"
+				}, {
+					"label": "RSP",
+					"value": "rsp"
+				}]
+			},
+			"selectThreshold": 0.3,
+			"validate": {
+				"required": true,
+				"onlyAvailableItems": true,
+				"custom": "valid = (data.pleaseSelectDriverType == 'fleetLineHaul' || data.pleaseSelectDriverType == 'areaServiceProvider' || data.pleaseSelectDriverType == 'serviceProvider' || data.pleaseSelectDriverType == 'rsp' || data.pleaseSelectDriverType == 'pickupDelivery') : true ? \"Kindly Select Driver Type From Given Options\""
+			},
+			"key": "pleaseSelectDriverType",
+			"type": "select",
+			"input": true
+		}, {
 			"label": "Driver Details",
 			"reorder": false,
 			"addAnother": "Add Another Driver",
@@ -532,13 +563,13 @@
 						"currentWidth": 3
 					}, {
 						"components": [{
-							"label": "Street",
+							"label": "Email",
 							"tableView": true,
 							"validate": {
 								"required": true
 							},
-							"key": "street1DriverUnitInfo",
-							"type": "textfield",
+							"key": "driverEmail",
+							"type": "email",
 							"input": true,
 							"hideOnChildrenHidden": false
 						}],
@@ -549,17 +580,7 @@
 						"width": 3,
 						"currentWidth": 3
 					}, {
-						"components": [{
-							"label": "City",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "city1DriverUnitInfo",
-							"type": "textfield",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
+						"components": [],
 						"size": "md",
 						"width": 3,
 						"offset": 0,
@@ -574,6 +595,42 @@
 				}, {
 					"label": "Columns",
 					"columns": [{
+						"components": [{
+							"label": "Street",
+							"tableView": true,
+							"validate": {
+								"required": true
+							},
+							"key": "street1DriverUnitInfo",
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}],
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md",
+						"width": 3,
+						"currentWidth": 3
+					}, {
+						"components": [{
+							"label": "City",
+							"tableView": true,
+							"validate": {
+								"required": true
+							},
+							"key": "city1DriverUnitInfo",
+							"type": "textfield",
+							"input": true,
+							"hideOnChildrenHidden": false
+						}],
+						"offset": 0,
+						"push": 0,
+						"pull": 0,
+						"size": "md",
+						"width": 3,
+						"currentWidth": 3
+					}, {
 						"components": [{
 							"label": "State",
 							"widget": "choicesjs",
@@ -597,11 +654,11 @@
 							"hideOnChildrenHidden": false,
 							"isNew": false
 						}],
+						"size": "md",
+						"width": 3,
 						"offset": 0,
 						"push": 0,
 						"pull": 0,
-						"size": "md",
-						"width": 3,
 						"currentWidth": 3
 					}, {
 						"components": [{
@@ -620,62 +677,6 @@
 							"type": "number",
 							"input": true,
 							"hideOnChildrenHidden": false
-						}],
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"size": "md",
-						"width": 3,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "Email",
-							"tableView": true,
-							"validate": {
-								"required": true
-							},
-							"key": "driverEmail",
-							"type": "email",
-							"input": true,
-							"hideOnChildrenHidden": false
-						}],
-						"size": "md",
-						"width": 3,
-						"offset": 0,
-						"push": 0,
-						"pull": 0,
-						"currentWidth": 3
-					}, {
-						"components": [{
-							"label": "Please select driver type",
-							"widget": "choicesjs",
-							"tableView": true,
-							"data": {
-								"values": [{
-									"label": "Pickup & Delivery",
-									"value": "pickupDelivery"
-								}, {
-									"label": "Fleet Line Haul",
-									"value": "fleetLineHaul"
-								}, {
-									"label": "Area Service Provider",
-									"value": "areaServiceProvider"
-								}, {
-									"label": "Service Provider",
-									"value": "serviceProvider"
-								}, {
-									"label": "RSP",
-									"value": "rsp"
-								}]
-							},
-							"selectThreshold": 0.3,
-							"validate": {
-								"required": true,
-								"onlyAvailableItems": true
-							},
-							"key": "pleaseSelectDriverType",
-							"type": "select",
-							"input": true
 						}],
 						"size": "md",
 						"width": 3,
@@ -960,10 +961,10 @@
 						"key": "crimeFidelityEmployeeDishonesty",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "pickupDelivery"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -976,10 +977,10 @@
 						"key": "PDgeneralCommercial",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "pickupDelivery"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}, {
@@ -989,10 +990,10 @@
 						"key": "trailerInterchange",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1004,10 +1005,10 @@
 						"key": "crimeFidelityEmployeeDishonesty1",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1019,10 +1020,10 @@
 						"key": "generalCommercial",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1039,10 +1040,10 @@
 			"key": "html1",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "rsp"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'rsp') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'rsp') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -1052,10 +1053,10 @@
 			"key": "table",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "rsp"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'rsp') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'rsp') ? true : false",
 			"type": "table",
 			"numRows": 2,
 			"numCols": 2,
@@ -1100,10 +1101,10 @@
 			"key": "table1",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "rsp"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'rsp') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'rsp') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 1,
@@ -1122,7 +1123,7 @@
 						"label": "Table",
 						"cellAlignment": "left",
 						"key": "table2",
-						"customConditional": "console.log(data.RSPscheduledOrOwnedAuto);\nif (data.RSPscheduledOrOwnedAuto == true)\n  show = true;\nelse show = false;",
+						"customConditional": "if (data.RSPscheduledOrOwnedAuto == true)\n  show = true;\nelse show = false;",
 						"type": "table",
 						"numCols": 1,
 						"input": false,
@@ -1173,10 +1174,10 @@
 			"key": "html9",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "areaServiceProvider"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -1186,10 +1187,10 @@
 			"key": "table3",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "areaServiceProvider"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 1,
@@ -1204,10 +1205,10 @@
 						"key": "ASPSplitLimitOrCombinedSingleLimitCa",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "areaServiceProvider"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1219,11 +1220,12 @@
 			"key": "table13",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "areaServiceProvider"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
 			"type": "table",
+			"numRows": 2,
 			"numCols": 2,
 			"input": false,
 			"tableView": false,
@@ -1311,8 +1313,7 @@
 						}]
 					}]
 				}]
-			],
-			"numRows": 2
+			]
 		}, {
 			"label": "HTML",
 			"attrs": [{
@@ -1324,10 +1325,10 @@
 			"key": "html10",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "serviceProvider"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'serviceProvider') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'serviceProvider') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -1337,10 +1338,10 @@
 			"key": "table17",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "serviceProvider"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'serviceProvider') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'serviceProvider') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 1,
@@ -1355,10 +1356,10 @@
 						"key": "SPSplitLimitOrCombinedSingleLimitCa",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "serviceProvider"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'serviceProvider') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'serviceProvider') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1370,10 +1371,10 @@
 			"key": "table14",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "serviceProvider"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'serviceProvider') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'serviceProvider') ? true : false",
 			"type": "table",
 			"numCols": 2,
 			"input": false,
@@ -1479,10 +1480,10 @@
 			"key": "html11",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "pickupDelivery"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -1492,10 +1493,10 @@
 			"key": "table15",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "pickupDelivery"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "table",
 			"numCols": 2,
 			"input": false,
@@ -1622,10 +1623,10 @@
 			"key": "FLHAutoliability",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "fleetLineHaul"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -1635,10 +1636,10 @@
 			"key": "table16",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "fleetLineHaul"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "table",
 			"numCols": 2,
 			"input": false,
@@ -1650,7 +1651,7 @@
 						"tableView": false,
 						"defaultValue": false,
 						"key": "FLHCombinedSingleLimit",
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1663,7 +1664,7 @@
 						"tableView": false,
 						"defaultValue": false,
 						"key": "FLHanyAuto",
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1673,7 +1674,7 @@
 						"tableView": false,
 						"defaultValue": false,
 						"key": "FLHaddlInsBoxCheckedOnCoi",
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1702,7 +1703,7 @@
 							"tableView": false,
 							"defaultValue": false,
 							"key": "FLHownedAutoNonowned",
-							"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+							"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 							"type": "checkbox",
 							"input": true
 						}, {
@@ -1710,7 +1711,7 @@
 							"tableView": false,
 							"defaultValue": false,
 							"key": "FLHownedAutohiredCoverage",
-							"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+							"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 							"type": "checkbox",
 							"input": true
 						}]
@@ -1721,7 +1722,7 @@
 						"tableView": false,
 						"defaultValue": false,
 						"key": "FLHscheduledAuto",
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}, {
@@ -1747,7 +1748,7 @@
 							"tableView": false,
 							"defaultValue": false,
 							"key": "FLHscheduledAutononOwned",
-							"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+							"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 							"type": "checkbox",
 							"input": true
 						}, {
@@ -1755,7 +1756,7 @@
 							"tableView": false,
 							"defaultValue": false,
 							"key": "FLHscheduledAutohiredCoverage",
-							"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+							"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 							"type": "checkbox",
 							"input": true
 						}]
@@ -1790,10 +1791,10 @@
 						"key": "RSPMotorTRuckCargoPerOccurrence",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "rsp"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'rsp') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'rsp') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}, {
@@ -1803,10 +1804,10 @@
 						"key": "ASPMotorTRuckCargoPerOccurrence",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "areaServiceProvider"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}, {
@@ -1816,10 +1817,10 @@
 						"key": "SPMotorTRuckCargoPerOccurrence",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "serviceProvider"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'serviceProvider') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'serviceProvider') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}, {
@@ -1829,10 +1830,10 @@
 						"key": "FLHMotorTRuckCargoPerOccurrence",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}, {
@@ -1842,10 +1843,10 @@
 						"key": "PDMotorTRuckCargoPerOccurrence",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "pickupDelivery"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1864,10 +1865,10 @@
 			"key": "html7",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "pickupDelivery"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -1877,10 +1878,10 @@
 			"key": "table10",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "pickupDelivery"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 1,
@@ -1895,10 +1896,10 @@
 						"key": "PDnoLessThan",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "pickupDelivery"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -1915,10 +1916,10 @@
 			"key": "html8",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "fleetLineHaul"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -1928,10 +1929,10 @@
 			"key": "table11",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "fleetLineHaul"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 1,
@@ -1946,10 +1947,10 @@
 						"key": "FLHDishonestyCoveragenoLessThan",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -2008,10 +2009,10 @@
 			"key": "html15",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "fleetLineHaul"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -2021,10 +2022,10 @@
 			"key": "table5",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "fleetLineHaul"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 2,
@@ -2039,10 +2040,10 @@
 						"key": "FLHGeneralCommercialCombinedSingleLimit",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -2054,10 +2055,10 @@
 						"key": "FLHGeneralCommercialaddlInsBoxCheckedOnCoi",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -2074,10 +2075,10 @@
 			"key": "html16",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "pickupDelivery"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -2087,10 +2088,10 @@
 			"key": "table8",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "pickupDelivery"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 2,
@@ -2105,10 +2106,10 @@
 						"key": "PDGeneralCommercialCombinedSingleLimit",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "pickupDelivery"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -2120,10 +2121,10 @@
 						"key": "PDGeneralCommercialaddlInsBoxCheckedOnCoi",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "pickupDelivery"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'pickupDelivery') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'pickupDelivery') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -2140,10 +2141,10 @@
 			"key": "html13",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "fleetLineHaul"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
@@ -2153,10 +2154,10 @@
 			"key": "table9",
 			"conditional": {
 				"show": true,
-				"when": "dataGrid.pleaseSelectDriverType",
+				"when": "pleaseSelectDriverType",
 				"eq": "true"
 			},
-			"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+			"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 			"type": "table",
 			"numRows": 1,
 			"numCols": 1,
@@ -2171,10 +2172,10 @@
 						"key": "FLHnoLessThan",
 						"conditional": {
 							"show": true,
-							"when": "dataGrid.pleaseSelectDriverType",
+							"when": "pleaseSelectDriverType",
 							"eq": "fleetLineHaul"
 						},
-						"customConditional": "show = (data.dataGrid[0].pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
+						"customConditional": "show = (data.pleaseSelectDriverType == 'fleetLineHaul') ? true : false",
 						"type": "checkbox",
 						"input": true
 					}]
@@ -2761,7 +2762,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 209,
+	"_vid": 215,
 	"title": "HUB Compliance Checklist",
 	"display": "wizard",
 	"access": [{
@@ -2780,6 +2781,6 @@
 	"path": "hubcompliancechecklist",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-04-22T04:57:04.358Z",
-	"modified": "2021-08-30T07:19:40.002Z",
+	"modified": "2021-08-31T07:25:13.836Z",
 	"machineName": "insuranceprocurement-eoxvantage:hubComplianceChecklist"
 }
