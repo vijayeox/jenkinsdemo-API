@@ -350,7 +350,7 @@
         </style>
     </head>
     <body>
-        <span class="preheader">HubDrive Online Excess Liability Submission</span>
+        <span class="preheader">HUB Drive Excess Liability Shield</span>
         <table
         role="presentation"
         border="0"
@@ -374,14 +374,36 @@
                         cellspacing="0"
                     >
                         <tr>
-                        <td>
-                            <p>Thank you for your submission. We at Avant Brokerage appreciate your business.   Please access this email as notice that we have received your submission and will begin the review process.   If anything is missing in order for us to provide a quotation, we will be in contact within the next 24 hours.</p>
-                            <p>After we have a completed submission we will work to provide your quotation within the next 3 business days.</p>
-                            <p>Thank you again for your business and we will be in contact soon.</p>
-                            <p>The Avant Brokerage Team</p>
-                            <br />
-                            <br />
-                        </td>
+                            <p>
+                            Account Name : 
+                                {if isset($insuredName)}
+                                    {$insuredName}
+                                {/if}
+                            </p>
+                            <p>
+                            Account City and State: 
+                            {if isset($city)}
+                                {$city} , 
+                            {/if}
+                            {if isset($state.name)}
+                                {$state.name}
+                            {/if}
+                            </p>
+                            <p>
+                            Effective Date: 
+                            {if isset($desiredPolicyEffectiveDateFormatted)}
+                                {$desiredPolicyEffectiveDateFormatted}
+                            {/if}
+                            </p>
+                            <p>
+                            Hub Producer name and location: 
+                            {if isset($producersName)}
+                                {$producersName} , 
+                            {/if}
+                            {if isset($producerRegion)}
+                                {$producerRegion} 
+                            {/if}
+                            </p>
                         </tr>
                     </table>
                     </td>
@@ -389,72 +411,6 @@
                 <!-- END MAIN CONTENT AREA -->
                 </table>
                 <!-- END CENTERED WHITE CONTAINER -->
-                <!-- START FOOTER -->
-                <div class="footer">
-                <table
-                    class="MsoNormalTable"
-                    border="0"
-                    cellspacing="0"
-                    cellpadding="0"
-                    style="border-collapse: collapse"
-                >
-                    <tbody>
-                    <tr style="height: 13pt">
-                        <p class="MsoNormal">
-                        <a
-                            href="http://www.eoxvantage.com/"
-                            target="_blank"
-                            title="http://www.eoxvantage.com/"
-                            ><span
-                            style="
-                                font-size: 10pt;
-                                font-family: 'Times New Roman', serif;
-                                color: #1155cc;
-                                border: none windowtext 1pt;
-                                padding: 0in;
-                                mso-fareast-language: EN-IN;
-                                text-decoration: none;
-                            "
-                            ><img
-                                border="0"
-                                width="100"
-                                height="100"
-                                style="
-                                width: 1.1137in;
-                                height: 1.1145in;
-                                max-width: 100vw;
-                                max-height: 101.305vw;
-                                "
-                                id="_x0000_i1028"
-                                src="https://lh5.googleusercontent.com/Aj3VBqHWUKzF7oXEnV2cCHND8uL0b8xTci2Y0gL8vy0UiOW5231RHh9wUy8mRlEp-P2mIRYh0kjIyzRm39TYL_VVVjVk9fcvxdXO-nv7khbHjCuU0NO5FqKYJgMEggwBkyZkKJt3" /></span
-                        ></a>
-                        </p>
-                    </tr>
-                    </tbody>
-                </table>
-                <table
-                    role="presentation"
-                    border="0"
-                    cellpadding="0"
-                    cellspacing="0"
-                >
-                    <tr>
-                    <td class="content-block">
-                        <span class="apple-link"
-                        >23611 Chagrin Blvd. Suite 320
-                        </span>
-                        <br />
-                        <span class="apple-link"> Beachwood, OH 44122 </span>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td class="content-block powered-by">
-                        Powered by <a href="http://htmlemail.io">EOS</a>
-                    </td>
-                    </tr>
-                </table>
-                </div>
-                <!-- END FOOTER -->
             </div>
             </td>
             <td>&nbsp;</td>
