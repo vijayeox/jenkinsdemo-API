@@ -22,15 +22,15 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
     {
         $fieldTypeMappingPDF = include(__DIR__ . "/FieldMappingComplianceChecklist.php");
         
-        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'fleetLineHaul')
+        if($data['pleaseSelectDriverType'] == 'fleetLineHaul')
             $complianceChecklistPDFTemplate = "OnTrac_Fleet_Checklist";
-        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'rsp')
+        if($data['pleaseSelectDriverType'] == 'rsp')
             $complianceChecklistPDFTemplate = "OnTrac_RSP_Checklist";
-        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'areaServiceProvider')
+        if($data['pleaseSelectDriverType'] == 'areaServiceProvider')
             $complianceChecklistPDFTemplate = "OnTrac_ASP_Checklist";
-        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'serviceProvider')
+        if($data['pleaseSelectDriverType'] == 'serviceProvider')
             $complianceChecklistPDFTemplate = "OnTrac_SP_Checklist";
-        if($data['dataGrid'][0]['pleaseSelectDriverType'] == 'pickupDelivery')
+        if($data['pleaseSelectDriverType'] == 'pickupDelivery')
             $complianceChecklistPDFTemplate = "OnTrac_P_D_Checklist";
             
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
@@ -51,18 +51,18 @@ class ComplianceChecklistPDFGeneration extends AbstractDocumentAppDelegate
         $trueKey = ['certificateOfInsuranceIsCompliant', 'certificateOfInsuranceIsDeficient'];
         foreach($data as $key=>$value) {
             if(in_array($key, $trueKey) && $value == true){
-                if(isset($fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$key])) {
+                if(isset($fieldTypeMappingPDF[$data['pleaseSelectDriverType']]["checkbox"][$key])) {
                     array_push($form, $key);
                 }
             }
             if(!in_array($key, $trueKey) && $value==false) {
-                if(isset($fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$key])) {
+                if(isset($fieldTypeMappingPDF[$data['pleaseSelectDriverType']]["checkbox"][$key])) {
                     array_push($form, $key);
                 }
             }
         }
         foreach($form as $i) {
-            $pdfData[$fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$i]['fieldname']] = $fieldTypeMappingPDF[$data['dataGrid'][0]['pleaseSelectDriverType']]["checkbox"][$i]["options"]["true"];
+            $pdfData[$fieldTypeMappingPDF[$data['pleaseSelectDriverType']]["checkbox"][$i]['fieldname']] = $fieldTypeMappingPDF[$data['pleaseSelectDriverType']]["checkbox"][$i]["options"]["true"];
         }
         
         $pdfData = array_filter($pdfData);

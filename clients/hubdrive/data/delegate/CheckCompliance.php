@@ -15,7 +15,7 @@ class CheckCompliance extends AbstractAppDelegate
         $this->logger->info("Executing Check compliance with data- " . json_encode($data, JSON_UNESCAPED_SLASHES));
         $nonComp=array();
         $compliant=true;
-        $drivertype = $data['dataGrid'][0]['pleaseSelectDriverType'];
+        $drivertype = $data['pleaseSelectDriverType'];
 
         if($drivertype == 'fleetLineHaul'){
             if((isset($data['auto']) && $data['auto'] == true) && (isset($data['motorTruckCargo']) && $data['motorTruckCargo'] == true) && (isset($data['crimeFidelityEmployeeDishonesty1']) && $data['crimeFidelityEmployeeDishonesty1'] == true) && (isset($data['generalCommercial']) && $data['generalCommercial'] == true) && (isset($data['trailerInterchange']) && $data['trailerInterchange'] == true)) {
