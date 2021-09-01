@@ -86,7 +86,7 @@ return array(
             "fieldname" => 'FLHGeneralCommercialaddlInsBoxCheckedOnCoi',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
-        'FLHTrailerInterchange' => [
+        'FLHnoLessThan' => [
             "fieldname" => 'FLHTrailerInterchange',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
@@ -251,7 +251,7 @@ return array(
             "options" => ["true" => "Yes", "false" => "No"]
         ],
         'ASPanyAuto' => [
-            "fieldname" => 'RSPanyAuto',
+            "fieldname" => 'ASPanyAuto',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
         'ASPownedAuto' => [
@@ -442,7 +442,7 @@ return array(
             "fieldname" => 'motorTruckCargo',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
-        'crimeFidelityEmployeeDishonesty1' => [
+        'crimeFidelityEmployeeDishonesty' => [
             "fieldname" => 'crimeFidelityEmployeeDishonesty1',
             "options" => ["true" => "Yes", "false" => "No"]
         ],

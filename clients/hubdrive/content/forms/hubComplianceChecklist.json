@@ -482,7 +482,7 @@
 			"validate": {
 				"required": true,
 				"onlyAvailableItems": true,
-				"custom": "valid = (data.pleaseSelectDriverType == 'fleetLineHaul' || data.pleaseSelectDriverType == 'areaServiceProvider' || data.pleaseSelectDriverType == 'serviceProvider' || data.pleaseSelectDriverType == 'rsp' || data.pleaseSelectDriverType == 'pickupDelivery') : true ? \"Kindly Select Driver Type From Given Options\""
+				"custom": "valid = ((data.pleaseSelectDriverType == 'fleetLineHaul') || (data.pleaseSelectDriverType == 'areaServiceProvider') || (data.pleaseSelectDriverType == 'serviceProvider') || (data.pleaseSelectDriverType == 'rsp') || (data.pleaseSelectDriverType == 'pickupDelivery')) : true ? \"Kindly Select Driver Type From Given Options\""
 			},
 			"key": "pleaseSelectDriverType",
 			"type": "select",
