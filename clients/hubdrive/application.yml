@@ -428,6 +428,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
+        enable_generatelink: false
+        enable_print: false
         pageContent:
             data:
                 content:
