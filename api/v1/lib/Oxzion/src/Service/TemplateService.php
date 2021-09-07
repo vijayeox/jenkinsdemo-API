@@ -91,7 +91,6 @@ class TemplateService extends AbstractService
             print("Error - " . $e->getMessage() . "\n");
             throw $e;
         }
-        //print_r($content);exit;
         return $content;
     }
 
