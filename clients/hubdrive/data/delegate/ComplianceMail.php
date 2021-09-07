@@ -18,10 +18,13 @@ class ComplianceMail extends MailDelegate
         $type = (isset($data['entity_name']) && $data['entity_name'] == 'Excess Liability') ? 'excessLiabilityMail' : 'complianceMail';
         $selectQuery = "Select value FROM applicationConfig WHERE type ='" . $type . "'";
         $mailTo = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+        //$mailTo  = $data['iCEmail'];
+        $this->logger->info("mailto- " . $mailTo);
         $mailOptions = [];
         $mailOptions['to'] = $mailTo;
+        $mailOptions['cc'] = $mailTo;
         $fileData = array();
-        $mailOptions['subject'] = (isset($data['entity_name']) && $data['entity_name'] == 'Excess Liability') ? 'Excess Liability' : 'Independant Contractor Compliance';
+        $mailOptions['subject'] = (isset($data['entity_name']) && $data['entity_name'] == 'Excess Liability') ? 'Excess Liability' : 'OnTrac Compliance Checklist';
         $template = (isset($data['entity_name']) && $data['entity_name'] == 'Excess Liability') ? 'excessLiabilityMail' : 'ICComplianceMail';
         if (isset($data['attachments'])) {
             $data['attachments'] = json_decode($data['attachments'], true);

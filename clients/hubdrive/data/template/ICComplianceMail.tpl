@@ -375,17 +375,45 @@
                     >
                         <tr>
                         <td>
-                            <p>Hello,</p>
-                            <p>The attached certificate of insurance for Auto Liability and Cargo Liability is 
-                            {if $status == 'Compliant'}
-                                Compliant 
-                            {else}
-                                Non-Compliant 
-                            {/if}
-                            and meets the insurance requirements.</p>
-                            <p>Thank you</p>
+                            <p> RSP Name : {$name}</p>
+                            <p> Business Name : {$companyName}</p>
+                            <p> Driver # : {$vendorNumber}</p>
+                            <p> Facility : {$pleaseSelectTheFacility}</p>
+
+                            <p>Welcome to OnTrac Compliance,</p>
+                            <p>Please see the attached checklist regarding the status of your Certificate of Insurance for OnTrac.</p>
+                            
+                            <p>If you need to supply a Revised Certificate of Insurance (COI), please send to <a href='HDOLsupport@hubinternational.com'>HDOLsupport@hubinternational.com</a>.</p>
+
+                            <p>If you have any questions about this mail, please contact <a href='VendorRelations@ontrac.com'>VendorRelations@ontrac.com</a> or your OnTrac VR Specialist</p>
                             <br />
                             <br />
+                        </td>
+                        </tr>
+                        <tr>
+                        <td><span
+                            style="
+                                font-size: 10pt;
+                                font-family: 'Times New Roman', serif;
+                                color: #1155cc;
+                                border: none windowtext 1pt;
+                                padding: 0in;
+                                mso-fareast-language: EN-IN;
+                                text-decoration: none;
+                            "
+                            ><img
+                                border="0"
+                                width="100"
+                                height="50"
+                                id="_x0000_i1028"
+                                src="./image/hub.jpg" /></span
+                        ></td></tr>
+                        
+                        <tr><td><p style= "font-size: 10pt; font-family: 'Times New Roman', serif;margin-bottom: 0px;"> Risk & Insurance | Employee Benefits | Retirement & Private Wealth </p></td></tr>
+                        <tr><td><p style= "font-size: 12pt; font-family: 'Times New Roman', serif;color:#0678d5;font-weight:bold">Ready for tomorrow</p></td></tr>
+                        <br>
+                        <tr><td><p style= "font-size: 12pt; font-family: 'Times New Roman', serif;font-weight:bold">HUB Compliance</p>
+                        
                         </td>
                         </tr>
                     </table>
@@ -395,7 +423,7 @@
                 </table>
                 <!-- END CENTERED WHITE CONTAINER -->
                 <!-- START FOOTER -->
-                <div class="footer">
+                <!-----<div class="footer">
                 <table
                     class="MsoNormalTable"
                     border="0"
@@ -458,7 +486,7 @@
                     </td>
                     </tr>
                 </table>
-                </div>
+                </div>----->
                 <!-- END FOOTER -->
             </div>
             </td>
