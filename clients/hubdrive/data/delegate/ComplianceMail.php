@@ -15,14 +15,15 @@ class ComplianceMail extends MailDelegate
     {
         $this->logger->info("Executing Compliance Mail with data- " . print_r($data, true));
         // Add logs for created by id and producer name who triggered submission
-        $type = (isset($data['entity_name']) && $data['entity_name'] == 'Excess Liability') ? 'excessLiabilityMail' : 'complianceMail';
-        $selectQuery = "Select value FROM applicationConfig WHERE type ='" . $type . "'";
-        $mailTo = ($persistenceService->selectQuery($selectQuery))->current()["value"];
+        $type = 'complianceMail';
+        $mailTo  = $data['iCEmail'];
+        $this->logger->info("mailto- " . $mailTo);
         $mailOptions = [];
         $mailOptions['to'] = $mailTo;
+        $mailOptions['cc'] = 'VendorRelations@ontrac.com';
         $fileData = array();
-        $mailOptions['subject'] = (isset($data['entity_name']) && $data['entity_name'] == 'Excess Liability') ? 'Excess Liability' : 'Independant Contractor Compliance';
-        $template = (isset($data['entity_name']) && $data['entity_name'] == 'Excess Liability') ? 'excessLiabilityMail' : 'ICComplianceMail';
+        $mailOptions['subject'] = 'OnTrac Compliance Checklist';
+        $template = 'ICComplianceMail';
         if (isset($data['attachments'])) {
             $data['attachments'] = json_decode($data['attachments'], true);
             foreach ($data['attachments'] as $key => $value) {

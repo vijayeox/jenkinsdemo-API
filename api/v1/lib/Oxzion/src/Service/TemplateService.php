@@ -72,7 +72,7 @@ class TemplateService extends AbstractService
         $this->logger->info("Data context" . print_r($data, true));
 
         $template = $this->getTemplateDir($templateName, $data, $options);
-        $this->logger->info("Template Directory:" . print_r($template['templatePath'], true));
+        $this->logger->info("Template Directory:" . print_r($template, true));
         $this->logger->info("Template Name with Extension:" . print_r($template['templateNameWithExt'], true));
         if (!$template) {
             throw new Exception("Template not found!");
