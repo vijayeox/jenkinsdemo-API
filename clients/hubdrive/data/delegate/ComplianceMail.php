@@ -16,8 +16,6 @@ class ComplianceMail extends MailDelegate
         $this->logger->info("Executing Compliance Mail with data- " . print_r($data, true));
         // Add logs for created by id and producer name who triggered submission
         $type = 'complianceMail';
-        //$selectQuery = "Select value FROM applicationConfig WHERE type ='" . $type . "'";
-        //$mailTo = ($persistenceService->selectQuery($selectQuery))->current()["value"];
         $mailTo  = $data['iCEmail'];
         $this->logger->info("mailto- " . $mailTo);
         $mailOptions = [];
