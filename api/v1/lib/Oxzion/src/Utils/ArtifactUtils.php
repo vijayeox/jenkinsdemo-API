@@ -14,11 +14,11 @@ class ArtifactUtils
         $templateDir = $config['TEMPLATE_FOLDER'];
         $accountId = isset($params['accountId']) ? $params['accountId'] : (isset($params['accountId']) ? $params['accountId'] : AuthContext::get(AuthConstants::ACCOUNT_UUID));
         self::$logger->info("accountId - $accountId");
-        if(isset($params['appId'])) {
-            $appId = $params['appId'];
-        }
         if(isset($params['app_id'])) {
             $appId = $params['app_id'];
+        }
+        if(isset($params['appId'])) {
+            $appId = $params['appId'];
         }
         if (isset($accountId)) {
             $path = $accountId."/".$template;
