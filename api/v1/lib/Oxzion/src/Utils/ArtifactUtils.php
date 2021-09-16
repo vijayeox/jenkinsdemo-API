@@ -19,7 +19,6 @@ class ArtifactUtils
         }
         if(isset($params['appId'])) {
             $appId = $params['appId'];
-            self::$logger->info("Brian check 1 - $appId");
         }
         if (isset($accountId)) {
             $path = $accountId."/".$template;
