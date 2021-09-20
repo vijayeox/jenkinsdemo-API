@@ -65,6 +65,13 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Controller\FoleyController::class => function ($container) {
+                    return new Controller\FoleyController(
+                        $container->get(Model\PrehireTable::class),
+                        $container->get(FoleyService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
             ],
         ];
     }

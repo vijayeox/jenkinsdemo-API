@@ -31,7 +31,7 @@ class FoleyControllerTest extends ControllerTest
 
     public function testApplicationShell()
     {
-        //$this->initAuthToken($this->adminUser);
+        $this->initAuthToken($this->adminUser);
         $data=array (
             'CreateApplicant' => 
             array (
@@ -69,12 +69,12 @@ class FoleyControllerTest extends ControllerTest
               ),
               'driver_applicant' => 
               array (
-                'id' => 'driver uuid',
-                'report_id' => 'unique id to identify record',
+                'id' => 'driver1234',
+                'report_id' => 'driverreposrt1234',
               ),
               'PersonalData' => 
               array (
-                'ClientReferenceId' => 'driver uuid',
+                'ClientReferenceId' => '9876',
                 'FirstName' => 'Megha',
                 'MiddleName' => '',
                 'LastName' => 'Gupta',
@@ -99,23 +99,21 @@ class FoleyControllerTest extends ControllerTest
                   'DriverLicenseState' => 'GA',
                   'MVRCurrentState' => 'True',
                   'CDLFlag' => 'True',
-                  'ScreeningReferenceID' => 'unique id to identify record',
-                  'ClientReferenceId' => 'same as above',
+                  'ScreeningReferenceID' => 'hello',
+                  'ClientReferenceId' => '9876',
                   'ScreeningStatus' => 'NEW',
                 ),
               ),
             ),
         );
-        $this->setJsonContent(json_encode($data));
+        //$this->setJsonContent(json_encode($data));
         $this->dispatch('/foley/endpoint/ApplicantShell', 'POST',$data); 
         $content = json_decode($this->getResponse()->getContent(), true);
         print_r($content);exit;
         $this->assertResponseStatusCode(201);
         $this->assertMatchedRouteName('foley');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['request_type'],'MVR');
-        $this->assertEquals($content['data']['implementation'],'foley');
-        $this->assertEquals($content['data']['request'],'{something ooooo}');
+        
 
     }
 
