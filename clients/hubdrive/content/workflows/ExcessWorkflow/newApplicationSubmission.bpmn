@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_18aoobw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
+  <bpmn:process id="Process_0sw9fv5" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Excess New Application" camunda:asyncAfter="true">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="template" value="abExcessLiability" />
+          <camunda:property name="fields" value="insuredName" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1hm9lab</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_005seqd">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">execution.setVariable("overallStatus","Completed");</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0e9rl8h</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1hm9lab" sourceRef="StartEvent_1" targetRef="Task_1stdsf2" />
+    <bpmn:sendTask id="Task_1stdsf2" name="Mail to Avant" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property />
+        </camunda:properties>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command":"delegate","delegate":"ExcessMail"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1hm9lab</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0crs2xf</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_00ony52</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="Task_1uzx3et" name="Avant initial submission check" camunda:candidateUsers="{{role:ABAccountManager}}">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">execution.setVariable("overallStatus","Recieved");</camunda:script>
+        </camunda:executionListener>
+        <camunda:properties>
+          <camunda:property name="template" value="abExcessLiability" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_00ony52</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_03qqooz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1kwn590">
+      <bpmn:incoming>SequenceFlow_03qqooz</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_156oy9e</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0e9rl8h</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Task_0nhilfs" name="Hub AM rechecks form" camunda:candidateUsers="{{role:Account Manager}}">
+      <bpmn:incoming>SequenceFlow_156oy9e</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0crs2xf</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0jiarjo</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_03qqooz" sourceRef="Task_1uzx3et" targetRef="ExclusiveGateway_1kwn590" />
+    <bpmn:sequenceFlow id="SequenceFlow_0crs2xf" sourceRef="Task_0nhilfs" targetRef="Task_1stdsf2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approvalRejection == "approve"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_00ony52" sourceRef="Task_1stdsf2" targetRef="Task_1uzx3et" />
+    <bpmn:endEvent id="EndEvent_07apard">
+      <bpmn:incoming>SequenceFlow_0jiarjo</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0jiarjo" sourceRef="Task_0nhilfs" targetRef="EndEvent_07apard">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approvalRejection == "lost"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_156oy9e" sourceRef="ExclusiveGateway_1kwn590" targetRef="Task_0nhilfs">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approvalRejection1 == "reject"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0e9rl8h" sourceRef="ExclusiveGateway_1kwn590" targetRef="EndEvent_005seqd">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approvalRejection1 == "approve"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0sw9fv5">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="162" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="152" y="145" width="61" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_005seqd_di" bpmnElement="EndEvent_005seqd">
+        <dc:Bounds x="702" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1hm9lab_di" bpmnElement="SequenceFlow_1hm9lab">
+        <di:waypoint x="198" y="120" />
+        <di:waypoint x="280" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SendTask_168zpio_di" bpmnElement="Task_1stdsf2">
+        <dc:Bounds x="280" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_047rjth_di" bpmnElement="Task_1uzx3et">
+        <dc:Bounds x="460" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1kwn590_di" bpmnElement="ExclusiveGateway_1kwn590" isMarkerVisible="true">
+        <dc:Bounds x="605" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1ulvoio_di" bpmnElement="Task_0nhilfs">
+        <dc:Bounds x="380" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_03qqooz_di" bpmnElement="SequenceFlow_03qqooz">
+        <di:waypoint x="560" y="120" />
+        <di:waypoint x="605" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0crs2xf_di" bpmnElement="SequenceFlow_0crs2xf">
+        <di:waypoint x="410" y="240" />
+        <di:waypoint x="410" y="200" />
+        <di:waypoint x="330" y="200" />
+        <di:waypoint x="330" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_00ony52_di" bpmnElement="SequenceFlow_00ony52">
+        <di:waypoint x="380" y="120" />
+        <di:waypoint x="460" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_07apard_di" bpmnElement="EndEvent_07apard">
+        <dc:Bounds x="412" y="382" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0jiarjo_di" bpmnElement="SequenceFlow_0jiarjo">
+        <di:waypoint x="430" y="320" />
+        <di:waypoint x="430" y="382" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_156oy9e_di" bpmnElement="SequenceFlow_156oy9e">
+        <di:waypoint x="630" y="120" />
+        <di:waypoint x="630" y="200" />
+        <di:waypoint x="460" y="200" />
+        <di:waypoint x="460" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0e9rl8h_di" bpmnElement="SequenceFlow_0e9rl8h">
+        <di:waypoint x="655" y="120" />
+        <di:waypoint x="702" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

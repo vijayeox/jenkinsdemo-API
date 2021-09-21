@@ -40,9 +40,9 @@ class CustomTaskListener implements TaskListener, Serializable {
     def candidatesArray = []
     def i=0
     def reg1 = /\{\{[A-Za-z0-9]*\}\}/
-    def reg2 = /\{\{role:[A-Za-z]*\}\}/
-    def reg3 = /\{\{group:[A-Za-z]*\}\}/
-    def reg4 = /\{\{participant:[A-Za-z0-9_-]*\}\}/
+    def reg2 = /\{\{role:[A-Za-z0-9 _-]*\}\}/
+    def reg3 = /\{\{group:[A-Za-z0-9 _-]*\}\}/
+    def reg4 = /\{\{participant:[A-Za-z0-9 _-]*\}\}/
     taskDetails.variables = execution.getVariables()
     for (IdentityLink item : delegateTask.getCandidates()){
       Map candidateList = [:]
