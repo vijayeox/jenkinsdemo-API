@@ -529,7 +529,7 @@ class WorkflowInstanceService extends AbstractService
             $select = $this->executeQueryWithBindParameters($selectQuery, $updateQueryParams)->toArray();
             $this->logger->info("QUERY------- $selectQuery with params" . print_r($updateQueryParams, true));
             if (count($select) > 0) {
-                $updateQuery = "UPDATE ox_workflow_instance owi join ox_file of on of.id = owi.file_id SET owi.status=:status,owi.completion_data=:fileData,owi.date_modified=:modifiedDate where process_instance_id = :workflowInstanceId";
+                $updateQuery = "UPDATE ox_workflow_instance owi SET owi.status=:status,owi.completion_data=:fileData,owi.date_modified=:modifiedDate where process_instance_id = :workflowInstanceId";
                 $updateParams = array('status' => 'Completed', 'workflowInstanceId' => $params['processInstanceId'], 'fileData' => $select[0]['data'], 'modifiedDate' => date('Y-m-d H:i:s'));
                 $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
                 $this->commit();
