@@ -33,13 +33,14 @@ class ExcessLiabilityPDF extends AbstractDocumentAppDelegate
         $excessLiabilityPDFName = $excessLiabilityPDFTemplate.".pdf";
         $generatedExcessLiabilityPDF = array();
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
-
         $currentAccount = isset($data['accountId']) ? $data['accountId'] : null;
         $accountId = isset($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
         $this->logger->info("ACCOUT IS ____" . $accountId);
-
+        $path = "https://i.imgur.com/1zkaS1p.jpeg";
+        $img = file_get_contents($path);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data['avantImageSrc'] = 'data:image/' . $type . ';base64,' . base64_encode($img);
         $this->getAppropriateDataForPDF($data);
-
         $folderDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('accountId' => $accountId));
         $fileDestination = $folderDestination['absolutePath'].$excessLiabilityPDFName;
         if(FileUtils::fileExists($fileDestination)) {

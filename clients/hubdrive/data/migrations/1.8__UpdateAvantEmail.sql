@@ -1,0 +1,1 @@
+UPDATE applicationConfig SET `value` = 'exsubmission@avantbrokerage.com' WHERE `type` = 'excessLiabilityMail';
