@@ -1,0 +1,1 @@
+INSERT INTO applicationConfig (`type`,`value`,`ox_app_account_id`)  VALUES ('ExcessSubmissionNumber','1',0);
