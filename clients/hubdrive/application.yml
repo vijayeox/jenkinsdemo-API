@@ -10,7 +10,7 @@ app:
     logo: default_app.png
     start_options: null
     title: HubDriveOnline
-    app_properties: '{"chat_notification":"","appIdentifiers":""}'
+    app_properties: '{"chat_notification":""}'
 org:
     -
         name: HUB
@@ -93,6 +93,9 @@ businessRole:
     -
         name: 'Contract Carrier - Compliance only'
         uuid: b01e2f50-0d65-4940-9070-62ed710dd2ca
+    -
+        name: 'Contract Carrier - Excess Only'
+        uuid: e17b90f9-ca10-49c9-beb9-546c74da8549
 privilege:
     -
         name: MANAGE_COMPLIANCE
@@ -117,6 +120,9 @@ privilege:
         permission: 3
     -
         name: MANAGE_EMPLOYEE
+        permission: 3
+    -
+        name: MANAGE_EXCESS
         permission: 3
 role:
     -
@@ -151,6 +157,9 @@ role:
         privileges:
             -
                 privilege_name: MANAGE_ACCOUNT_MANAGER
+                permission: 3
+            -
+                privilege_name: MANAGE_EXCESS
                 permission: 3
         uuid: 99eaa419-0622-438b-b1b5-e21186394681
         businessRole:
@@ -230,6 +239,15 @@ role:
         uuid: d3ef9902-3bf8-4d70-8c79-129e6bc4e45c
         businessRole:
             name: 'Independent Contractor'
+    -
+        name: 'ABAccountManager'
+        privileges:
+            -
+                privilege_name: MANAGE_EXCESS
+                permission: 3
+        uuid: 840ae886-c375-4ddd-81d6-f521f572d231
+        businessRole:
+            name: 'Contract Carrier - Excess Only'
 entity:
     -
         name: 'PartTime Independent Contractor Onboarding'
@@ -764,10 +782,12 @@ entity:
                 index: true
         identifiers:
             -
-                identifier: email
+                identifier: usDot
         participantRole:
             -
                 businessRole: 'Independent Contractor'
+            -
+                businessRole: 'Contract Carrier - Excess Only'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
@@ -1181,9 +1201,8 @@ pages:
             -
                 type: List
                 content:
-                    route: file/user/me
+                    route: assignments
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -1241,24 +1260,12 @@ pages:
                             defaultAction: true
                         -
                             name: Edit
-                            rule: 'false'
+                            rule: 'true'
                             details:
                                 -
                                     type: Form
-                                    form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
-                                    fileId: '{{uuid}}'
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                             icon: 'far fa-pencil-alt'
-                    operations:
-                        title: 'Create Excess Liability'
-                        actions:
-                            -
-                                name: 'Create Excess Liability'
-                                icon: 'fa fa-plus'
-                                rule: 'true'
-                                details:
-                                    -
-                                        type: Form
-                                        form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
                     columnConfig:
                         -
                             title: 'Insured Name'
@@ -1269,6 +1276,9 @@ pages:
                             cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+                        -
+                            title: 'Status'
+                            field: overallStatus
     -
         name: 'Excess Liability'
         uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
@@ -1337,13 +1347,12 @@ pages:
                             defaultAction: true
                         -
                             name: Edit
-                            rule: 'false'
+                            icon: 'fa fa-pencil'
+                            rule: 'true'
                             details:
                                 -
                                     type: Form
-                                    form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
-                                    fileId: '{{uuid}}'
-                            icon: 'far fa-pencil-alt'
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                     operations:
                         title: 'Create Excess Liability'
                         actions:
@@ -1354,7 +1363,7 @@ pages:
                                 details:
                                     -
                                         type: Form
-                                        form_id: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
+                                        url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
                     columnConfig:
                         -
                             title: 'Insured Name'
@@ -1365,6 +1374,9 @@ pages:
                             cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+                        -
+                            title: 'Status'
+                            field: overallStatus
 menu:
     -
         name: 'Independent Contractor'
@@ -1395,13 +1407,13 @@ menu:
         icon: 'fas fa-street-view'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
-        privilege: '{"eq" : "MANAGE_ACCOUNT_MANAGER_READ","neq" : "MANAGE_APP_WRITE"}'
+        privilege: MANAGE_EXCESS
     -
         name: 'Excess Liability'
         icon: 'fas fa-street-view'
         page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
-        privilege: MANAGE_APP_WRITE
+        privilege: MANAGE_EXCESS
 form:
     -
         name: 'Excess Liability Form'
@@ -1499,3 +1511,9 @@ form:
         description: 'How To Survive A Dot Audit'
         template_file: howToSurviveADotAudit.json
         entity: 'How To Survive A Dot Audit'
+workflow:
+    -
+        name: 'Excess New Application Submission'
+        uuid: ab854546-9e1b-43b3-ae7d-e6cf93683f61
+        bpmn_file: ExcessWorkflow/newApplicationSubmission.bpmn
+        entity: 'Excess Liability'
