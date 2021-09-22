@@ -75,7 +75,7 @@ return [
         'password' => 'h+MfHWZhND64FpTmoKwy8Q==::3157db2c39b1c896a95904d1a0e7555e',
         'foleyurl' => 'https://sandboxapi.foleyservices.com/api/foley/v1.2/json/',
         'foleyapiusername' => 'HUBAPI-136757',
-        'foleyapipassword' => 'HUBTestSKpjVM5SiT'
+        'foleyapipassword' => 'qdf9uqMRBs5TnUkivPHAro4=::f60dfe4a0a79beb2a8ab5d3848c3941c'
     ],
     'esign' => [
         'clientid' => '6l3lpgsbrha13u8rdg9t5hq3au',

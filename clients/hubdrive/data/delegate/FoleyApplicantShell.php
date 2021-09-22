@@ -4,7 +4,7 @@ use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\DelegateException;
 use Oxzion\AppDelegate\PrehireTrait;
-use function GuzzleHttp\json_decode;
+use Oxzion\Utils\UuidUtil;
 
 class FoleyApplicantShell extends AbstractAppDelegate
 {
@@ -22,6 +22,7 @@ class FoleyApplicantShell extends AbstractAppDelegate
     {   
         
         $this->logger->info("in foley delegate- " . json_encode($data, JSON_UNESCAPED_SLASHES));
+        $driver_id = UuidUtil::uuid();
         $dataToPost = array();
         $dataToPost['CreateApplicant']['Account']['FoleyAccountCode'] = '0000136757'; //config
         $dataToPost['CreateApplicant']['Account']['AccountName'] = 'Hub International Limited'; //config
@@ -49,32 +50,35 @@ class FoleyApplicantShell extends AbstractAppDelegate
         $dataToPost['CreateApplicant']['ClientReferences']['TalentCoordinator'] = '';
         $dataToPost['CreateApplicant']['ClientReferences']['TalentCoordinatorEmail'] = '';
 
-        $dataToPost['CreateApplicant']['driver_applicant']['id'] = '123456';
-        $dataToPost['CreateApplicant']['driver_applicant']['report_id'] = 'test123456';
+        $dataToPost['CreateApplicant']['driver_applicant']['id'] = $driver_id;
+        $dataToPost['CreateApplicant']['driver_applicant']['report_id'] = 'driverreport'.$driver_id;
 
-        $dataToPost['CreateApplicant']['PersonalData']['ClientReferenceId'] = '123456';
-        $dataToPost['CreateApplicant']['PersonalData']['FirstName'] = 'Megha';
+        $dataToPost['CreateApplicant']['PersonalData']['ClientReferenceId'] = $driver_id;
+        $dataToPost['CreateApplicant']['PersonalData']['FirstName'] = $data['firstName'];
         $dataToPost['CreateApplicant']['PersonalData']['MiddleName'] = '';
-        $dataToPost['CreateApplicant']['PersonalData']['LastName'] = 'Gupta';
-        $dataToPost['CreateApplicant']['PersonalData']['ZipCode'] = '33333';
-        $dataToPost['CreateApplicant']['PersonalData']['State'] = 'GA';
-        $dataToPost['CreateApplicant']['PersonalData']['City'] = 'mnbnm';
-        $dataToPost['CreateApplicant']['PersonalData']['StreetAddress'] = 'cfdcede';
+        $dataToPost['CreateApplicant']['PersonalData']['LastName'] = $data['lastName'];
+        $dataToPost['CreateApplicant']['PersonalData']['ZipCode'] = $data['zipCode'];
+        $dataToPost['CreateApplicant']['PersonalData']['State'] = 'GA';//$data['state1];
+        $dataToPost['CreateApplicant']['PersonalData']['City'] = $data['city'];
+        $dataToPost['CreateApplicant']['PersonalData']['StreetAddress'] = $data['streetAddress'];
         $dataToPost['CreateApplicant']['PersonalData']['PhoneNumber'] = '123456789';
-        $dataToPost['CreateApplicant']['PersonalData']['EmailAddress'] = 'foleyapitest@abc.com';
+        $dataToPost['CreateApplicant']['PersonalData']['EmailAddress'] = $data['email'];
         $dataToPost['CreateApplicant']['PersonalData']['IDCountry'] = 'US';
         $dataToPost['CreateApplicant']['PersonalData']['IDType'] = 'SSN';
-        $dataToPost['CreateApplicant']['PersonalData']['IDNumber'] = '12tt456789';
-        $dataToPost['CreateApplicant']['PersonalData']['DateofBirth'] = '09/18/1992'; //mm/dd/yyyy
-        $dataToPost['CreateApplicant']['PersonalData']['GenderCode'] = 'F';
+        $dataToPost['CreateApplicant']['PersonalData']['IDNumber'] = $data['ssn'];
+        
+        $dob = date_format(date_create(explode("T",$data['dob1'])[0]),'m/d/Y');
+
+        $dataToPost['CreateApplicant']['PersonalData']['DateofBirth'] = $dob; 
+        $dataToPost['CreateApplicant']['PersonalData']['GenderCode'] = 'F'; //$data['gender']
 
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['@type'] = 'x:mvr';
-        $dataToPost['CreateApplicant']['Screenings']['SearchType']['DriverLicenseNumber'] = '026409105';
-        $dataToPost['CreateApplicant']['Screenings']['SearchType']['DriverLicenseState'] = 'GA';
+        $dataToPost['CreateApplicant']['Screenings']['SearchType']['DriverLicenseNumber'] = $data['driverLicense'];
+        $dataToPost['CreateApplicant']['Screenings']['SearchType']['DriverLicenseState'] = 'GA';//$data['licenseState1']
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['MVRCurrentState'] = "true";
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['CDLFlag'] = "true";
-        $dataToPost['CreateApplicant']['Screenings']['SearchType']['ScreeningReferenceID'] = '9876';
-        $dataToPost['CreateApplicant']['Screenings']['SearchType']['ClientReferenceId'] = '123456';
+        $dataToPost['CreateApplicant']['Screenings']['SearchType']['ScreeningReferenceID'] = "driverscreening".$driver_id;
+        $dataToPost['CreateApplicant']['Screenings']['SearchType']['ClientReferenceId'] = $driver_id;
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['ScreeningStatus'] = 'NEW';
         
         $result = $this->createApplicantShell('createapplicant/',$dataToPost);
