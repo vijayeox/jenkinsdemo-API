@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_18aoobw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
-  <bpmn:process id="Process_0sw9fv5" isExecutable="true">
+  <bpmn:process id="New_Excess_Application_Submission" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Excess New Application" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
@@ -24,20 +24,15 @@
       <bpmn:incoming>SequenceFlow_0ed0fbt</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1c1hg5d</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1c7sza5</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_03qqooz</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_1kwn590" name="Avant Submission">
-      <bpmn:incoming>SequenceFlow_03qqooz</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_156oy9e</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0e9rl8h</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
+    </bpmn:userTask>
     <bpmn:userTask id="Task_0nhilfs" name="Hub AM rechecks form" camunda:candidateUsers="{{role:AccountManager}}">
       <bpmn:incoming>SequenceFlow_156oy9e</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1c1hg5d</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_03qqooz" sourceRef="Task_1uzx3et" targetRef="ExclusiveGateway_1kwn590" />
     <bpmn:sequenceFlow id="SequenceFlow_00ony52" sourceRef="Task_1stdsf2" targetRef="Task_1uzx3et" />
-    <bpmn:sequenceFlow id="SequenceFlow_156oy9e" name="Avant Rejected and Require Additional Info" sourceRef="ExclusiveGateway_1kwn590" targetRef="Task_0nhilfs">
+    <bpmn:sequenceFlow id="SequenceFlow_156oy9e" name="Avant Rejected and Require Additional Info" sourceRef="Task_1uzx3et" targetRef="Task_0nhilfs">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${avantSubmissionApproval == "reject" &amp;&amp; hubAddInfoRequired == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Task_1stdsf2" name="Mail to Avant" camunda:expression="0">
@@ -56,13 +51,13 @@
       <bpmn:incoming>SequenceFlow_1hm9lab</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00ony52</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0e9rl8h" name="Approved" sourceRef="ExclusiveGateway_1kwn590" targetRef="Task_11luahe">
+    <bpmn:sequenceFlow id="SequenceFlow_0e9rl8h" name="Approved" sourceRef="Task_1uzx3et" targetRef="Task_11luahe">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${avantSubmissionApproval == "approve"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0ed0fbt" name="Genre Rejected and require HUB" sourceRef="Task_11luahe" targetRef="Task_1uzx3et">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${genreApproval == "reject"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Task_11luahe" name="Send Mail to Genre">
+    <bpmn:serviceTask id="Task_11luahe" name="Send Mail to Genre" camunda:expression="0">
       <bpmn:incoming>SequenceFlow_0e9rl8h</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1249u42</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0ed0fbt</bpmn:outgoing>
@@ -83,10 +78,6 @@
       <bpmn:outgoing>SequenceFlow_026y6w9</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1c7sza5</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:task id="Task_1n5oxi0" name="Generate policy number">
-      <bpmn:incoming>SequenceFlow_0ma7oqp</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_079nplo</bpmn:outgoing>
-    </bpmn:task>
     <bpmn:sequenceFlow id="SequenceFlow_026y6w9" name="Quote Approved" sourceRef="Task_17tad1p" targetRef="Task_0i8yx12">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${quoteApproved == "approved" || quoteApproved == "pendingBind"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -94,7 +85,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${quoteApproved == "rejected"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_079nplo" sourceRef="Task_1n5oxi0" targetRef="Task_0xvxkce" />
-    <bpmn:serviceTask id="Task_0xvxkce" name="Send Mail to Genre Request to Bind">
+    <bpmn:serviceTask id="Task_0xvxkce" name="Send Mail to Genre Request to Bind" camunda:expression="0">
       <bpmn:incoming>SequenceFlow_079nplo</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0qui7o5</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -136,17 +127,21 @@
       <bpmn:outgoing>SequenceFlow_1hvu9mk</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0ma7oqp" name="Yes" sourceRef="ExclusiveGateway_0lwre0e" targetRef="Task_1n5oxi0">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${policyBind = "yes"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${policyBind == "yes"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1hvu9mk" name="No" sourceRef="ExclusiveGateway_0lwre0e" targetRef="EndEvent_0ogi8ew">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${policyBind = "no"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${policyBind == "no"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1249u42" sourceRef="Task_11luahe" targetRef="Task_191wd79">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${genreApproval == "approved"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Task_1n5oxi0" name="Generate policy number" camunda:expression="0">
+      <bpmn:incoming>SequenceFlow_0ma7oqp</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_079nplo</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0sw9fv5">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="New_Excess_Application_Submission">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="162" y="292" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -160,38 +155,28 @@
       <bpmndi:BPMNShape id="UserTask_047rjth_di" bpmnElement="Task_1uzx3et">
         <dc:Bounds x="460" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_1kwn590_di" bpmnElement="ExclusiveGateway_1kwn590" isMarkerVisible="true">
-        <dc:Bounds x="735" y="285" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="596" y="292" width="88" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_1ulvoio_di" bpmnElement="Task_0nhilfs">
-        <dc:Bounds x="710" y="420" width="100" height="80" />
+        <dc:Bounds x="460" y="450" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_03qqooz_di" bpmnElement="SequenceFlow_03qqooz">
-        <di:waypoint x="560" y="310" />
-        <di:waypoint x="735" y="310" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_00ony52_di" bpmnElement="SequenceFlow_00ony52">
         <di:waypoint x="380" y="310" />
         <di:waypoint x="460" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_156oy9e_di" bpmnElement="SequenceFlow_156oy9e">
-        <di:waypoint x="760" y="335" />
-        <di:waypoint x="760" y="420" />
+        <di:waypoint x="520" y="350" />
+        <di:waypoint x="520" y="450" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="672" y="350" width="75" height="40" />
+          <dc:Bounds x="532" y="380" width="75" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1k79xq2_di" bpmnElement="Task_1stdsf2">
         <dc:Bounds x="280" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0e9rl8h_di" bpmnElement="SequenceFlow_0e9rl8h">
-        <di:waypoint x="785" y="310" />
+        <di:waypoint x="560" y="310" />
         <di:waypoint x="890" y="310" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="789" y="292" width="47" height="14" />
+          <dc:Bounds x="624" y="292" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0ed0fbt_di" bpmnElement="SequenceFlow_0ed0fbt">
@@ -207,9 +192,8 @@
         <dc:Bounds x="890" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1c1hg5d_di" bpmnElement="SequenceFlow_1c1hg5d">
-        <di:waypoint x="710" y="460" />
-        <di:waypoint x="510" y="460" />
-        <di:waypoint x="510" y="350" />
+        <di:waypoint x="490" y="450" />
+        <di:waypoint x="490" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_0692jqv_di" bpmnElement="Task_191wd79">
         <dc:Bounds x="1130" y="270" width="100" height="80" />
@@ -227,9 +211,6 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_0fhz8e3_di" bpmnElement="Task_17tad1p">
         <dc:Bounds x="1590" y="270" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_1n5oxi0_di" bpmnElement="Task_1n5oxi0">
-        <dc:Bounds x="2100" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_026y6w9_di" bpmnElement="SequenceFlow_026y6w9">
         <di:waypoint x="1690" y="310" />
@@ -330,6 +311,9 @@
         <di:waypoint x="990" y="310" />
         <di:waypoint x="1130" y="310" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1d7cbnw_di" bpmnElement="Task_1n5oxi0">
+        <dc:Bounds x="2100" y="270" width="100" height="80" />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
