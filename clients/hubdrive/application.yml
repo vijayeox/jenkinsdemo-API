@@ -1404,7 +1404,6 @@ pages:
                             cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
-<<<<<<< HEAD
     -
         name: 'Foley Driver Verification'
         uuid: 7e742804-1ab5-11ec-9621-0242ac130002

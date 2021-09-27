@@ -82,7 +82,8 @@ class FoleyApplicantShell extends AbstractAppDelegate
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['ScreeningStatus'] = 'NEW';
         
         $result = $this->createApplicantShell('createapplicant/',$dataToPost);
-        print_r($result);
+        $this->logger->info("in foley delegate respone - " . json_encode($result, JSON_UNESCAPED_SLASHES));
+        //print_r($result);
     }
 
     

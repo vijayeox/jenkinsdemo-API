@@ -40,13 +40,13 @@ class FoleyController extends AbstractApiController
                 case 'OrderMVR':
                     
                     break;
-                case 'CHQuery':
+                case 'OrderCHQuery':
                     
                     break;
-                case 'DrugTest':
+                case 'OrderDrugTest':
                     
                     break;
-                case 'BGC':
+                case 'OrderBGC':
                     
                     break;
                 default:
