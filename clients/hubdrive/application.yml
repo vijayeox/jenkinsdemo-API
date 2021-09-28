@@ -10,7 +10,7 @@ app:
     logo: default_app.png
     start_options: null
     title: HubDriveOnline
-    app_properties: '{"chat_notification":""}'
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
 org:
     -
         name: HUB
@@ -240,7 +240,7 @@ role:
         businessRole:
             name: 'Independent Contractor'
     -
-        name: 'ABAccountManager'
+        name: ABAccountManager
         privileges:
             -
                 privilege_name: MANAGE_EXCESS
@@ -1194,7 +1194,7 @@ pages:
                 useRowData: false
                 route: ''
     -
-        name: 'Excess Liability'
+        name: 'Approval Requests'
         uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         description: 'Shows a list of Excess Liability'
         content:
@@ -1259,7 +1259,7 @@ pages:
                                 metadata: {  }
                             defaultAction: true
                         -
-                            name: Edit
+                            name: Review
                             rule: 'true'
                             details:
                                 -
@@ -1277,13 +1277,24 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
                         -
-                            title: 'Status'
-                            field: overallStatus
+                            title: Status
+                            field: policyStatus
     -
-        name: 'Excess Liability'
+        name: 'Manage Policies'
         uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         description: 'Shows a list of Excess Liability'
         content:
+            -
+                type: RenderButtons
+                content:
+                    buttonList:
+                        -
+                            name: Create Excess Liability
+                            icon: 'fa fa-plus'
+                            details:
+                                    -
+                                        type: Form
+                                        url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
             -
                 type: List
                 content:
@@ -1348,22 +1359,11 @@ pages:
                         -
                             name: Edit
                             icon: 'fa fa-pencil'
-                            rule: 'true'
+                            rule: '''{{policyStatus}}'' == ''In Force'''
                             details:
                                 -
                                     type: Form
                                     url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
-                    operations:
-                        title: 'Create Excess Liability'
-                        actions:
-                            -
-                                name: 'Create Excess Liability'
-                                icon: 'fa fa-plus'
-                                rule: 'true'
-                                details:
-                                    -
-                                        type: Form
-                                        url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
                     columnConfig:
                         -
                             title: 'Insured Name'
@@ -1375,8 +1375,8 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
                         -
-                            title: 'Status'
-                            field: overallStatus
+                            title: Status
+                            field: policyStatus
 menu:
     -
         name: 'Independent Contractor'
@@ -1403,16 +1403,16 @@ menu:
         uuid: 30de0d23-f5e5-47e6-8511-2305bd1af060
         privilege: MANAGE_COMPLIANCE
     -
-        name: 'Excess Liability'
-        icon: 'fas fa-street-view'
-        page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
-        uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
-        privilege: MANAGE_EXCESS
-    -
-        name: 'Excess Liability'
-        icon: 'fas fa-street-view'
+        name: 'Manage Policies'
+        icon: 'fas fa-folder-open'
         page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
+        privilege: MANAGE_ACCOUNT_MANAGER
+    -
+        name: 'Approval Requests'
+        icon: 'fas fa-list'
+        page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
+        uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
         privilege: MANAGE_EXCESS
 form:
     -
