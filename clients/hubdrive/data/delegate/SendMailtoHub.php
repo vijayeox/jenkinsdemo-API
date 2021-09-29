@@ -20,8 +20,14 @@ class SendMailtoHub extends MailDelegate
         $mailOptions = [];
         $mailOptions['to'] = $data['HubAMmailId'];
         $fileData = array();
-        $mailOptions['subject'] = 'Application with Submission -'.$data['SubmissionNumber'].' hass been received by Avant';
-        $template = 'confirmationMail';
+        $mailOptions['subject'] = 'Quote Document';
+        $template = 'QuoteDocumentMail';
+        if (isset($data['attachments'])) {
+            $data['attachments'] = json_decode($data['attachments'], true);
+            foreach ($data['attachments'] as $key => $value) {
+                $mailOptions['attachments'][$key] = $value['fullPath'];
+            }
+        }
         $response = $this->sendMail($data, $template, $mailOptions);
         $this->logger->info("Mail Response" . $response);
         return $data;
