@@ -484,7 +484,7 @@ class AppService extends AbstractService
             $this->createRole($yamlData, false, $accountId, $bRoleResult);         
             $user = $this->accountService->getContactUserForAccount($accountId);
             $this->userService->addAppRolesToUser($user['accountUserId'], $appId);
-            $startOptions = $this->getAppStartOptions($appId, $yamlData['org']);
+            $startOptions = ((isset($yamlData['org']))) ? $this->getAppStartOptions($appId, $yamlData['org']):[];
             $result = $this->appRegistryService->createAppRegistry($appId, $accountId, $startOptions);
             $this->logger->info("PATH--- $path");
             $this->setupAccountFiles($path, $accountId, $appId);
