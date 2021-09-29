@@ -54,7 +54,6 @@ org:
                 businessRole: 'Contract Carrier - Compliance only'
                 entity:
                     - Compliance
-                    - Foley
         preferences: '{}'
     -
         name: IGGI
@@ -77,6 +76,7 @@ org:
                 entity:
                     - 'Independent Contractor Onboarding'
                     - 'PartTime Independent Contractor Onboarding'
+                    - Foley
         preferences: '{}'
 businessRole:
     -
@@ -819,6 +819,9 @@ entity:
         end_date_field: end_date
         status_field: status
         subscriber_field: observers
+        participantRole:
+            -
+                businessRole: 'Manage Independent Contractor'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
@@ -1405,7 +1408,7 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
     -
-        name: 'Foley Driver Verification'
+        name: 'Foley Applicant Shell'
         uuid: 7e742804-1ab5-11ec-9621-0242ac130002
         description: 'Shows a list of Drivers opted for Foley Service'
         content:
@@ -1480,7 +1483,7 @@ pages:
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
                     operations:
-                        title: 'Create Foley Applicant Shell'
+                        title: 'Foley'
                         actions:
                             -
                                 name: 'Create Applicant Shell'
@@ -1490,6 +1493,192 @@ pages:
                                     -
                                         type: Form
                                         form_id: 76736158-1ab8-11ec-9621-0242ac130002
+                    columnConfig:
+                        -
+                            title: Name
+                            field: name
+                        -
+                            title: 'Status'
+                            field: overallStatus
+    -
+        name: 'Foley Order MVR'
+        uuid: 135b39a2-203e-11ec-9621-0242ac130002
+        description: 'Shows a list of Drivers opted for Foley Service'
+        content:
+            -
+                type: List
+                content:
+                    route: ''
+                    filterable: true
+                    defaultFilters: ''
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: ''
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: ''
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            rule: 'false'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: df120582-1f56-11ec-9621-0242ac130002
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                    operations:
+                        title: 'Foley'
+                        actions:
+                            -
+                                name: 'Order MVR'
+                                icon: 'fa fa-plus'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: df120582-1f56-11ec-9621-0242ac130002
+                    columnConfig:
+                        -
+                            title: Name
+                            field: name
+                        -
+                            title: 'Status'
+                            field: overallStatus
+    -
+        name: 'Foley CH Query Order'
+        uuid: 7ffee818-2040-11ec-9621-0242ac130002
+        description: 'Shows a list of Drivers opted for Foley Service'
+        content:
+            -
+                type: List
+                content:
+                    route: ''
+                    filterable: true
+                    defaultFilters: ''
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: ''
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: ''
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            rule: 'false'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: 08d697cc-202c-11ec-9621-0242ac130002
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                    operations:
+                        title: 'Foley'
+                        actions:
+                            -
+                                name: 'CH Query'
+                                icon: 'fa fa-plus'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: 08d697cc-202c-11ec-9621-0242ac130002
                     columnConfig:
                         -
                             title: Name
@@ -1536,10 +1725,22 @@ menu:
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
         privilege: MANAGE_APP_WRITE
     -
-        name: 'Foley Driver Verification'
+        name: 'Foley Applicant Shell'
         icon: 'fas fa-cabinet-filing'
         page_uuid: 7e742804-1ab5-11ec-9621-0242ac130002
         uuid: fd0f19fa-1b67-11ec-9621-0242ac130002
+        privilege: MANAGE_IC
+    -
+        name: 'Foley Order MVR'
+        icon: 'fas fa-briefcase'
+        page_uuid: 135b39a2-203e-11ec-9621-0242ac130002
+        uuid: 2386dc3c-203e-11ec-9621-0242ac130002
+        privilege: MANAGE_IC
+    -
+        name: 'Foley Clear House Query'
+        icon: 'fas fa-business-time'
+        page_uuid: 7ffee818-2040-11ec-9621-0242ac130002
+        uuid: 91a061c8-2040-11ec-9621-0242ac130002
         privilege: MANAGE_IC
 form:
     -
@@ -1639,14 +1840,20 @@ form:
         template_file: howToSurviveADotAudit.json
         entity: 'How To Survive A Dot Audit'
     -
-        name: 'Foley Applicant Shell'
+        name: 'Create Applicant Shell'
         uuid: 76736158-1ab8-11ec-9621-0242ac130002
         description: 'Foley Applicant Shell'
         template_file: foleyApplicantShellForm.json
         entity: 'Foley'
-workflow:
     -
-        name: 'Excess New Application Submission'
-        uuid: ab854546-9e1b-43b3-ae7d-e6cf93683f61
-        bpmn_file: ExcessWorkflow/NewExcessApplicationSubmission.bpmn
-        entity: 'Excess Liability'
+        name: 'Create Order MVR'
+        uuid: df120582-1f56-11ec-9621-0242ac130002
+        description: 'Order MVR'
+        template_file: foleyOrderMVRForm.json
+        entity: 'Foley'
+    -
+        name: 'Create CH Query'
+        uuid: 08d697cc-202c-11ec-9621-0242ac130002
+        description: 'Clear House Query'
+        template_file: foleyChQueryForm.json
+        entity: 'Foley'

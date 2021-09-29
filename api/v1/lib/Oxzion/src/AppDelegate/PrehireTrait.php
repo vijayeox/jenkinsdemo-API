@@ -25,5 +25,13 @@ trait PrehireTrait
         return $this->foleyService->invokeApplicantShellCreationAPI($endpoint, $data);
     }
 
+    protected function createOrderMvr($endpoint, $data) {
+        return $this->foleyService->invokeOrderMvrAPI($endpoint, $data);
+    }
+
+    protected function createCHQuery($endpoint, $data) {
+        return $this->foleyService->invokeCHQueryAPI($endpoint, $data);
+    }
+
     
 }

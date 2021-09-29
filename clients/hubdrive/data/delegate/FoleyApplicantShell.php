@@ -58,10 +58,10 @@ class FoleyApplicantShell extends AbstractAppDelegate
         $dataToPost['CreateApplicant']['PersonalData']['MiddleName'] = '';
         $dataToPost['CreateApplicant']['PersonalData']['LastName'] = $data['lastName'];
         $dataToPost['CreateApplicant']['PersonalData']['ZipCode'] = $data['zipCode'];
-        $dataToPost['CreateApplicant']['PersonalData']['State'] = 'GA';//$data['state1];
+        $dataToPost['CreateApplicant']['PersonalData']['State'] = $data['stateObj']['abbreviation'];
         $dataToPost['CreateApplicant']['PersonalData']['City'] = $data['city'];
         $dataToPost['CreateApplicant']['PersonalData']['StreetAddress'] = $data['streetAddress'];
-        $dataToPost['CreateApplicant']['PersonalData']['PhoneNumber'] = '123456789';
+        $dataToPost['CreateApplicant']['PersonalData']['PhoneNumber'] = $data['phoneNumber'];
         $dataToPost['CreateApplicant']['PersonalData']['EmailAddress'] = $data['email'];
         $dataToPost['CreateApplicant']['PersonalData']['IDCountry'] = 'US';
         $dataToPost['CreateApplicant']['PersonalData']['IDType'] = 'SSN';
@@ -70,11 +70,11 @@ class FoleyApplicantShell extends AbstractAppDelegate
         $dob = date_format(date_create(explode("T",$data['dob1'])[0]),'m/d/Y');
 
         $dataToPost['CreateApplicant']['PersonalData']['DateofBirth'] = $dob; 
-        $dataToPost['CreateApplicant']['PersonalData']['GenderCode'] = 'F'; //$data['gender']
+        $dataToPost['CreateApplicant']['PersonalData']['GenderCode'] = $data['gender'];
 
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['@type'] = 'x:mvr';
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['DriverLicenseNumber'] = $data['driverLicense'];
-        $dataToPost['CreateApplicant']['Screenings']['SearchType']['DriverLicenseState'] = 'GA';//$data['licenseState1']
+        $dataToPost['CreateApplicant']['Screenings']['SearchType']['DriverLicenseState'] = $data['licenseState1']['abbreviation'];
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['MVRCurrentState'] = "true";
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['CDLFlag'] = "true";
         $dataToPost['CreateApplicant']['Screenings']['SearchType']['ScreeningReferenceID'] = "driverscreening".$driver_id;

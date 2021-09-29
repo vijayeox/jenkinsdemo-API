@@ -29,7 +29,7 @@ class FoleyController extends AbstractApiController
         $routeparams = $this->params()->fromRoute();
         $this->log->info(__CLASS__ . "-> foley endpoint - " . json_encode($routeparams, true));
 
-        $this->log->info(__CLASS__ . "-> applicant shell data - " . json_encode($data, true));
+        $this->log->info(__CLASS__ . "-> foley API Data - " . json_encode($data, true));
         if(!isset($routeparams['type']))
             throw new InvalidParameterException('Incorrect Request Provided');
         try {
@@ -38,10 +38,10 @@ class FoleyController extends AbstractApiController
                     $result = $this->foleyService->invokeApplicantShellCreationAPI('createapplicant/',$data);
                     break;
                 case 'OrderMVR':
-                    
+                    $result = $this->foleyService->invokeOrderMvrAPI('ordermvr/',$data);
                     break;
                 case 'OrderCHQuery':
-                    
+                    $result = $this->foleyService->invokeCHQueryAPI('CHQueryOrder/',$data);
                     break;
                 case 'OrderDrugTest':
                     
