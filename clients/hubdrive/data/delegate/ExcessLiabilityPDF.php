@@ -59,6 +59,9 @@ class ExcessLiabilityPDF extends AbstractDocumentAppDelegate
             )
         );
         $data['attachments'] = $generatedExcessLiabilityPDF;
+        if(isset($data['avantImageSrc'])){
+            unset($data['avantImageSrc']);
+        }
         $this->saveFile($data, $fileUUID);
         return $data;
     }

@@ -10,7 +10,7 @@ app:
     logo: default_app.png
     start_options: null
     title: HubDriveOnline
-    app_properties: '{"chat_notification":""}'
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
 org:
     -
         name: HUB
@@ -241,7 +241,7 @@ role:
         businessRole:
             name: 'Independent Contractor'
     -
-        name: 'ABAccountManager'
+        name: ABAccountManager
         privileges:
             -
                 privilege_name: MANAGE_EXCESS
@@ -1227,7 +1227,7 @@ pages:
                 useRowData: false
                 route: ''
     -
-        name: 'Excess Liability'
+        name: 'Approval Requests'
         uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         description: 'Shows a list of Excess Liability'
         content:
@@ -1292,7 +1292,7 @@ pages:
                                 metadata: {  }
                             defaultAction: true
                         -
-                            name: Edit
+                            name: Review
                             rule: 'true'
                             details:
                                 -
@@ -1310,13 +1310,24 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
                         -
-                            title: 'Status'
-                            field: overallStatus
+                            title: Status
+                            field: policyStatus
     -
-        name: 'Excess Liability'
+        name: 'Manage Policies'
         uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         description: 'Shows a list of Excess Liability'
         content:
+            -
+                type: RenderButtons
+                content:
+                    buttonList:
+                        -
+                            name: Create Excess Liability
+                            icon: 'fa fa-plus'
+                            details:
+                                    -
+                                        type: Form
+                                        url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
             -
                 type: List
                 content:
@@ -1381,22 +1392,11 @@ pages:
                         -
                             name: Edit
                             icon: 'fa fa-pencil'
-                            rule: 'true'
+                            rule: '''{{policyStatus}}'' == ''In Force'''
                             details:
                                 -
                                     type: Form
                                     url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
-                    operations:
-                        title: 'Create Excess Liability'
-                        actions:
-                            -
-                                name: 'Create Excess Liability'
-                                icon: 'fa fa-plus'
-                                rule: 'true'
-                                details:
-                                    -
-                                        type: Form
-                                        url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
                     columnConfig:
                         -
                             title: 'Insured Name'
@@ -1498,195 +1498,8 @@ pages:
                             title: Name
                             field: name
                         -
-                            title: 'Status'
-                            field: overallStatus
-    -
-        name: 'Foley Order MVR'
-        uuid: 135b39a2-203e-11ec-9621-0242ac130002
-        description: 'Shows a list of Drivers opted for Foley Service'
-        content:
-            -
-                type: List
-                content:
-                    route: ''
-                    filterable: true
-                    defaultFilters: ''
-                    resizable: true
-                    refreshButton: true
-                    pageable:
-                        buttonCount: 3
-                        pageSizes:
-                            - 10
-                            - 20
-                            - 50
-                        info: true
-                    sortable:
-                        allowUnsort: true
-                        mode: single
-                    actions:
-                        -
-                            name: View
-                            icon: 'fa fa-eye'
-                            rule: 'true'
-                            details:
-                                -
-                                    type: EntityViewer
-                                    page_id: ''
-                                    htmlContent: ''
-                                    externalDataSource: ''
-                                    formSource: ''
-                                    form_name: {  }
-                                    formUrl: ''
-                                    urlPostParams: ''
-                                    dashboard_uuid: ''
-                                    url: ''
-                                    content: ''
-                                    useRowData: false
-                            paramsDuplicate:
-                                -
-                                    parameterKey: ''
-                                    parameterValue: ''
-                            contentDuplicate:
-                                data:
-                                    content:
-                                        -
-                                            type: EntityViewer
-                                            page_id: ''
-                                            htmlContent: ''
-                                            externalDataSource: ''
-                                            formSource: ''
-                                            form_name: {  }
-                                            formUrl: ''
-                                            urlPostParams: ''
-                                            dashboard_uuid: ''
-                                            url: ''
-                                            content: ''
-                                            useRowData: false
-                                    listActionContent: true
-                                    listAction: true
-                                metadata: {  }
-                            defaultAction: true
-                        -
-                            name: Edit
-                            rule: 'false'
-                            details:
-                                -
-                                    type: Form
-                                    form_id: df120582-1f56-11ec-9621-0242ac130002
-                                    fileId: '{{uuid}}'
-                            icon: 'far fa-pencil-alt'
-                    operations:
-                        title: 'Foley'
-                        actions:
-                            -
-                                name: 'Order MVR'
-                                icon: 'fa fa-plus'
-                                rule: 'true'
-                                details:
-                                    -
-                                        type: Form
-                                        form_id: df120582-1f56-11ec-9621-0242ac130002
-                    columnConfig:
-                        -
-                            title: Name
-                            field: name
-                        -
-                            title: 'Status'
-                            field: overallStatus
-    -
-        name: 'Foley CH Query Order'
-        uuid: 7ffee818-2040-11ec-9621-0242ac130002
-        description: 'Shows a list of Drivers opted for Foley Service'
-        content:
-            -
-                type: List
-                content:
-                    route: ''
-                    filterable: true
-                    defaultFilters: ''
-                    resizable: true
-                    refreshButton: true
-                    pageable:
-                        buttonCount: 3
-                        pageSizes:
-                            - 10
-                            - 20
-                            - 50
-                        info: true
-                    sortable:
-                        allowUnsort: true
-                        mode: single
-                    actions:
-                        -
-                            name: View
-                            icon: 'fa fa-eye'
-                            rule: 'true'
-                            details:
-                                -
-                                    type: EntityViewer
-                                    page_id: ''
-                                    htmlContent: ''
-                                    externalDataSource: ''
-                                    formSource: ''
-                                    form_name: {  }
-                                    formUrl: ''
-                                    urlPostParams: ''
-                                    dashboard_uuid: ''
-                                    url: ''
-                                    content: ''
-                                    useRowData: false
-                            paramsDuplicate:
-                                -
-                                    parameterKey: ''
-                                    parameterValue: ''
-                            contentDuplicate:
-                                data:
-                                    content:
-                                        -
-                                            type: EntityViewer
-                                            page_id: ''
-                                            htmlContent: ''
-                                            externalDataSource: ''
-                                            formSource: ''
-                                            form_name: {  }
-                                            formUrl: ''
-                                            urlPostParams: ''
-                                            dashboard_uuid: ''
-                                            url: ''
-                                            content: ''
-                                            useRowData: false
-                                    listActionContent: true
-                                    listAction: true
-                                metadata: {  }
-                            defaultAction: true
-                        -
-                            name: Edit
-                            rule: 'false'
-                            details:
-                                -
-                                    type: Form
-                                    form_id: 08d697cc-202c-11ec-9621-0242ac130002
-                                    fileId: '{{uuid}}'
-                            icon: 'far fa-pencil-alt'
-                    operations:
-                        title: 'Foley'
-                        actions:
-                            -
-                                name: 'CH Query'
-                                icon: 'fa fa-plus'
-                                rule: 'true'
-                                details:
-                                    -
-                                        type: Form
-                                        form_id: 08d697cc-202c-11ec-9621-0242ac130002
-                    columnConfig:
-                        -
-                            title: Name
-                            field: name
-                        -
-                            title: 'Status'
-                            field: overallStatus
-
+                            title: Status
+                            field: policyStatus
 menu:
     -
         name: 'Independent Contractor'
@@ -1713,35 +1526,17 @@ menu:
         uuid: 30de0d23-f5e5-47e6-8511-2305bd1af060
         privilege: MANAGE_COMPLIANCE
     -
-        name: 'Excess Liability'
-        icon: 'fas fa-street-view'
+        name: 'Manage Policies'
+        icon: 'fas fa-folder-open'
+        page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
+        uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
+        privilege: MANAGE_ACCOUNT_MANAGER
+    -
+        name: 'Approval Requests'
+        icon: 'fas fa-list'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
         privilege: MANAGE_EXCESS
-    -
-        name: 'Excess Liability'
-        icon: 'fas fa-street-view'
-        page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
-        uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
-        privilege: MANAGE_APP_WRITE
-    -
-        name: 'Foley Applicant Shell'
-        icon: 'fas fa-cabinet-filing'
-        page_uuid: 7e742804-1ab5-11ec-9621-0242ac130002
-        uuid: fd0f19fa-1b67-11ec-9621-0242ac130002
-        privilege: MANAGE_IC
-    -
-        name: 'Foley Order MVR'
-        icon: 'fas fa-briefcase'
-        page_uuid: 135b39a2-203e-11ec-9621-0242ac130002
-        uuid: 2386dc3c-203e-11ec-9621-0242ac130002
-        privilege: MANAGE_IC
-    -
-        name: 'Foley Clear House Query'
-        icon: 'fas fa-business-time'
-        page_uuid: 7ffee818-2040-11ec-9621-0242ac130002
-        uuid: 91a061c8-2040-11ec-9621-0242ac130002
-        privilege: MANAGE_IC
 form:
     -
         name: 'Excess Liability Form'

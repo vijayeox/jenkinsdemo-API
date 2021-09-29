@@ -37,7 +37,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   padding: 0px;
 }
 
-.Window_HUB {
+.Window_HubDrive {
   $primary-color: #1e1246;
   $secondary: #55b089;
   $secondary-dark: #282b2d;
@@ -202,5 +202,41 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     div {
       padding-left: 15px;
     }
+  }
+  .Navigation .moduleBtn .block {
+    background-color: #007bff;
+    color: #fff;
+    width: auto;
+    height: auto;
+    font-size: 17px;
+    align-items: flex-start;
+  }
+
+  .Navigation .appButtons .moduleBtn .titles {
+    padding: 0px 0px 0px 2px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .Navigation .moduleBtn {
+    display: -webkit-inline-box;
+    float: right;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 17px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 7px;
+  }
+
+  .Navigation .appButtons {
+    width: auto;
+    height: auto;
+    display: inline;
+  }
+
+  .Navigation .customActions {
+    display: block !important;
   }
 }

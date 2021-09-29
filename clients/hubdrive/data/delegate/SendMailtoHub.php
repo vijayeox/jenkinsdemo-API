@@ -3,7 +3,7 @@
 use Oxzion\AppDelegate\MailDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\FileTrait;
-class ExcessMail extends MailDelegate
+class SendMailtoHub extends MailDelegate
 {
     use FileTrait;
     public function setDocumentPath($destination)
@@ -17,21 +17,16 @@ class ExcessMail extends MailDelegate
         $fileData = $this->getFile($data['fileId'],false,$data['accountId']);
         $data = array_merge($data,$fileData['data']);
         // Add logs for created by id and producer name who triggered submission
-        $selectQuery = "Select value FROM applicationConfig WHERE type ='excessLiabilityMail'";
-        $mailTo = ($persistenceService->selectQuery($selectQuery))->current()["value"];
         $mailOptions = [];
-        $mailOptions['to'] = $mailTo;
+        $mailOptions['to'] = $data['HubAMmailId'];
         $fileData = array();
-        $mailOptions['subject'] = 'HUB Drive Excess Liability Document Submission -'.$data['SubmissionNumber'];
-        $template = 'excessLiabilityMail';
+        $mailOptions['subject'] = 'Quote Document';
+        $template = 'QuoteDocumentMail';
         if (isset($data['attachments'])) {
             $data['attachments'] = json_decode($data['attachments'], true);
             foreach ($data['attachments'] as $key => $value) {
                 $mailOptions['attachments'][$key] = $value['fullPath'];
             }
-        }
-        if(isset($data['desiredPolicyEffectiveDate'])) {
-            $data['desiredPolicyEffectiveDateFormatted'] = isset($data['desiredPolicyEffectiveDate']) ? explode('T',$data['desiredPolicyEffectiveDate'])[0] : null;
         }
         $response = $this->sendMail($data, $template, $mailOptions);
         $this->logger->info("Mail Response" . $response);
