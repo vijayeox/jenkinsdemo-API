@@ -375,10 +375,10 @@
                     >
                         <tr>
                         <td>
-                            <p> RSP Name : {$name}</p>
-                            <p> Business Name : {$companyName}</p>
-                            <p> Driver # : {$vendorNumber}</p>
-                            <p> Facility : {$pleaseSelectTheFacility}</p>
+                            <p> RSP Name : {if ((isset($name) && $name != ""))}<span>{$name}</span>{else}<span>____</span>{/if}</p>
+                            <p> Business Name : {if ((isset($companyName) && $companyName != ""))}<span>{$companyName}</span>{else}<span>____</span>{/if}</p>
+                            <p> Driver # : {if ((isset($vendorNumber) && $vendorNumber != ""))}<span>{$vendorNumber}</span>{else}<span>____</span>{/if}</p>
+                            <p> Facility : {if ((isset($pleaseSelectTheFacility) && $pleaseSelectTheFacility != ""))}<span>{$pleaseSelectTheFacility}</span>{else}<span>____</span>{/if}</p>
 
                             <p>Welcome to OnTrac Compliance,</p>
                             <p>Please see the attached checklist regarding the status of your Certificate of Insurance for OnTrac.</p>
