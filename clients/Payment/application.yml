@@ -1,0 +1,50 @@
+app:
+    name: Payment
+    description: 'Payment App for EOX'
+    category: EXAMPLE_CATEGORY
+    type: 1
+    autostart: true
+    autoinstall: true
+    version: 1
+    uuid: cec14502-3c24-4616-a0dd-5a6bf25fabf4
+    status: 4
+    isdefault: true
+    logo: default_app.png
+    start_options: null
+    title: Payment
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
+# privilege:
+#     -
+#         name: MANAGE_APPLICATION
+#         permission: 3
+#     -
+#         name: MANAGE_INSTALL_APP
+#         permission: 3
+#     -
+#         name: MANAGE_DEPLOY_APP
+#         permission: 3
+# role:
+#     -
+#         name: 'App Developer'
+#         privileges:
+#             -
+#                 privilege_name: MANAGE_APPLICATION
+#                 permission: 3
+#             -
+#                 privilege_name: MANAGE_INSTALL_APP
+#                 permission: 3
+#             -
+#                 privilege_name: MANAGE_DEPLOY_APP
+#                 permission: 3
+        # uuid: 33818081-b18d-456d-a74d-0493a20a2887
+pages:
+    -
+        page_name: InvoicePage.yml
+        uuid: e281d040-c089-4f32-bf2a-c99b0bfa3e7f
+menu:
+    -
+        name: 'Manage Invoices'
+        icon: 'fas fa-home'
+        page_uuid: e281d040-c089-4f32-bf2a-c99b0bfa3e7f
+        uuid: ad78fb87-2dc7-491b-abf0-8c6e54967b36
+        privilege: MANAGE_APPLICATION_READ

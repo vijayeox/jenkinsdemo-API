@@ -43,5 +43,6 @@ return [
     'Ims',
     'Kra',
     'Profile',
-    'Prehire'
+    'Prehire',
+    'Billing'
 ];

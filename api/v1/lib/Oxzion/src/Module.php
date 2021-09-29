@@ -731,6 +731,18 @@ class Module
                         $queryService
                     );
                 },
+                Service\InvoiceService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $paymentService = $container->get(Service\PaymentService::class);
+                    $appDelegateService = $container->get(AppDelegate\AppDelegateService::class);
+
+                    return new Service\InvoiceService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $paymentService,
+                        $appDelegateService
+                    );
+                },
                 Service\CommandService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\CommandService(
