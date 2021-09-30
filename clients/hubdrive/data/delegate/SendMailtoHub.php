@@ -25,7 +25,9 @@ class SendMailtoHub extends MailDelegate
         if (isset($data['attachments'])) {
             $data['attachments'] = json_decode($data['attachments'], true);
             foreach ($data['attachments'] as $key => $value) {
-                $mailOptions['attachments'][$key] = $value['fullPath'];
+                if($key == "quote_pdf"){
+                    $mailOptions['attachments'][] = $value['fullPath'];
+                }
             }
         }
         $response = $this->sendMail($data, $template, $mailOptions);

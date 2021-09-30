@@ -1289,12 +1289,12 @@ pages:
                 content:
                     buttonList:
                         -
-                            name: Create Excess Liability
+                            name: 'Create Excess Liability'
                             icon: 'fa fa-plus'
                             details:
-                                    -
-                                        type: Form
-                                        url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
+                                -
+                                    type: Form
+                                    url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
             -
                 type: List
                 content:
@@ -1407,13 +1407,13 @@ menu:
         icon: 'fas fa-folder-open'
         page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
-        privilege: MANAGE_ACCOUNT_MANAGER
+        privilege: MANAGE_ACCOUNT_MANAGER_WRITE
     -
         name: 'Approval Requests'
         icon: 'fas fa-list'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
-        privilege: MANAGE_EXCESS
+        privilege: MANAGE_EXCESS_WRITE
 form:
     -
         name: 'Excess Liability Form'
