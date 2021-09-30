@@ -58,6 +58,19 @@ content:
                           listAction: true
                       metadata: {  }
                   defaultAction: true
+
+            operations:
+                title: 'Create Invoice'
+                icon: 'fa fa-plus'
+                actions:
+                    -
+                        name: 'Create New Invoice'
+                        icon: 'fa fa-plus'
+                        rule: 'true'
+                        details:
+                            -
+                                type: Form
+                                form_id: 746a1a46-684a-43d5-b69f-a8447d14489a
             columnConfig:
                 -
                     title: Client

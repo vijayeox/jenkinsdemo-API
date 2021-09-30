@@ -44,7 +44,7 @@ class CreateInvoicePDF extends AbstractDocumentAppDelegate
         if(FileUtils::fileExists($fileDestination)) {
             FileUtils::deleteFile($invoicePDFName,$folderDestination['absolutePath']);
         }
-        $doc = $this->documentBuilder->generateDocument($invoicePDFTemplate,$data,$fileDestination);
+    $doc = $this->documentBuilder->generateDocument($invoicePDFTemplate,$data,$fileDestination);
         $documentpdf = $folderDestination['relativePath'] . $invoicePDFName;
         array_push(
             $generatedInvoicePDF,
