@@ -35,6 +35,7 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             if(count($resultArr) >= 1){
                 $this->logger->info("Skipping the Zendrive Integration As IC Is Already Registered With Zendrive. Key - ". $resultArr[0]['zendrive_fleet_api_key']);
                 return $data;
+                
             }
 
             $fleet_name = $data['name'];
