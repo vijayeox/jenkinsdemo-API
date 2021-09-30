@@ -41,18 +41,19 @@ class GenerateQuote extends AbstractDocumentAppDelegate
         }
         $doc = $this->documentBuilder->generateDocument($template,$data,$fileDestination);
         $documentpdf = $folderDestination['relativePath'] . $quotePdfName;
-        if (isset($data['attachments'])) {
-            $data['attachments'] = json_decode($data['attachments'], true);
-            array_push($data['attachments'],array(
-                "name" => $quotePdfName,
-                "fullPath" => $fileDestination,
-                "file" => $documentpdf,
-                "originalName" => $quotePdfName,
-                "type" => "file/pdf",
-            ));
+        if(isset($data['attachments'])){
+            $data['attachments'] = is_string($data['attachments']) ? json_decode($data['attachments'],true) : $data['attachments'];
         }else{
-            $data['attachments'] = $generatedQuotePDF;
+            $data['attachments'] = array();
         }
+        $data['attachments']['quote_pdf'] = array(
+            "name" => $quotePdfName,
+            "fullPath" => $fileDestination,
+            "file" => $documentpdf,
+            "originalName" => $quotePdfName,
+            "type" => "file/pdf",
+        );
+        $data['policyStatus'] = "Quoted";
         if(isset($data['avantImageSrc'])){
             unset($data['avantImageSrc']);
         }
