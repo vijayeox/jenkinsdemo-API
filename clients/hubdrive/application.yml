@@ -780,6 +780,10 @@ entity:
                 name: companyName
                 data_type: text
                 index: true
+            -   
+                name: policyStatus
+                data_type: text
+                index: true
         identifiers:
             -
                 identifier: usDot
@@ -1300,7 +1304,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:

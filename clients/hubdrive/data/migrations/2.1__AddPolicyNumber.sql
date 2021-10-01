@@ -1,0 +1,1 @@
+INSERT INTO applicationConfig (`type`,`value`)  VALUES ('PolicyNumber','1');
