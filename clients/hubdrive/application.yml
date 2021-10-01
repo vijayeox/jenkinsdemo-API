@@ -1414,7 +1414,7 @@ menu:
         privilege: MANAGE_ACCOUNT_MANAGER_WRITE
     -
         name: 'Approval Requests'
-        icon: 'fas fa-list'
+        icon: 'fas fa-clipboard-check'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
         privilege: MANAGE_EXCESS_WRITE
