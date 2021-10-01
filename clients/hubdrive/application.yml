@@ -432,6 +432,15 @@ entity:
                 name: companyName
                 data_type: text
                 index: true
+            -
+                name: pleaseSelectDriverType
+                data_type: text
+                index: true
+            -
+                name: pleaseSelectTheFacility
+                data_type: text
+                index: true
+            
         identifiers:
             -
                 identifier: iCEmail
@@ -1146,6 +1155,12 @@ pages:
                             cell: '<td>{formatDate(item.date_created)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+                        -
+                            title: Driver Types 
+                            field: pleaseSelectDriverType
+                        -
+                            title: Facility 
+                            field: pleaseSelectTheFacility
     -
         name: 'Compliance OI'
         uuid: 7a395567-1292-4a79-88e8-927577198b52
@@ -1289,12 +1304,12 @@ pages:
                 content:
                     buttonList:
                         -
-                            name: Create Excess Liability
+                            name: 'Create Excess Liability'
                             icon: 'fa fa-plus'
                             details:
-                                    -
-                                        type: Form
-                                        url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
+                                -
+                                    type: Form
+                                    url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
             -
                 type: List
                 content:
