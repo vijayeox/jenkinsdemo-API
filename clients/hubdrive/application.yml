@@ -1159,7 +1159,7 @@ pages:
                             title: Driver Types 
                             field: pleaseSelectDriverType
                         -
-                            title: Facility 
+                            title: Terminal 
                             field: pleaseSelectTheFacility
     -
         name: 'Compliance OI'
