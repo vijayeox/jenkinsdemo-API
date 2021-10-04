@@ -28,6 +28,16 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             if(!isset($data['buyerAccountId']) || $data['buyerAccountId']=='')
                 throw new DelegateException("Account Not Found.","no.user.record.exists");
             
+            $selectQuery = "SELECT * FROM `ic_info` WHERE email = :email";
+            $resultArr = $persistenceService->selectQuery($selectQuery,[
+                    "email"=>$data['email']
+                ],true);
+            if(count($resultArr) >= 1){
+                $this->logger->info("Skipping the Zendrive Integration As IC Is Already Registered With Zendrive. Key - ". $resultArr[0]['zendrive_fleet_api_key']);
+                return $data;
+                
+            }
+
             $fleet_name = $data['name'];
             $fleet_email = $data['email'];
             $fleet_id = $data['buyerAccountId'];
@@ -75,7 +85,7 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             throw new DelegateException("Driver Data Invalid Format","no.user.record.exists");*/
 
         foreach ($driverData as $k=>$driver) {
-            $email  = isset($driver['driverEmail']) ? $driver['driverEmail'] : $driver['driverFirstName']."@abc.com";
+            $email  = $driver['driverEmail'] ;
             $driveruuid = $driver['driveruuid'];
             
             $params = array('first_name'=>$driver['driverFirstName'] , 'last_name'=>$driver['driverLastName'], 'email'=>$email);

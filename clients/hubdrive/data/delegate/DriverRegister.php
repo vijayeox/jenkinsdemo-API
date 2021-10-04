@@ -26,46 +26,47 @@ class DriverRegister extends AbstractAppDelegate
             if(isset($data['driverDataGrid']) && !is_array($data['driverDataGrid'])){
                 $data['driverDataGrid'] = json_decode($data['driverDataGrid'],true);
             }
-            if(!empty($data['driverDataGrid']) && $data['driverDataGrid'][0]['driverFirstName']!='' &&$data['driverDataGrid'][0]['driverLastName']!='' && $data['driverDataGrid'][0]['driverEmail'] !=''){
+            if(isset($data['driverDataGrid']) && !empty($data['driverDataGrid'])){
+
                 foreach ($data['driverDataGrid'] as $k=>$driver) {
                     $dataForDriver = array();
+
+                    if(!isset($driver['driverFirstName']) || $driver['driverFirstName']==''){
+                        $this->logger->info("Driver not Registered. Missing First Name" . $driver['driverFirstName']);
+                        continue;
+                    }
+                        
+                    if(!isset($driver['driverLastName']) || $driver['driverLastName']==''){
+                        $this->logger->info("Driver not Registered. Missing Last Name" . $driver['driverLastName']);
+                        continue;
+                    }
+
+                    if(!isset($driver['driverEmail']) || $driver['driverEmail']==''){
+                        $this->logger->info("Driver not Registered. Missing email" . $driver['driverEmail']);
+                        continue;
+                    }
+                        
+
+
                     if (!isset($dataForDriver['uuid'])) {
                         $dataForDriver['uuid'] = UuidUtil::uuid();
                     }
-                    /*$dataForDriver['name'] = $driver['nameDriverUnit']." ".$driver['driverLastName'];
-                    $dataForDriver['email'] = $driver['driverEmail'];
-                    $dataForDriver['firstname'] = $driver['nameDriverUnit'];
-                    $dataForDriver['lastname'] = $driver['driverLastName'];
-                    $dataForDriver['address1'] = $driver['street1DriverUnitInfo'];
-                    $dataForDriver['city'] = $driver['city1DriverUnitInfo'];
-                    $dataForDriver['state'] = $driver['stateDriverUnitInfo']['abbreviation'];
-                    $dataForDriver['zip'] = $driver['zipCode1DriverUnitInfo'];
-                    $dataForDriver['country'] = 'United States of America';
-                    if (!isset($dataForDriver['contact'])) {
-                        $dataForDriver['contact'] = array();
-                        $dataForDriver['contact']['username'] = str_replace('@', '.', $driver['driverEmail']);
-                        $dataForDriver['contact']['firstname'] = $driver['nameDriverUnit'];
-                        $dataForDriver['contact']['lastname'] = $driver['driverLastName'];
-                        $dataForDriver['contact']['email'] = $driver['driverEmail'];
-                    }
+                    /*
                     if (!isset($dataForDriver['preferences'])) {
                         $dataForDriver['preferences'] = '{}';
                     }*/
                     $dataForDriver['name'] = $driver['driverFirstName']." ".$driver['driverLastName'];
-                    $dataForDriver['email'] = isset($driver['driverEmail']) ? $driver['driverEmail'] : $driver['driverFirstName']."@abc.com";
+                    $dataForDriver['email'] = $driver['driverEmail'];
                     $dataForDriver['firstname'] = $driver['driverFirstName'];
                     $dataForDriver['lastname'] = $driver['driverLastName'];
-                    $dataForDriver['username'] = $driver['driverFirstName'];
+                    $dataForDriver['username'] = str_replace('@', '.', $driver['driverEmail']);;
                     if (!isset($dataForDriver['contact'])) {
                         $dataForDriver['contact'] = array();
-                        $dataForDriver['contact']['username'] = $driver['driverFirstName']; //isset($driver['driverEmail']) ? str_replace('@', '.', $driver['driverEmail']) : 'testuser'.$k;
+                        $dataForDriver['contact']['username'] = str_replace('@', '.', $driver['driverEmail']);
                         $dataForDriver['contact']['firstname'] = $driver['driverFirstName'];
                         $dataForDriver['contact']['lastname'] = $driver['driverLastName'];
-                        $dataForDriver['contact']['email'] = isset($driver['driverEmail']) ? $driver['driverEmail'] : $driver['driverFirstName']."@abc.com";
+                        $dataForDriver['contact']['email'] = $driver['driverEmail'];
                     }
-                    /*if (!isset($dataForDriver['preferences'])) {
-                        $dataForDriver['preferences'] = '{}';
-                    }*/
                     $dataForDriver['app_id'] = self::APPID;
                     $dataForDriver['type'] = 'INDIVIDUAL';
                     $params['accountId'] = $data['buyerAccountId'];
@@ -73,9 +74,6 @@ class DriverRegister extends AbstractAppDelegate
                     $driver['driveruuid'] = $dataForDriver['uuid'];
                     $data['driverDataGrid'][$k] = $driver;
                     $this->logger->info("After driver registration---".print_r($driver,true));
-                    // if ($exceptionOnFailure == 1) {
-                    //     throw new DelegateException("Username/Email Used","record.exists");
-                    // }
                 }
             }
         }

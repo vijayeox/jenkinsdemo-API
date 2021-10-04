@@ -114,7 +114,8 @@
       "Ims\\":"module/Ims/src/",
       "Kra\\":"module/Kra/src/",
       "Profile\\":"module/Profile/src",
-      "Prehire\\": "module/Prehire/src/"
+      "Prehire\\": "module/Prehire/src/",
+      "Billing\\":"module/Billing/src/"
     }
   },
   "autoload-dev": {
