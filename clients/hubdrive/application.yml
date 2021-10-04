@@ -759,7 +759,7 @@ entity:
         name: 'Excess Liability'
         start_date_field: start_date
         end_date_field: end_date
-        status_field: status
+        status_field: policyStatus
         subscriber_field: observers
         field:
             -
@@ -804,7 +804,7 @@ entity:
                     -
                         type: HTMLViewer
                         page_id: ''
-                        htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                        htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                         externalDataSource: ''
                         formSource: ''
                         form_name: {  }
@@ -812,7 +812,7 @@ entity:
                         urlPostParams: ''
                         dashboard_uuid: ''
                         url: ''
-                        content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                        content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                         useRowData: false
             metadata: {  }
         page_uuid: 29f8c79a-d89c-11eb-b8bc-0242ac130003
@@ -1228,7 +1228,7 @@ pages:
                                 -
                                     type: EntityViewer
                                     page_id: ''
-                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     externalDataSource: ''
                                     formSource: ''
                                     form_name: {  }
@@ -1236,7 +1236,7 @@ pages:
                                     urlPostParams: ''
                                     dashboard_uuid: ''
                                     url: ''
-                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     useRowData: false
                             paramsDuplicate:
                                 -
@@ -1326,7 +1326,7 @@ pages:
                                 -
                                     type: EntityViewer
                                     page_id: ''
-                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     externalDataSource: ''
                                     formSource: ''
                                     form_name: {  }
@@ -1334,7 +1334,7 @@ pages:
                                     urlPostParams: ''
                                     dashboard_uuid: ''
                                     url: ''
-                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     useRowData: false
                             paramsDuplicate:
                                 -
