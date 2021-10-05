@@ -26,7 +26,7 @@
 			"persistent": false,
 			"protected": true,
 			"redrawOn": "data",
-			"calculateValue": "value = {};\nconsole.log(data.attachments);\nif(data.attachments)\n{\n  if(typeof data.attachments === 'object'){\n    value[0] = data.attachments['quote_pdf']['file'];\n  }else{\n    var documents = {};\n    data.attachments.map(item,key => {\n      documents[key] = item['quote_pdf']['file'];\n    });\n    value = documents;\n  }\n}",
+			"calculateValue": "value = {};\nconsole.log(data.documents);\nif(data.documents)\n{\n  if(typeof data.documents === 'object'){\n    value[0] = data.documents['quote_pdf']['file'];\n  }else{\n    var documents = {};\n    data.documents.map(item,key => {\n      documents[key] = item['quote_pdf']['file'];\n    });\n    value = documents;\n  }\n}",
 			"key": "quote",
 			"type": "hidden",
 			"input": true,
@@ -39,7 +39,7 @@
 			"hideLabel": true,
 			"inputType": "documentviewer",
 			"input": 1,
-			"refreshOn": "documents",
+			"refreshOn": "quote",
 			"tableView": false,
 			"protected": true,
 			"persistent": false
@@ -115,13 +115,13 @@
 	"submissionAccess": [],
 	"controller": "",
 	"properties": {
-		"submission_commands": "[{\"command\":\"submitWorkflow\",\"entity_name\": \"Excess Liability\"}]"
+		"submission_commands": "[{\"command\":\"fileSave\",\"entity_name\": \"Excess Liability\"},{\"command\":\"submitWorkflow\",\"entity_name\": \"Excess Liability\"}]"
 	},
 	"settings": {},
 	"name": "hubQuoteApproval",
 	"path": "hubquoteapproval",
 	"project": "5dc1489e4f668513e9535090",
 	"created": "2021-09-30T12:44:18.264Z",
-	"modified": "2021-10-01T09:17:14.541Z",
+	"modified": "2021-10-05T07:10:33.073Z",
 	"machineName": "eoxproductsupport:hubQuoteApproval"
 }

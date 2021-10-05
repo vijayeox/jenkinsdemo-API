@@ -46,19 +46,19 @@ class GenerateExcessPolicyPDF extends AbstractDocumentAppDelegate
             $pdfData,
             $documentDestination
         );
-        if(isset($data['attachments'])){
-            $data['attachments'] = is_string($data['attachments']) ? json_decode($data['attachments'],true) : $data['attachments'];
+        if(isset($data['documents'])){
+            $data['documents'] = is_string($data['documents']) ? json_decode($data['documents'],true) : $data['documents'];
         }else{
-            $data['attachments'] = array();
+            $data['documents'] = array();
         }
-        $data['attachments']['final_policy'] = array(
+        $data['documents']['final_policy'] = array(
             "name" => $pdfName,
             "fullPath" => $documentDestination,
             "file" => $fileDestination['relativePath'] . $pdfName,
             "originalName" => $pdfName,
             "type" => "file/pdf",
         );
-        $this->logger->info("PDF MAPPED DOCUMENT : ". print_r($data['attachments'], true));
+        $this->logger->info("PDF MAPPED DOCUMENT : ". print_r($data['documents'], true));
         $this->saveFile($data, $fileUUID);
         return $data;
     }

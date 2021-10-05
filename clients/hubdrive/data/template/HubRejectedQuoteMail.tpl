@@ -1,0 +1,1 @@
+<div>HubRejectedQuote</div>
