@@ -308,7 +308,7 @@
 					"currentWidth": 3
 				}, {
 					"components": [{
-						"label": "Please select the facility",
+						"label": "Please select the terminal",
 						"placeholder": "Please select",
 						"tableView": true,
 						"data": {
