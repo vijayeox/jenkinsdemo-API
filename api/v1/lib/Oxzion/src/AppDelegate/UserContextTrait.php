@@ -56,4 +56,8 @@ trait UserContextTrait
     public function createUser($params, $userData){
         return $this->userService->createUser($params, $userData);
     }
+
+    public function getUserByUsername($account_id, $username){
+        return $this->userService->getUserByUsername($account_id,$username);
+    }
 }

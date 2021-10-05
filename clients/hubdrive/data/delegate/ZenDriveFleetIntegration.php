@@ -66,13 +66,13 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
                 $this->logger->info("driver data grid is set- ");
                 if(is_array($data['driverDataGrid'])){
                     $this->logger->info("driver data grid is array- ");
-                    $this->addDriver($data['driverDataGrid'], $ic_id, $fleet_id, $persistenceService);
+                    $this->addDriver($data['buyerAccountId'], $data['driverDataGrid'], $ic_id, $fleet_id, $persistenceService);
                 }else{
                     $this->logger->info("driver data grid is json object- ");
                     $driverData = json_decode($data['driverDataGrid'], true);
                     $this->logger->info("driver data grid expanded- ".print_r($driverData,true));
                     if(is_array($driverData) && count($driverData) >= 1)
-                        $this->addDriver($driverData, $ic_id, $fleet_id, $persistenceService);
+                        $this->addDriver($data['buyerAccountId'],$driverData, $ic_id, $fleet_id, $persistenceService);
                 }
             }else{
                 $this->logger->info("driver data grid not found- ");
@@ -84,7 +84,7 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
     
     }
 
-    private function addDriver($driverData, $ic_id, $fleet_id, Persistence $persistenceService){
+    private function addDriver($fleet_account_id,$driverData, $ic_id, $fleet_id, Persistence $persistenceService){
         //$fleet_id = $driverData['buyerAccountId'];
         $endpoint = 'fleet/'.$fleet_id.'/driver/';
         $this->logger->info("in zendrive delegate driver api request- " . $endpoint."  ".print_r($driverData,true));
@@ -96,6 +96,14 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
 
         foreach ($driverData as $k=>$driver) {
             $email  = $driver['driverEmail'] ;
+
+            $username = str_replace('@', '.', $driver['driverEmail']);
+            $uuidresponse = $this->getUserByUsername($fleet_account_id, $username);
+            $this->logger->info("in zendrive delegate uuid ".print_r($uuidresponse,true));
+
+            if(count($uuidresponse) < 1)
+                continue;
+
             $driveruuid = $driver['driveruuid'];
             
             $params = array('first_name'=>$driver['driverFirstName'] , 'last_name'=>$driver['driverLastName'], 'email'=>$email);
