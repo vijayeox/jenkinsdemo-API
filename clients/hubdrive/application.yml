@@ -763,8 +763,8 @@ entity:
         subscriber_field: observers
         field:
             -
-                name: attachments
-                text: Attachment
+                name: documents
+                text: Documents
                 data_type: document
             -
                 name: insuredName
@@ -796,6 +796,7 @@ entity:
         statusField: ''
         title: '${entity_name} ${name}'
         enable_documents: true
+        documents_label: "Documents"
         enable_comments: true
         enable_view: true
         pageContent:
@@ -1419,12 +1420,6 @@ menu:
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
         privilege: MANAGE_EXCESS_WRITE
 form:
-    -
-        name: 'Excess Liability Form'
-        uuid: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
-        description: 'Excess Liability'
-        template_file: abExcessLiability.json
-        entity: 'Excess Liability'
     -
         name: 'Compliance CheckList Form'
         uuid: e26bd719-f47f-455b-9be4-9b26c18a0b78
