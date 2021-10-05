@@ -432,6 +432,15 @@ entity:
                 name: companyName
                 data_type: text
                 index: true
+            -
+                name: pleaseSelectDriverType
+                data_type: text
+                index: true
+            -
+                name: pleaseSelectTheFacility
+                data_type: text
+                index: true
+            
         identifiers:
             -
                 identifier: iCEmail
@@ -1151,6 +1160,12 @@ pages:
                             cell: '<td>{formatDate(item.date_created)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+                        -
+                            title: Driver Types 
+                            field: pleaseSelectDriverType
+                        -
+                            title: Terminal 
+                            field: pleaseSelectTheFacility
     -
         name: 'Compliance OI'
         uuid: 7a395567-1292-4a79-88e8-927577198b52
