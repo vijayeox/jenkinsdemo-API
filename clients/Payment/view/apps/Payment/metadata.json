@@ -1,0 +1,23 @@
+{
+    "type": "application",
+    "name": "Payment",
+    "appId": "cec14502-3c24-4616-a0dd-5a6bf25fabf4",
+    "category": "EXAMPLE_CATEGORY",
+    "autostart": true,
+    "singleton": true,
+    "icon": "icon.svg",
+    "icon_white": "icon_white.svg",
+    "defaultAppforOrgs": true,
+    "hidden": false,
+    "server": "server.js",
+    "title": {
+        "en_EN": "Payment"
+    },
+    "description": {
+        "en_EN": "Payment App for EOX"
+    },
+    "files": [
+        "main.js",
+        "main.css"
+    ]
+}

@@ -1,0 +1,127 @@
+{
+	"_id": "6155b12238c20a01a06d2743",
+	"type": "form",
+	"tags": [],
+	"owner": "5db28b688d7586b574a8f4f6",
+	"components": [{
+		"title": "Quote Information",
+		"theme": "primary",
+		"collapsible": false,
+		"key": "page5Panel",
+		"type": "panel",
+		"label": "Quote Information",
+		"breadcrumb": "none",
+		"buttonSettings": {
+			"previous": true,
+			"cancel": true,
+			"next": true
+		},
+		"navigateOnEnter": false,
+		"saveOnEnter": false,
+		"scrollToTop": false,
+		"tableView": false,
+		"input": false,
+		"components": [{
+			"label": "quote",
+			"persistent": false,
+			"protected": true,
+			"redrawOn": "data",
+			"calculateValue": "value = {};\nconsole.log(data.documents);\nif(data.documents)\n{\n  if(typeof data.documents === 'object'){\n    value[0] = data.documents['quote_pdf']['file'];\n  }else{\n    var documents = {};\n    data.documents.map(item,key => {\n      documents[key] = item['quote_pdf']['file'];\n    });\n    value = documents;\n  }\n}",
+			"key": "quote",
+			"type": "hidden",
+			"input": true,
+			"tableView": false
+		}, {
+			"type": "documentviewer",
+			"key": "quoteDocuments",
+			"label": "Quote Documents",
+			"calculateValue": "value = (data['quote'])",
+			"hideLabel": true,
+			"inputType": "documentviewer",
+			"input": 1,
+			"refreshOn": "quote",
+			"tableView": false,
+			"protected": true,
+			"persistent": false
+		}, {
+			"key": "page5Panel2",
+			"input": false,
+			"title": "Approval",
+			"theme": "primary",
+			"tableView": false,
+			"components": [{
+				"label": "I hereby declare that I accept the quote",
+				"optionsLabelPosition": "right",
+				"inline": false,
+				"tableView": true,
+				"values": [{
+					"value": "approved",
+					"label": "Accept",
+					"shortcut": ""
+				}, {
+					"value": "rejected",
+					"label": "Decline",
+					"shortcut": ""
+				}],
+				"clearOnHide": false,
+				"validate": {
+					"required": true
+				},
+				"key": "quoteApproved",
+				"properties": {
+					"": "page7"
+				},
+				"type": "radio",
+				"input": true,
+				"lockKey": true
+			}, {
+				"label": "Could you let us know the Reason for Rejecting the Quote?",
+				"autoExpand": false,
+				"tableView": true,
+				"validate": {
+					"required": true
+				},
+				"key": "hubNote",
+				"conditional": {
+					"show": true,
+					"when": "quoteApproved",
+					"eq": "rejected"
+				},
+				"type": "textarea",
+				"input": true
+			}],
+			"type": "panel",
+			"lockKey": true,
+			"label": "Panel",
+			"path": "page5Panel2"
+		}],
+		"path": "page5Panel"
+	}, {
+		"type": "button",
+		"label": "Submit",
+		"key": "submit",
+		"disableOnInvalid": true,
+		"input": true,
+		"tableView": false
+	}],
+	"revisions": "",
+	"_vid": 0,
+	"title": "HUB Quote Approval",
+	"display": "form",
+	"access": [{
+		"roles": ["5dc1489e4f66850fb0535091", "5dc1489e4f6685cbf7535092", "5dc1489e4f668531f7535093"],
+		"type": "read_all"
+	}],
+	"submissionAccess": [],
+	"controller": "",
+	"properties": {
+		"submission_commands": "[{\"command\":\"fileSave\",\"entity_name\": \"Excess Liability\"},{\"command\":\"submitWorkflow\",\"entity_name\": \"Excess Liability\"}]"
+	},
+	"settings": {},
+	"name": "hubQuoteApproval",
+	"path": "hubquoteapproval",
+	"project": "5dc1489e4f668513e9535090",
+	"created": "2021-09-30T12:44:18.264Z",
+	"modified": "2021-10-05T07:10:33.073Z",
+	"machineName": "eoxproductsupport:hubQuoteApproval"
+}

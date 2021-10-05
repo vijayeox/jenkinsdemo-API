@@ -63,6 +63,7 @@ class DocumentBuilder
         if ($options && isset($options['generateOptions'])) {
             $generateOptions = $options['generateOptions'];
         }
+        $options['encoding'] = "utf-8";
         return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer, $data, $append, $prepend, $generateOptions);
     }
 

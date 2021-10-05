@@ -768,12 +768,12 @@ entity:
         name: 'Excess Liability'
         start_date_field: start_date
         end_date_field: end_date
-        status_field: status
+        status_field: policyStatus
         subscriber_field: observers
         field:
             -
-                name: attachments
-                text: Attachment
+                name: documents
+                text: Documents
                 data_type: document
             -
                 name: insuredName
@@ -789,6 +789,10 @@ entity:
                 name: companyName
                 data_type: text
                 index: true
+            -   
+                name: policyStatus
+                data_type: text
+                index: true
         identifiers:
             -
                 identifier: usDot
@@ -801,6 +805,7 @@ entity:
         statusField: ''
         title: '${entity_name} ${name}'
         enable_documents: true
+        documents_label: "Documents"
         enable_comments: true
         enable_view: true
         pageContent:
@@ -809,7 +814,7 @@ entity:
                     -
                         type: HTMLViewer
                         page_id: ''
-                        htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                        htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                         externalDataSource: ''
                         formSource: ''
                         form_name: {  }
@@ -817,7 +822,7 @@ entity:
                         urlPostParams: ''
                         dashboard_uuid: ''
                         url: ''
-                        content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                        content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                         useRowData: false
             metadata: {  }
         page_uuid: 29f8c79a-d89c-11eb-b8bc-0242ac130003
@@ -1239,7 +1244,7 @@ pages:
                                 -
                                     type: EntityViewer
                                     page_id: ''
-                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     externalDataSource: ''
                                     formSource: ''
                                     form_name: {  }
@@ -1247,7 +1252,7 @@ pages:
                                     urlPostParams: ''
                                     dashboard_uuid: ''
                                     url: ''
-                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     useRowData: false
                             paramsDuplicate:
                                 -
@@ -1315,7 +1320,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -1337,7 +1342,7 @@ pages:
                                 -
                                     type: EntityViewer
                                     page_id: ''
-                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     externalDataSource: ''
                                     formSource: ''
                                     form_name: {  }
@@ -1345,7 +1350,7 @@ pages:
                                     urlPostParams: ''
                                     dashboard_uuid: ''
                                     url: ''
-                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     useRowData: false
                             paramsDuplicate:
                                 -
@@ -1422,20 +1427,14 @@ menu:
         icon: 'fas fa-folder-open'
         page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
-        privilege: MANAGE_ACCOUNT_MANAGER
+        privilege: MANAGE_ACCOUNT_MANAGER_WRITE
     -
         name: 'Approval Requests'
-        icon: 'fas fa-list'
+        icon: 'fas fa-clipboard-check'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
-        privilege: MANAGE_EXCESS
+        privilege: MANAGE_EXCESS_WRITE
 form:
-    -
-        name: 'Excess Liability Form'
-        uuid: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
-        description: 'Excess Liability'
-        template_file: abExcessLiability.json
-        entity: 'Excess Liability'
     -
         name: 'Compliance CheckList Form'
         uuid: e26bd719-f47f-455b-9be4-9b26c18a0b78
