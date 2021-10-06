@@ -43,7 +43,7 @@ class ExcessLiabilityPDF extends AbstractDocumentAppDelegate
             $generatedExcessLiabilityPDF = array();
             $accountId = isset($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
             $this->logger->info("ACCOUT IS ____" . $accountId);
-            $path = "https://i.imgur.com/1zkaS1p.jpeg";
+            $path = $this->applicationUrl . '/public/img/avant.png';
             $img = file_get_contents($path);
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data['avantImageSrc'] = 'data:image/' . $type . ';base64,' . base64_encode($img);

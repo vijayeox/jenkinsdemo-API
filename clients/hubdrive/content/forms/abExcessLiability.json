@@ -1733,12 +1733,12 @@
 						"customPrivate": false,
 						"json": "",
 						"min": "",
-						"max": 9,
 						"strictDateValidation": false,
 						"multiple": false,
 						"unique": false,
 						"step": "any",
-						"integer": ""
+						"integer": "",
+						"max": ""
 					},
 					"errorLabel": "",
 					"key": "usDot",
@@ -1772,7 +1772,7 @@
 					"showCharCount": false,
 					"showWordCount": false,
 					"allowMultipleMasks": false,
-					"id": "ehkt298",
+					"id": "ej6lyal",
 					"defaultValue": null
 				}],
 				"width": 4,
@@ -35790,7 +35790,7 @@
 		"id": "een4nr"
 	}],
 	"revisions": "current",
-	"_vid": 188,
+	"_vid": 189,
 	"title": "AB Excess Liability",
 	"display": "wizard",
 	"access": [{
@@ -35807,6 +35807,6 @@
 	"path": "abexcessliability",
 	"project": "5dc1489e4f668513e9535090",
 	"created": "2021-06-22T08:23:13.475Z",
-	"modified": "2021-10-06T05:58:14.876Z",
+	"modified": "2021-10-06T08:38:21.548Z",
 	"machineName": "eoxproductsupport:abExcessLiability"
 }

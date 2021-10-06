@@ -30,7 +30,7 @@ class GenerateQuote extends AbstractDocumentAppDelegate
         $fileData = $this->getFile($data['fileId'],false,$data['accountId']);
         $data = array_merge($data,$fileData['data']);
         $this->logger->info("ACCOUT IS ____" . $accountId);
-        $path = "https://i.imgur.com/1zkaS1p.jpeg";
+        $path = $this->applicationUrl . '/public/img/avant.png';
         $img = file_get_contents($path);
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data['avantImageSrc'] = 'data:image/' . $type . ';base64,' . base64_encode($img);
