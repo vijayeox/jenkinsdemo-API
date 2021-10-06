@@ -29,35 +29,35 @@ class SendMail extends MailDelegate
         $mailOptions['attachments'] = $this->getMailDocuments($file,$data['documentType'],$data['mailAttachments']);
         $template = $data['mailTemplate'];
         
-        $temp = $data;
+        $temp = $file;
         $this->processData($temp);
-        $temp['avantImgUrl'] = $this->applicationUrl . '/public/img/avant.png';
-        if($data['mailType'] == "ExcessMail"){
-            if(isset($data['desiredPolicyEffectiveDate'])) {
+        $temp['avantImageUrl'] = $this->applicationUrl . '/public/img/avant.png';
+        if($file['mailType'] == "ExcessMail"){
+            if(isset($file['desiredPolicyEffectiveDate'])) {
                 $temp['desiredPolicyEffectiveDateFormatted'] = isset($data['desiredPolicyEffectiveDate']) ? explode('T',$data['desiredPolicyEffectiveDate'])[0] : null;
             }
         }
         if($data['mailType'] == "SubmissionMailToGenre"){
-            if($temp['limitsNeededinExcessLayer'] == '1M'){
+            if($file['limitsNeededinExcessLayer'] == '1M'){
                 $temp['limitsNeededExcess'] = '1,000,000.00';
-            }else if($temp['limitsNeededinExcessLayer'] == '2M'){
+            }else if($file['limitsNeededinExcessLayer'] == '2M'){
                 $temp['limitsNeededExcess'] = '2,000,000.00';
-            }else if($temp['limitsNeededinExcessLayer'] == '3M'){
+            }else if($file['limitsNeededinExcessLayer'] == '3M'){
                 $temp['limitsNeededExcess'] = '3,000,000.00';
-            }else if($temp['limitsNeededinExcessLayer'] == '4M'){
+            }else if($file['limitsNeededinExcessLayer'] == '4M'){
                 $temp['limitsNeededExcess'] = '4,000,000.00';
-            }else if($temp['limitsNeededinExcessLayer'] == '5M'){
+            }else if($file['limitsNeededinExcessLayer'] == '5M'){
                 $temp['limitsNeededExcess'] = '5,000,000.00';
-            }else if($temp['limitsNeededinExcessLayer'] == 'all'){
+            }else if($file['limitsNeededinExcessLayer'] == 'all'){
                 $temp['limitsNeededExcess'] = 'ALL';
             } 
-            if($data['excessCovCgl'] == true){
+            if($file['excessCovCgl'] == true){
                 $temp['ExcessCvrg'] = 'GL only';
-            }else if($data['commercialAutoLiability'] == true){
+            }else if($file['commercialAutoLiability'] == true){
                 $temp['ExcessCvrg'] = 'AL only';
-            }else if($data['employersLiability'] == true){
+            }else if($file['employersLiability'] == true){
                 $temp['ExcessCvrg'] = 'GL,AL & EL';
-            }else if($data['excessCovGlAl'] == true){
+            }else if($file['excessCovGlAl'] == true){
                 $temp['ExcessCvrg'] = 'GL & AL';
             }
         } 

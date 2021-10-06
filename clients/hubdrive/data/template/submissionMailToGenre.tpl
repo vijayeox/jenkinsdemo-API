@@ -14,7 +14,7 @@
         <p><b>Excess Coverages(AL only,AL & GL or AL,GL & EL) :</b> {$ExcessCvrg} </p>
     {/if}
     <p><b>Need by date :</b> {$desiredPolicyEffDateFormatted|date_format:"%m/%d/%Y"} </p>
-    <p><b>Target Permium (if avaliable) :</b> {$targetPremium|number_formt:2} </p>
+    <p><b>Target Permium (if avaliable) :</b> {$targetPremium|number_format:2} </p>
 </div>
 <br/>
 <p>Please "replay all" when responding.</p>
