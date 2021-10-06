@@ -29,12 +29,39 @@ class SendMail extends MailDelegate
         $mailOptions['attachments'] = $this->getMailDocuments($file,$data['documentType'],$data['mailAttachments']);
         $template = $data['mailTemplate'];
         
+        $temp = $data;
+        $this->processData($temp);
+        $temp['avantImgUrl'] = $this->applicationUrl . '/public/img/avant.png';
         if($data['mailType'] == "ExcessMail"){
             if(isset($data['desiredPolicyEffectiveDate'])) {
-                $data['desiredPolicyEffectiveDateFormatted'] = isset($data['desiredPolicyEffectiveDate']) ? explode('T',$data['desiredPolicyEffectiveDate'])[0] : null;
+                $temp['desiredPolicyEffectiveDateFormatted'] = isset($data['desiredPolicyEffectiveDate']) ? explode('T',$data['desiredPolicyEffectiveDate'])[0] : null;
             }
         }
-        $response = $this->sendMail($data, $template, $mailOptions);
+        if($data['mailType'] == "SubmissionMailToGenre"){
+            if($temp['limitsNeededinExcessLayer'] == '1M'){
+                $temp['limitsNeededExcess'] = '1,000,000.00';
+            }else if($temp['limitsNeededinExcessLayer'] == '2M'){
+                $temp['limitsNeededExcess'] = '2,000,000.00';
+            }else if($temp['limitsNeededinExcessLayer'] == '3M'){
+                $temp['limitsNeededExcess'] = '3,000,000.00';
+            }else if($temp['limitsNeededinExcessLayer'] == '4M'){
+                $temp['limitsNeededExcess'] = '4,000,000.00';
+            }else if($temp['limitsNeededinExcessLayer'] == '5M'){
+                $temp['limitsNeededExcess'] = '5,000,000.00';
+            }else if($temp['limitsNeededinExcessLayer'] == 'all'){
+                $temp['limitsNeededExcess'] = 'ALL';
+            } 
+            if($data['excessCovCgl'] == true){
+                $temp['ExcessCvrg'] = 'GL only';
+            }else if($data['commercialAutoLiability'] == true){
+                $temp['ExcessCvrg'] = 'AL only';
+            }else if($data['employersLiability'] == true){
+                $temp['ExcessCvrg'] = 'GL,AL & EL';
+            }else if($data['excessCovGlAl'] == true){
+                $temp['ExcessCvrg'] = 'GL & AL';
+            }
+        } 
+        $response = $this->sendMail($temp, $template, $mailOptions);
         $this->logger->info("Mail Response" . $response);
         return $data;
     }
@@ -77,7 +104,7 @@ class SendMail extends MailDelegate
         }else if($mailType == "RequestForBind"){
             $subjectLine = "RequestForBind";
         }else if($mailType == "SubmissionMailToGenre"){
-            $subjectLine = "SubmissionMailToGenre";
+            $subjectLine = "Gen Re Quote -".$data['insuredName'];
         }else if($mailType == "PolicyMailtoHub"){
             $subjectLine = "PolicyMailtoHub";
         }else if($mailType == "RequestForMoreInfoMail"){
@@ -86,5 +113,14 @@ class SendMail extends MailDelegate
             $subjectLine = "HubRejectedQuote";
         }
         return $subjectLine;
+    }
+
+    protected function processData(&$temp)
+    {
+        foreach ($temp as $key => $value) {
+            if (is_array($temp[$key])) {
+                $temp[$key] = json_encode($value);
+            }
+        }
     }
 }
