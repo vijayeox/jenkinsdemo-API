@@ -36,11 +36,13 @@ final class Version20210914060741 extends AbstractMigration
             `customer_id` int(11) DEFAULT NULL,
             `amount` double NOT NULL,
             `data` json DEFAULT NULL,
-            `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
+            `date_created` date DEFAULT NULL,
+            `created_by` int(11) DEFAULT NULL,
             `is_settled` INT(1) DEFAULT 0,
             `date_modified` datetime DEFAULT NULL,
             PRIMARY KEY (`id`),
-            FOREIGN KEY (`customer_id`) REFERENCES ox_billing_customer(`id`)
+            FOREIGN KEY (`customer_id`) REFERENCES ox_billing_customer(`id`),
+            FOREIGN KEY (`created_by`) REFERENCES ox_user(`id`)           
             ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8");
 
     }
