@@ -167,7 +167,7 @@
           <table class="header-table">
             <thead>
               <tr>
-                <th scope="col">{"Invoice: `$invoiceUuid`"}</th>
+                <th scope="col">{"Invoice: `$invoiceNumber`"}</th>
               </tr>
             </thead>
           </table>
@@ -180,7 +180,7 @@
             </thead>
             <tbody>
               <tr>
-                <td>{$accountId}</td>
+                <td>{$accountNumber}</td>
                 <td>{$invoiceDate}</td>
               </tr>
             </tbody>
@@ -193,7 +193,7 @@
             </thead>
             <tbody>
               <tr>
-                <td>{$invoiceDate}</td>
+                <td>{$invoiceDueDate}</td>
               </tr>
             </tbody>
           </table>
@@ -206,8 +206,12 @@
             </thead>
             <tbody>
               <tr>
-                <td>0$</td>
-                <td>{$total}</td>
+                {if isset($amountPaid)}
+                <td>{"$`$amountPaid`"}</td>
+                {else}
+                <td>$0.0</td>
+                {/if}
+                <td>{"$`$total`"}</td>
               </tr>
             </tbody>
           </table>
@@ -237,8 +241,8 @@
           <tr>
             <th class="service">#</th>
             <th class="desc">DESCRIPTION</th>
-            <th>PRICE</th>
-            <th>QTY</th>
+            <th>Effective Date</th>
+            <th>Due Date</th>
             <th>TOTAL</th>
           </tr>
         </thead>
@@ -247,9 +251,13 @@
                 <tr>
                     <td class="service">{$key+1}</td>
                     <td class="desc">{$lineItem['description']}</td>
-                    <td class="unit">{"$`$lineItem['unitCost']`"}</td>
-                    {if isset($lineItem['quantity'])}
-                    <td class="qty">{$lineItem['quantity']}</td>
+                    {if isset($lineItem['transactionEffectiveDate'])}
+                    <td class="unit">{$lineItem['transactionEffectiveDate']}</td>
+                    {else}
+                    <td class="unit">--</td>
+                    {/if}
+                    {if isset($lineItem['transactionDueDate'])}
+                    <td class="qty">{$lineItem['transactionDueDate']}</td>
                     {else}
                     <td class="qty">--</td>
                     {/if}

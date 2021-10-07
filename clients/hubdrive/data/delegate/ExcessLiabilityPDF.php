@@ -55,12 +55,12 @@ class ExcessLiabilityPDF extends AbstractDocumentAppDelegate
             }
             $doc = $this->documentBuilder->generateDocument($excessLiabilityPDFTemplate,$data,$fileDestination);
             $documentpdf = $folderDestination['relativePath'] . $excessLiabilityPDFTemplate . ".pdf";
-            if(isset($data['attachments'])){
-                $data['attachments'] = is_string($data['attachments']) ? json_decode($data['attachments'],true) : $data['attachments'];
+            if(isset($data['documents'])){
+                $data['documents'] = is_string($data['documents']) ? json_decode($data['documents'],true) : $data['documents'];
             }else{
-                $data['attachments'] = array();
+                $data['documents'] = array();
             }
-            $data['attachments']['excess_pdf'] = array(
+            $data['documents']['excess_pdf'] = array(
                 "name" => $excessLiabilityPDFName,
                 "fullPath" => $fileDestination,
                 "file" => $documentpdf,
