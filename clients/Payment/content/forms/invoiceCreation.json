@@ -14,41 +14,24 @@
 		"tableView": false,
 		"components": [{
 			"label": "appId",
-			"customClass": "",
-			"modalEdit": false,
 			"defaultValue": "a4b1f073-fc20-477f-a804-1aa206938c42",
-			"persistent": true,
-			"protected": false,
-			"dbIndex": false,
-			"encrypted": false,
-			"redrawOn": "",
-			"customDefaultValue": "",
-			"calculateValue": "",
-			"calculateServer": false,
 			"key": "appId",
-			"tags": [],
-			"properties": {},
-			"logic": [],
-			"attributes": {},
-			"overlay": {
-				"style": "",
-				"page": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
 			"type": "hidden",
 			"input": true,
+			"tableView": false,
 			"placeholder": "",
 			"prefix": "",
+			"customClass": "",
 			"suffix": "",
 			"multiple": false,
+			"protected": false,
 			"unique": false,
+			"persistent": true,
 			"hidden": false,
 			"clearOnHide": true,
 			"refreshOn": "",
-			"tableView": false,
+			"redrawOn": "",
+			"modalEdit": false,
 			"dataGridLabel": false,
 			"labelPosition": "top",
 			"description": "",
@@ -58,9 +41,14 @@
 			"tabindex": "",
 			"disabled": false,
 			"autofocus": false,
+			"dbIndex": false,
+			"customDefaultValue": "",
+			"calculateValue": "",
+			"calculateServer": false,
 			"widget": {
 				"type": "input"
 			},
+			"attributes": {},
 			"validateOn": "change",
 			"validate": {
 				"required": false,
@@ -75,12 +63,21 @@
 				"when": null,
 				"eq": ""
 			},
+			"overlay": {
+				"style": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
 			"allowCalculateOverride": false,
+			"encrypted": false,
 			"showCharCount": false,
 			"showWordCount": false,
+			"properties": {},
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "e1jzpe"
+			"id": "eupahvb"
 		}, {
 			"label": "Select Customer",
 			"widget": "choicesjs",
@@ -100,6 +97,15 @@
 				"url": "",
 				"resource": "",
 				"custom": ""
+			},
+			"validate": {
+				"required": true,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false,
+				"onlyAvailableItems": false
 			},
 			"key": "accountId",
 			"type": "select",
@@ -133,15 +139,6 @@
 			"calculateServer": false,
 			"attributes": {},
 			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false,
-				"onlyAvailableItems": false
-			},
 			"conditional": {
 				"show": null,
 				"when": null,
@@ -186,10 +183,21 @@
 			},
 			"customOptions": {},
 			"useExactSearch": false,
-			"id": "epvr9q"
+			"id": "eyarhy5"
 		}, {
 			"label": "Invoice Number",
 			"tableView": true,
+			"validate": {
+				"required": true,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false,
+				"minLength": "",
+				"maxLength": "",
+				"pattern": ""
+			},
 			"key": "invoiceNumber",
 			"type": "textfield",
 			"input": true,
@@ -225,17 +233,6 @@
 			},
 			"attributes": {},
 			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false,
-				"minLength": "",
-				"maxLength": "",
-				"pattern": ""
-			},
 			"conditional": {
 				"show": null,
 				"when": null,
@@ -259,89 +256,80 @@
 			"inputFormat": "plain",
 			"inputMask": "",
 			"spellcheck": true,
-			"id": "ep5h9kd"
+			"id": "e1v44rd"
 		}, {
 			"label": "Account Number",
-			"labelPosition": "top",
-			"placeholder": "",
-			"description": "",
-			"tooltip": "",
-			"prefix": "",
-			"suffix": "",
-			"widget": {
-				"type": "input"
-			},
-			"inputMask": "",
-			"allowMultipleMasks": false,
-			"customClass": "",
-			"tabindex": "",
-			"autocomplete": "",
-			"hidden": false,
-			"hideLabel": false,
-			"showWordCount": false,
-			"showCharCount": false,
-			"mask": false,
-			"autofocus": false,
-			"spellcheck": true,
-			"disabled": false,
 			"tableView": true,
-			"modalEdit": false,
+			"validate": {
+				"required": true,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false,
+				"minLength": "",
+				"maxLength": "",
+				"pattern": ""
+			},
+			"key": "accountNumber",
+			"type": "textfield",
+			"input": true,
+			"placeholder": "",
+			"prefix": "",
+			"customClass": "",
+			"suffix": "",
 			"multiple": false,
-			"persistent": true,
-			"inputFormat": "plain",
+			"defaultValue": null,
 			"protected": false,
-			"dbIndex": false,
-			"case": "",
-			"encrypted": false,
-			"redrawOn": "",
+			"unique": false,
+			"persistent": true,
+			"hidden": false,
 			"clearOnHide": true,
+			"refreshOn": "",
+			"redrawOn": "",
+			"modalEdit": false,
+			"dataGridLabel": false,
+			"labelPosition": "top",
+			"description": "",
+			"errorLabel": "",
+			"tooltip": "",
+			"hideLabel": false,
+			"tabindex": "",
+			"disabled": false,
+			"autofocus": false,
+			"dbIndex": false,
 			"customDefaultValue": "",
 			"calculateValue": "",
 			"calculateServer": false,
-			"allowCalculateOverride": false,
-			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"pattern": "",
-				"customMessage": "",
-				"custom": "",
-				"customPrivate": false,
-				"json": "",
-				"minLength": "",
-				"maxLength": "",
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
+			"widget": {
+				"type": "input"
 			},
-			"unique": false,
-			"errorLabel": "",
-			"key": "accountNumber",
-			"tags": [],
-			"properties": {},
+			"attributes": {},
+			"validateOn": "change",
 			"conditional": {
 				"show": null,
 				"when": null,
-				"eq": "",
-				"json": ""
+				"eq": ""
 			},
-			"customConditional": "",
-			"logic": [],
-			"attributes": {},
 			"overlay": {
 				"style": "",
-				"page": "",
 				"left": "",
 				"top": "",
 				"width": "",
 				"height": ""
 			},
-			"type": "textfield",
-			"input": true,
-			"refreshOn": "",
-			"dataGridLabel": false,
+			"allowCalculateOverride": false,
+			"encrypted": false,
+			"showCharCount": false,
+			"showWordCount": false,
+			"properties": {},
+			"allowMultipleMasks": false,
+			"mask": false,
 			"inputType": "text",
-			"id": "eq22t1j",
-			"defaultValue": ""
+			"inputFormat": "plain",
+			"inputMask": "",
+			"spellcheck": true,
+			"id": "ef2tdeh"
 		}, {
 			"label": "Invoice Date",
 			"format": "yyyy-MM-dd",
@@ -454,7 +442,7 @@
 				"arrowkeys": true
 			},
 			"customOptions": {},
-			"id": "e0ecdpg"
+			"id": "e25ib7o"
 		}, {
 			"label": "Invoice Due Date",
 			"format": "yyyy-MM-dd",
@@ -474,6 +462,14 @@
 				"maxDate": null
 			},
 			"enableMaxDateInput": false,
+			"validate": {
+				"required": true,
+				"custom": "",
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false
+			},
 			"key": "invoiceDueDate",
 			"type": "datetime",
 			"input": true,
@@ -524,14 +520,6 @@
 			"calculateServer": false,
 			"attributes": {},
 			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false
-			},
 			"conditional": {
 				"show": null,
 				"when": null,
@@ -567,7 +555,7 @@
 				"arrowkeys": true
 			},
 			"customOptions": {},
-			"id": "eu3ajdw"
+			"id": "e1sonvo"
 		}, {
 			"label": "Amount Paid",
 			"prefix": "$",
@@ -576,6 +564,18 @@
 			"delimiter": false,
 			"requireDecimal": false,
 			"inputFormat": "plain",
+			"validate": {
+				"custom": "valid = (input <= data.total)?true:'Amount paid cannot exceed total invoice amount'",
+				"min": 0,
+				"required": false,
+				"customPrivate": false,
+				"strictDateValidation": false,
+				"multiple": false,
+				"unique": false,
+				"max": "",
+				"step": "any",
+				"integer": ""
+			},
 			"key": "amountPaid",
 			"type": "number",
 			"input": true,
@@ -610,18 +610,6 @@
 			},
 			"attributes": {},
 			"validateOn": "change",
-			"validate": {
-				"required": false,
-				"custom": "",
-				"customPrivate": false,
-				"strictDateValidation": false,
-				"multiple": false,
-				"unique": false,
-				"min": "",
-				"max": "",
-				"step": "any",
-				"integer": ""
-			},
 			"conditional": {
 				"show": null,
 				"when": null,
@@ -640,7 +628,7 @@
 			"showWordCount": false,
 			"properties": {},
 			"allowMultipleMasks": false,
-			"id": "e7u4l29"
+			"id": "ejjko8e"
 		}, {
 			"label": "Ledger Data",
 			"reorder": false,
@@ -728,7 +716,7 @@
 						"inputFormat": "plain",
 						"inputMask": "",
 						"spellcheck": true,
-						"id": "ebj88ea"
+						"id": "epuxj5"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -809,7 +797,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "einq1ij"
+						"id": "evcf60h"
 					}],
 					"offset": 0,
 					"push": 0,
@@ -825,6 +813,18 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
+						"validate": {
+							"min": 1,
+							"required": false,
+							"custom": "",
+							"customPrivate": false,
+							"strictDateValidation": false,
+							"multiple": false,
+							"unique": false,
+							"max": "",
+							"step": "any",
+							"integer": ""
+						},
 						"key": "quantity",
 						"type": "number",
 						"input": true,
@@ -860,18 +860,6 @@
 						},
 						"attributes": {},
 						"validateOn": "change",
-						"validate": {
-							"required": false,
-							"custom": "",
-							"customPrivate": false,
-							"strictDateValidation": false,
-							"multiple": false,
-							"unique": false,
-							"min": "",
-							"max": "",
-							"step": "any",
-							"integer": ""
-						},
 						"conditional": {
 							"show": null,
 							"when": null,
@@ -890,7 +878,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "e4he34w"
+						"id": "e87hu3s"
 					}],
 					"size": "sm",
 					"offset": 0,
@@ -971,7 +959,7 @@
 						"showWordCount": false,
 						"properties": {},
 						"allowMultipleMasks": false,
-						"id": "ewbhltk"
+						"id": "etmbgu26"
 					}],
 					"size": "sm",
 					"offset": 0,
@@ -1092,7 +1080,7 @@
 							"arrowkeys": true
 						},
 						"customOptions": {},
-						"id": "ed8ixrn"
+						"id": "efk74p"
 					}],
 					"size": "sm",
 					"offset": 0,
@@ -1213,7 +1201,7 @@
 							"arrowkeys": true
 						},
 						"customOptions": {},
-						"id": "ecz86j"
+						"id": "e50d1k"
 					}],
 					"size": "sm",
 					"offset": 0,
@@ -1226,7 +1214,7 @@
 				"type": "columns",
 				"input": false,
 				"tableView": false,
-				"id": "eyxdhw90000000000",
+				"id": "eirvo480",
 				"placeholder": "",
 				"prefix": "",
 				"customClass": "",
@@ -1343,7 +1331,7 @@
 			"allowMultipleMasks": false,
 			"tree": true,
 			"disableAddingRemovingRows": false,
-			"id": "el2hka"
+			"id": "erg2w8"
 		}, {
 			"label": "Columns",
 			"columns": [{
@@ -1427,7 +1415,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "esuwlqs"
+					"id": "efosn5g"
 				}],
 				"offset": 0,
 				"push": 0,
@@ -1508,7 +1496,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "e7l98v"
+					"id": "e1zk1e"
 				}],
 				"size": "md",
 				"offset": 0,
@@ -1579,7 +1567,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"autoAdjust": false,
-			"id": "e32t0f"
+			"id": "ervz78e"
 		}, {
 			"label": "Columns",
 			"columns": [{
@@ -1671,7 +1659,7 @@
 					"showWordCount": false,
 					"properties": {},
 					"allowMultipleMasks": false,
-					"id": "ebeuyfy"
+					"id": "e2x6zlv"
 				}],
 				"size": "md",
 				"offset": 0,
@@ -1742,7 +1730,7 @@
 			"allowMultipleMasks": false,
 			"tree": false,
 			"autoAdjust": false,
-			"id": "eqpqmpa"
+			"id": "eyvcyl"
 		}],
 		"placeholder": "",
 		"prefix": "",
@@ -1802,7 +1790,7 @@
 		"allowMultipleMasks": false,
 		"tree": false,
 		"breadcrumb": "default",
-		"id": "e1a6scb"
+		"id": "e3grr7e"
 	}, {
 		"type": "button",
 		"label": "Submit",
@@ -1874,10 +1862,10 @@
 		"block": false,
 		"action": "submit",
 		"theme": "primary",
-		"id": "eujwb14"
+		"id": "eofbyzi"
 	}],
 	"revisions": "current",
-	"_vid": 9,
+	"_vid": 12,
 	"title": "invoiceCreation",
 	"display": "form",
 	"access": [{
@@ -1894,6 +1882,6 @@
 	"path": "invoicecreation",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-09-29T11:29:15.103Z",
-	"modified": "2021-10-06T05:56:11.612Z",
+	"modified": "2021-10-07T10:06:42.639Z",
 	"machineName": "insuranceprocurement-eoxvantage:invoiceCreation"
 }
