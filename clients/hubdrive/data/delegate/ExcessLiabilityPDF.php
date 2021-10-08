@@ -84,15 +84,10 @@ class ExcessLiabilityPDF extends AbstractDocumentAppDelegate
     }
 
     private function getAppropriateDataForPDF(&$data) {
-        $data['quoteByDateFormatted'] = isset($data['quoteByDate']) ? explode('T',$data['quoteByDate'])[0] : null;
-
-        $data['desiredPolicyEffectiveDateFormatted'] = isset($data['desiredPolicyEffectiveDate']) ? explode('T',$data['desiredPolicyEffectiveDate'])[0] : null;
-
         $temp = array();
         $temp['city'] = isset($data['city']) ? $data['city'] : null;
         $temp['state'] = isset($data['state']['name']) ? $data['state']['name'] : null;
         $temp['zipCode'] = isset($data['zipCode']) ? $data['zipCode'] : null;
-
         $data['csz'] = $temp['city']."/".$temp['state']."/".$temp['zipCode'];
         $data['checked'] = "checked";
     }
