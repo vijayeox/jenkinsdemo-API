@@ -798,8 +798,6 @@ entity:
                 identifier: usDot
         participantRole:
             -
-                businessRole: 'Independent Contractor'
-            -
                 businessRole: 'Contract Carrier - Excess Only'
         ryg_rule: ''
         statusField: ''
