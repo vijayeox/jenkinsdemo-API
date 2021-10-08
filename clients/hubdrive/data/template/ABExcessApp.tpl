@@ -256,7 +256,7 @@
 
                     <strong>Quote by Date: </strong>
                     {if ((isset($quoteByDateFormatted) && $quoteByDateFormatted != ""))}
-                        <span class="underline">{$quoteByDateFormatted}</span>
+                        <span class="underline">{$quoteByDateFormatted|date_format:"%m/%d/%Y"}</span>
 
                     {else}
                         <span>__________________</span>
@@ -274,7 +274,7 @@
 
                     <strong>Desired Policy Effective Date: </strong>
                     {if ((isset($desiredPolicyEffectiveDate) && $desiredPolicyEffectiveDate != ""))}
-                        <span class="underline">{$desiredPolicyEffectiveDate}</span>
+                        <span class="underline">{$desiredPolicyEffDateFormatted|date_format:"%m/%d/%Y"}</span>
 
                     {else}
                         <span>__________________</span>
@@ -398,8 +398,8 @@
                     {/if}
 
                     <strong>Producer’s Name: </strong>
-                    {if ((isset($producersName) && $producersName != ""))}
-                        <span class="underline">{$producersName}</span><br>
+                    {if ((isset($producerName) && $producerName != ""))}
+                        <span class="underline">{$producerName}</span><br>
                     {else}
                         <span>__________________</span>
                     {/if}
@@ -451,7 +451,9 @@
                 </p>
                 <p>
                     <strong>Coverage(s) Requested:</strong><br>
-                    <strong>Limits Needed in Excess Layer: </strong><span class="underline">{$select5}</span>
+                    <strong>Limits Needed in Excess Layer: </strong>{if $limitsNeededinExcessLayer && $limitsNeededinExcessLayer != ""}<span class="underline">{if $limitsNeededinExcessLayer == '1M'}$1,000,000.00{elseif $limitsNeededinExcessLayer == '2M'}$2,000,000.00{elseif $limitsNeededinExcessLayer == '3M'}$3,000,000.00{elseif $limitsNeededinExcessLayer == '4M'}$4,000,000.00{elseif $limitsNeededinExcessLayer == '5M'}$5,000,000.00{elseif $limitsNeededinExcessLayer == 'all'}ALL{/if}
+                    </span>
+                    {/if}
                 </p>
                 <p class="ml-4 mt-4 mb-4">
                     {if $excessCgl == true || $excessCgl == "true"}
@@ -491,7 +493,7 @@
                 <p>
                     <strong>Target Premium: </strong>
                     {if ((isset($targetPremium) && $targetPremium != ""))}
-                        <span class="underline">{$targetPremium}</span>
+                        <span class="underline">${$targetPremium}</span>
                     {else}
                         <span>__________________</span>
                     {/if}
@@ -505,7 +507,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {if $cgl == true || $cgl == "true"}
+                            {if $excessCovCgl == true || $excessCovCgl == "true"}
                                 <input id="Excess CGL" type="checkbox" name="Excess CGL" checked readonly />
                                 <label for="Excess CGL">Excess CGL</label>
                             {else}
@@ -514,15 +516,15 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carier) && $carier != ""))}
-                                <span class="underline">{$carier}</span>
+                            {if ((isset($excessCovCglCarrier) && $excessCovCglCarrier != ""))}
+                                <span class="underline">{$excessCovCglCarrier}</span>
                             {else}
                                 <span>__________________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($currency) && $currency != ""))}
-                                <span class="underline">${$currency}</span>
+                            {if ((isset($excessCovCglPremium) && $excessCovCglPremium != ""))}
+                                <span class="underline">${$excessCovCglPremium}</span>
                             {else}
                                 <span>$__________________</span>
                             {/if}
@@ -540,15 +542,15 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier2) && $carrier2 != ""))}
-                                <span class="underline">{$carrier2}</span>
+                            {if ((isset($commercialAutoLiabilityCarrier) && $commercialAutoLiabilityCarrier != ""))}
+                                <span class="underline">{$commercialAutoLiabilityCarrier}</span>
                             {else}
                                 <span>__________________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($currency1) && $currency1 != ""))}
-                                <span class="underline">${$currency1}</span>
+                            {if ((isset($commercialAutoLiabilityPremium) && $commercialAutoLiabilityPremium != ""))}
+                                <span class="underline">${$commercialAutoLiabilityPremium}</span>
                             {else}
                                 <span>$__________________</span>
                             {/if}
@@ -566,15 +568,15 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier3) && $carrier3 != ""))}
-                                <span class="underline">{$carrier3}</span>
+                            {if ((isset($employersLiabilityCarrier) && $employersLiabilityCarrier != ""))}
+                                <span class="underline">{$employersLiabilityCarrier}</span>
                             {else}
                                 <span>__________________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($currency2) && $currency2 != ""))}
-                                <span class="underline">${$currency2}</span>
+                            {if ((isset($employersLiabilityPremium) && $employersLiabilityPremium != ""))}
+                                <span class="underline">${$employersLiabilityPremium}</span>
                             {else}
                                 <span>$__________________</span>
                             {/if}
@@ -582,7 +584,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {if $others == true || $others == "true"}
+                            {if $excessCovGlAl == true || $excessCovGlAl == "true"}
                                 <input id="Excess (GL + AL only)" type="checkbox" name="Excess (GL + AL only)" checked
                                     readonly />
                                 <label for="Excess (GL + AL only)">Excess (GL + AL only)</label>
@@ -592,15 +594,15 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier4) && $carrier4 != ""))}
-                                <span class="underline">{$carrier4}</span>
+                            {if ((isset($excessCovGlAlCarrier) && $excessCovGlAlCarrier != ""))}
+                                <span class="underline">{$excessCovGlAlCarrier}</span>
                             {else}
                                 <span>__________________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($currency3) && $currency3 != ""))}
-                                <span class="underline">${$currency3}</span>
+                            {if ((isset($excessCovGlAlPremium) && $excessCovGlAlPremium != ""))}
+                                <span class="underline">${$excessCovGlAlPremium}</span>
                             {else}
                                 <span>$__________________</span>
                             {/if}
@@ -626,30 +628,30 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible1) && $deductible1 != ""))}
-                                <span class="underline">${$deductible1}</span>
+                            {if ((isset($autoLiabilityDeduct) && $autoLiabilityDeduct != ""))}
+                                <span class="underline">${$autoLiabilityDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier1) && $carrier1 != ""))}
-                                <span class="underline">{$carrier1}</span>
+                            {if ((isset($autoLiabilityCarrier) && $autoLiabilityCarrier != ""))}
+                                <span class="underline">{$autoLiabilityCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium1) && $premium1 != ""))}
-                                <span class="underline">${$premium1}</span>
+                            {if ((isset($autoLiabilityPremium) && $autoLiabilityPremium != ""))}
+                                <span class="underline">${$autoLiabilityPremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
 
-                            {if ((isset($limit1) && $limit1 != ""))}
-                                <span class="underline">${$limit1}</span>
+                            {if ((isset($autoLiabilityLimit) && $autoLiabilityLimit != ""))}
+                                <span class="underline">${$autoLiabilityLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -668,29 +670,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible2) && $deductible2 != ""))}
-                                <span class="underline">${$deductible2}</span>
+                            {if ((isset($personalInjuryProtectionPipDeduct) && $personalInjuryProtectionPipDeduct != ""))}
+                                <span class="underline">${$personalInjuryProtectionPipDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier5) && $carrier5 != ""))}
-                                <span class="underline">{$carrier5}</span>
+                            {if ((isset($personalInjuryProtectionPipCarrier) && $personalInjuryProtectionPipCarrier != ""))}
+                                <span class="underline">{$personalInjuryProtectionPipCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium2) && $premium2 != ""))}
-                                <span class="underline">${$premium2}</span>
+                            {if ((isset($personalInjuryProtectionPipPremium) && $personalInjuryProtectionPipPremium != ""))}
+                                <span class="underline">${$personalInjuryProtectionPipPremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit2) && $limit2 != ""))}
-                                <span class="underline">${$limit2}</span>
+                            {if ((isset($personalInjuryProtectionPipLimit) && $personalInjuryProtectionPipLimit != ""))}
+                                <span class="underline">${$personalInjuryProtectionPipLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -707,29 +709,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible3) && $deductible3 != ""))}
-                                <span class="underline">${$deductible3}</span>
+                            {if ((isset($umUimDeduct) && $umUimDeduct != ""))}
+                                <span class="underline">${$umUimDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier6) && $carrier6 != ""))}
-                                <span class="underline">{$carrier6}</span>
+                            {if ((isset($umUimCarrier) && $umUimCarrier != ""))}
+                                <span class="underline">{$umUimCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium3) && $premium3 != ""))}
-                                <span class="underline">${$premium3}</span>
+                            {if ((isset($umUimPremium) && $umUimPremium != ""))}
+                                <span class="underline">${$umUimPremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit3) && $limit3 != ""))}
-                                <span class="underline">${$limit3}</span>
+                            {if ((isset($umUimLimit) && $umUimLimit != ""))}
+                                <span class="underline">${$umUimLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -748,29 +750,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible4) && $deductible4 != ""))}
-                                <span class="underline">${$deductible4}</span>
+                            {if ((isset($companyPhysicalDamageDeduct) && $companyPhysicalDamageDeduct != ""))}
+                                <span class="underline">${$companyPhysicalDamageDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier7) && $carrier7 != ""))}
-                                <span class="underline">{$carrier7}</span>
+                            {if ((isset($companyPhysicalDamageCarrier) && $companyPhysicalDamageCarrier != ""))}
+                                <span class="underline">{$companyPhysicalDamageCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium4) && $premium4 != ""))}
-                                <span class="underline">${$premium4}</span>
+                            {if ((isset($companyPhysicalDamagePremium) && $companyPhysicalDamagePremium != ""))}
+                                <span class="underline">${$companyPhysicalDamagePremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit4) && $limit4 != ""))}
-                                <span class="underline">${$limit4}</span>
+                            {if ((isset($companyPhysicalDamageLimit) && $companyPhysicalDamageLimit != ""))}
+                                <span class="underline">${$companyPhysicalDamageLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -787,29 +789,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible5) && $deductible5 != ""))}
-                                <span class="underline">${$deductible5}</span>
+                            {if ((isset($hiredAutoDeduct) && $hiredAutoDeduct != ""))}
+                                <span class="underline">${$hiredAutoDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier8) && $carrier8 != ""))}
-                                <span class="underline">{$carrier8}</span>
+                            {if ((isset($hiredAutoCarrier) && $hiredAutoCarrier != ""))}
+                                <span class="underline">{$hiredAutoCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium5) && $premium5 != ""))}
-                                <span class="underline">${$premium5}</span>
+                            {if ((isset($hiredAutoPremium) && $hiredAutoPremium != ""))}
+                                <span class="underline">${$hiredAutoPremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit5) && $limit5 != ""))}
-                                <span class="underline">${$limit5}</span>
+                            {if ((isset($hiredAutoLimit) && $hiredAutoLimit != ""))}
+                                <span class="underline">${$hiredAutoLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -826,29 +828,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible6) && $deductible6 != ""))}
-                                <span class="underline">${$deductible6}</span>
+                            {if ((isset($trailerInterchangeDeduct) && $trailerInterchangeDeduct != ""))}
+                                <span class="underline">${$trailerInterchangeDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier9) && $carrier9 != ""))}
-                                <span class="underline">{$carrier9}</span>
+                            {if ((isset($trailerInterchangeCarrier) && $trailerInterchangeCarrier != ""))}
+                                <span class="underline">{$trailerInterchangeCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium6) && $premium6 != ""))}
-                                <span class="underline">${$premium6}</span>
+                            {if ((isset($trailerInterchangePremium) && $trailerInterchangePremium != ""))}
+                                <span class="underline">${$trailerInterchangePremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit6) && $limit6 != ""))}
-                                <span class="underline">${$limit6}</span>
+                            {if ((isset($trailerInterchangeLimit) && $trailerInterchangeLimit != ""))}
+                                <span class="underline">${$trailerInterchangeLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -865,29 +867,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible7) && $deductible7 != ""))}
-                                <span class="underline">${$deductible7}</span>
+                            {if ((isset($generalLiabilityDeduct) && $generalLiabilityDeduct != ""))}
+                                <span class="underline">${$generalLiabilityDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier10) && $carrier10 != ""))}
-                                <span class="underline">{$carrier10}</span>
+                            {if ((isset($generalLiabilityCarrier) && $generalLiabilityCarrier != ""))}
+                                <span class="underline">{$generalLiabilityCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium7) && $premium7 != ""))}
-                                <span class="underline">${$premium7}</span>
+                            {if ((isset($generalLiabilityPremium) && $generalLiabilityPremium != ""))}
+                                <span class="underline">${$generalLiabilityPremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit7) && $limit7 != ""))}
-                                <span class="underline">${$limit7}</span>
+                            {if ((isset($generalLiabilityLimit) && $generalLiabilityLimit != ""))}
+                                <span class="underline">${$generalLiabilityLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -904,29 +906,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible9) && $deductible9 != ""))}
-                                <span class="underline">${$deductible9}</span>
+                            {if ((isset($umbrellaDeduct) && $umbrellaDeduct != ""))}
+                                <span class="underline">${$umbrellaDeduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier12) && $carrier12 != ""))}
-                                <span class="underline">{$carrier12}</span>
+                            {if ((isset($umbrellaCarrier) && $umbrellaCarrier != ""))}
+                                <span class="underline">{$umbrellaCarrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium9) && $premium9 != ""))}
-                                <span class="underline">${$premium9}</span>
+                            {if ((isset($umbrellaPremium) && $umbrellaPremium != ""))}
+                                <span class="underline">${$umbrellaPremium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit9) && $limit9 != ""))}
-                                <span class="underline">${$limit9}</span>
+                            {if ((isset($umbrellaLimit) && $umbrellaLimit != ""))}
+                                <span class="underline">${$umbrellaLimit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -943,29 +945,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible8) && $deductible8 != ""))}
-                                <span class="underline">${$deductible8}</span>
+                            {if ((isset($employersLiability1Deduct) && $employersLiability1Deduct != ""))}
+                                <span class="underline">${$employersLiability1Deduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier11) && $carrier11 != ""))}
-                                <span class="underline">{$carrier11}</span>
+                            {if ((isset($employersLiability1Carrier) && $employersLiability1Carrier != ""))}
+                                <span class="underline">{$employersLiability1Carrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium8) && $premium8 != ""))}
-                                <span class="underline">${$premium8}</span>
+                            {if ((isset($employersLiability1Premium) && $employersLiability1Premium != ""))}
+                                <span class="underline">${$employersLiability1Premium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit8) && $limit8 != ""))}
-                                <span class="underline">${$limit8}</span>
+                            {if ((isset($employersLiability1Limit) && $employersLiability1Limit != ""))}
+                                <span class="underline">${$employersLiability1Limit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -973,7 +975,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {if $autoLiability == true || $autoLiability == "true"}
+                            {if $garageLiability1 == true || $garageLiability1 == "true"}
                                 <input id="Garage Liability" type="checkbox" name="Garage Liability" checked readonly />
                                 <label for="Garage Liability">Garage Liability</label>
                             {else}
@@ -982,29 +984,29 @@
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($deductible10) && $deductible10 != ""))}
-                                <span class="underline">${$deductible10}</span>
+                            {if ((isset($garageLiability1Deduct) && $garageLiability1Deduct != ""))}
+                                <span class="underline">${$garageLiability1Deduct}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($carrier13) && $carrier13 != ""))}
-                                <span class="underline">${$carrier13}</span>
+                            {if ((isset($garageLiability1Carrier) && $garageLiability1Carrier != ""))}
+                                <span class="underline">${$garageLiability1Carrier}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($premium10) && $premium10 != ""))}
-                                <span class="underline">${$premium10}</span>
+                            {if ((isset($garageLiability1Premium) && $garageLiability1Premium != ""))}
+                                <span class="underline">${$garageLiability1Premium}</span>
                             {else}
                                 <span>$_______________</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($limit10) && $limit10 != ""))}
-                                <span class="underline">${$limit10}</span>
+                            {if ((isset($garageLiability1Limit) && $garageLiability1Limit != ""))}
+                                <span class="underline">${$garageLiability1Limit}</span>
                             {else}
                                 <span>_______________</span>
                             {/if}
@@ -1028,7 +1030,9 @@
                 <p class="continued">SECTION 1: GENERAL INFORMATION, continued</p>
                 <p>
                     <strong>Provide brief description of Operations and Ownership/Management experience:
-                    </strong><br>{$provideBriefDescriptionOfOperationsAndOwnershipManagementExperience}<br>
+                    {if isset($descriptionOfOperations) && $descriptionOfOperations != ""}
+                    </strong><br>{$descriptionOfOperations}<br>
+                    {/if}
                 </p>
                 <strong>Garage Locations:</strong><br>
                 <table>
@@ -1037,22 +1041,22 @@
                         <th><strong>Address (Street, City, State, Zip Code)</strong></th>
                         <th><strong># Units Each Location</strong></th>
                     </tr>
-                    {foreach from=$dataGrid item=item key=key}
+                    {foreach from=$garageLocations item=item key=key}
                         <tr>
                             <td>#{$key+1}.</td>
 
                             <td>
-                                {if ((isset($item.address1) && $item.address1 != "")) && ((isset($item.city1) && $item.city1 != "")) && ((isset($item.state1.name) && $item.state1.name != "")) && ((isset($item.zipCode1) && $item.zipCode1 != ""))}
+                                {if ((isset($item.garageLocAddress) && $item.garageLocAddress != "")) && ((isset($item.garageLocCity) && $item.garageLocCity != "")) && ((isset($item.garageLocState.name) && $item.garageLocState.name != "")) && ((isset($item.garageLocZipCode) && $item.garageLocZipCode != ""))}
                                     <span
-                                        class="underline">{$item.address1},{$item.city1},{$item.state1.name},{$item.zipCode1},</span><br>
+                                        class="underline">{$item.garageLocAddress},{$item.garageLocCity},{$item.garageLocState.name},{$item.garageLocZipCode}</span><br>
                                 {else}
                                     __________________<br>
                                 {/if}
                             </td>
 
                             <td>
-                                {if ((isset($item.unitsEachLocation) && $item.unitsEachLocation != ""))}
-                                    <span class="underline">{$item.unitsEachLocation},</span><br>
+                                {if ((isset($item.garageLocUnitsEachLocation) && $item.garageLocUnitsEachLocation != ""))}
+                                    <span class="underline">{$item.garageLocUnitsEachLocation}</span><br>
                                 {else}
                                     __________________<br>
                                 {/if}
@@ -2167,60 +2171,113 @@
                         </th>
                     </tr>
                     <tr>
-                        <td>
-                            <input id="writtenApplication" type="checkbox" name="writtenApplication" readonly />
-                            <label for="writtenApplication">Written Application</label>
-                        </td>
-                        <td>
-                            <input id="hours" type="checkbox" name="hours" readonly />
-                            <label for="hours">Hours</label>
-                        </td>
+                        {if $writtenApplication == true || $writtenApplication == "true"}  
+                            <td>
+                                <input id="writtenApplication" type="checkbox" name="writtenApplication" checked readonly />
+                                <label for="writtenApplication">Written Application</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="writtenApplication" type="checkbox" name="writtenApplication" readonly />
+                                <label for="writtenApplication">Written Application</label> 
+                            </td>
+                        {/if}
+                        {if $hours == true || $hours == "true"}  
+                            <td>
+                                <input id="hours" type="checkbox" name="hours" checked readonly />
+                                <label for="hours">Hours</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="hours" type="checkbox" name="hours" readonly />
+                                <label for="hours">Hours</label>
+                            </td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>
-                            <input id="drivingTests" type="checkbox" name="drivingTests" readonly />
-                            <label for="drivingTests">Driving Tests</label>
-                        </td>
-                        <td>
-                            <input id="miles" type="checkbox" name="miles" readonly />
-                            <label for="miles">Miles</label>
-                        </td>
+                        {if $drivingTests == true || $drivingTests == "true"}  
+                            <td>
+                                <input id="drivingTests" type="checkbox" name="drivingTests" checked readonly />
+                                <label for="drivingTests">Driving Tests</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="drivingTests" type="checkbox" name="drivingTests" readonly />
+                                <label for="drivingTests">Driving Tests</label>
+                            </td>
+                        {/if}
+                        {if $miles == true || $miles == "true"}
+                            <td>
+                                <input id="miles" type="checkbox" name="miles" checked readonly />
+                                <label for="miles">Miles</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="miles" type="checkbox" name="miles" readonly />
+                                <label for="miles">Miles</label>
+                            </td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>
-                            <input id="drivingTests" type="checkbox" name="drivingTests" readonly />
-                            <label for="drivingTests">Driving Tests</label>
-                        </td>
-                        <td>
-                            <input id="miles" type="checkbox" name="miles" readonly />
-                            <label for="miles">Miles</label>
-                        </td>
+                        {if $interview == true || $interview == "true"}
+                            <td>
+                                <input id="interview" type="checkbox" name="interview" checked readonly />
+                                <label for="interview">Interview</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="interview" type="checkbox" name="interview" readonly />
+                                <label for="interview">Interview</label>
+                            </td>
+                        {/if}
+                        {if $revenue == true || $revenue == "true"}
+                            <td>
+                                <input id="revenue" type="checkbox" name="revenue" checked readonly />
+                                <label for="revenue">Revenue</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="revenue" type="checkbox" name="revenue" readonly />
+                                <label for="revenue">Revenue</label>
+                            </td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>
-                            <input id="interview" type="checkbox" name="interview" readonly />
-                            <label for="interview">Interview</label>
-                        </td>
-                        <td>
-                            <input id="miles" type="checkbox" name="miles" readonly />
-                            <label for="miles">Revenue</label>
-                        </td>
+                        {if $drugTest == true || $drugTest == "true"}
+                            <td>
+                                <input id="drugTest" type="checkbox" name="drugTest" checked readonly />
+                                <label for="drugTest">Drug Test</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="drugTest" type="checkbox" name="drugTest" readonly />
+                                <label for="drugTest">Drug Test</label>
+                            </td>
+                        {/if}
+                        {if $trips == true || $trips == "true"}
+                            <td>
+                                <input id="trips" type="checkbox" name="trips" checked readonly />
+                                <label for="trips">Trips</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="trips" type="checkbox" name="trips" readonly />
+                                <label for="trips">Trips</label>
+                            </td>
+                        {/if}
                     </tr>
                     <tr>
-                        <td>
-                            <input id="drugTest" type="checkbox" name="drugTest" readonly />
-                            <label for="drugTest">Drug Test</label>
-                        </td>
-                        <td>
-                            <input id="trips" type="checkbox" name="trips" readonly />
-                            <label for="trips">Trips</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input id="writtenTest" type="checkbox" name="writtenTest" readonly />
-                            <label for="writtenTest">Written Test</label>
-                        </td>
+                        {if $writtenTest == true || $writtenTest == "true"}
+                            <td>
+                                <input id="writtenTest" type="checkbox" name="writtenTest" checked readonly />
+                                <label for="writtenTest">Written Test</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="writtenTest" type="checkbox" name="writtenTest" readonly />
+                                <label for="writtenTest">Written Test</label>
+                            </td>
+                        {/if}
                         <td>
                             <strong>Average annual driver pay: $</strong>
                             {if isset($averageAnnualDriverPay)}
@@ -2231,17 +2288,31 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <input id="preHirePhysical" type="checkbox" name="preHirePhysical" readonly />
-                            <label for="preHirePhysical">Pre-Hire Physical</label>
-                        </td>
+                        {if $preHirePhysical == true || $preHirePhysical == "true"}
+                            <td>
+                                <input id="preHirePhysical" type="checkbox" name="preHirePhysical" checked readonly />
+                                <label for="preHirePhysical">Pre-Hire Physical</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="preHirePhysical" type="checkbox" name="preHirePhysical" readonly />
+                                <label for="preHirePhysical">Pre-Hire Physical</label>
+                            </td>
+                        {/if}
                         <td></td>
                     </tr>
                     <tr>
-                        <td>
-                            <input id="referenceCheck" type="checkbox" name="referenceCheck" readonly />
-                            <label for="referenceCheck">Reference Check</label>
-                        </td>
+                        {if $referenceCheck == true || $referenceCheck == "true"}
+                            <td>
+                                <input id="referenceCheck" type="checkbox" name="referenceCheck" checked readonly />
+                                <label for="referenceCheck">Reference Check</label>
+                            </td>
+                        {else}
+                            <td>
+                                <input id="referenceCheck" type="checkbox" name="referenceCheck" readonly />
+                                <label for="referenceCheck">Reference Check</label>
+                            </td>
+                        {/if}
                         <td>
                             <strong>How often are drivers home?</strong>
                             {if ((isset($howOftenAreDriversHome) && $howOftenAreDriversHome != ""))}
@@ -3187,37 +3258,37 @@
                     <tr>
                         <td>6.</td>
                         <td>Do you have a safety award program?</td>
-                        {if isset($survey5['doYouHaveASafetyAwardPrograms'])}
+                        {if isset($survey5['doYouHaveASafetyAwardProgram'])}
                             <td>
-                                {if $survey5.doYouHaveASafetyAwardPrograms == "yes"}
-                                    <input id="doYouHaveASafetyAwardPrograms" type="checkbox"
-                                        name="doYouHaveASafetyAwardPrograms" checked readonly />
-                                    <label for="doYouHaveASafetyAwardPrograms">Y</label>
+                                {if $survey5.doYouHaveASafetyAwardProgram == "yes"}
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
+                                        name="doYouHaveASafetyAwardProgram" checked readonly />
+                                    <label for="doYouHaveASafetyAwardProgram">Y</label>
                                 {else}
-                                    <input id="doYouHaveASafetyAwardPrograms" type="checkbox"
-                                        name="doYouHaveASafetyAwardPrograms" readonly />
-                                    <label for="doYouHaveASafetyAwardPrograms">Y</label>
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
+                                        name="doYouHaveASafetyAwardProgram" readonly />
+                                    <label for="doYouHaveASafetyAwardProgram">Y</label>
                                 {/if}
                             </td>
                             <td>
-                                {if $survey5.doYouHaveASafetyAwardPrograms == "no"}
-                                    <input id="doYouHaveASafetyAwardPrograms" type="checkbox"
-                                        name="doYouHaveASafetyAwardPrograms" checked readonly />
-                                    <label for="doYouHaveASafetyAwardPrograms">N</label>
+                                {if $survey5.doYouHaveASafetyAwardProgram == "no"}
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
+                                        name="doYouHaveASafetyAwardProgram" checked readonly />
+                                    <label for="doYouHaveASafetyAwardProgram">N</label>
                                 {else}
-                                    <input id="doYouHaveASafetyAwardPrograms" type="checkbox"
-                                        name="doYouHaveASafetyAwardPrograms" readonly />
-                                    <label for="doYouHaveASafetyAwardPrograms">N</label>
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
+                                        name="doYouHaveASafetyAwardProgram" readonly />
+                                    <label for="doYouHaveASafetyAwardProgram">N</label>
                                 {/if}
                             </td>
                         {else}
                             <td>
-                                <input id="doYouHaveASafetyAwardPrograms" type="checkbox"
-                                    name="doYouHaveASafetyAwardPrograms" readonly />
-                                <label for="doYouHaveASafetyAwardPrograms">Y</label>
-                                <input id="doYouHaveASafetyAwardPrograms" type="checkbox"
-                                    name="doYouHaveASafetyAwardPrograms" readonly />
-                                <label for="doYouHaveASafetyAwardPrograms">N</label>
+                                <input id="doYouHaveASafetyAwardProgram" type="checkbox"
+                                    name="doYouHaveASafetyAwardProgram" readonly />
+                                <label for="doYouHaveASafetyAwardProgram">Y</label>
+                                <input id="doYouHaveASafetyAwardProgram" type="checkbox"
+                                    name="doYouHaveASafetyAwardProgram" readonly />
+                                <label for="doYouHaveASafetyAwardProgram">N</label>
                             </td>
                         {/if}
                     </tr>
@@ -3358,15 +3429,15 @@
                     <tr>
                         <td>Accident Event Recorder - self managed:</td>
                         <td>
-                            {if isset($number1)}
-                                <span class="underline">{$number1}</span>%
+                            {if isset($accidentEventRecorderSelfManagedFleet)}
+                                <span class="underline">{$accidentEventRecorderSelfManagedFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime) && $dateTime != ""))}
-                                <span class="underline">{$dateTime}</span>
+                            {if ((isset($accidentEventRecorderSelfmanagedDate) && $accidentEventRecorderSelfmanagedDate != ""))}
+                                <span class="underline">{$accidentEventRecorderSelfmanagedDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3375,15 +3446,15 @@
                     <tr>
                         <td>Accident Event Recorder - third party reporting:</td>
                         <td>
-                            {if isset($number2)}
-                                <span class="underline">{$number2}</span>%
+                            {if isset($accidentEventRecThirdPartyReportingFleet)}
+                                <span class="underline">{$accidentEventRecThirdPartyReportingFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime2) && $dateTime2 != ""))}
-                                <span class="underline">{$dateTime2}</span>
+                            {if ((isset($accidentEventRecThirdPartyReportingDate) && $accidentEventRecThirdPartyReportingDate != ""))}
+                                <span class="underline">{$accidentEventRecThirdPartyReportingDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3392,15 +3463,15 @@
                     <tr>
                         <td>Electronic Logging Device:</td>
                         <td>
-                            {if isset($number3)}
-                                <span class="underline">{$number3}</span>%
+                            {if isset($electronicLoggingDeviceFleet)}
+                                <span class="underline">{$electronicLoggingDeviceFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime3) && $dateTime3 != ""))}
-                                <span class="underline">{$dateTime3}</span>
+                            {if ((isset($electronicLoggingDeviceDate) && $electronicLoggingDeviceDate != ""))}
+                                <span class="underline">{$electronicLoggingDeviceDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3409,15 +3480,15 @@
                     <tr>
                         <td>Collision Avoidance:</td>
                         <td>
-                            {if isset($number4)}
-                                <span class="underline">{$number4}</span>%
+                            {if isset($collisionAvoidanceFleet)}
+                                <span class="underline">{$collisionAvoidanceFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime5) && $dateTime5 != ""))}
-                                <span class="underline">{$dateTime5}</span>
+                            {if ((isset($collisionAvoidanceDate) && $collisionAvoidanceDate != ""))}
+                                <span class="underline">{$collisionAvoidanceDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3426,15 +3497,15 @@
                     <tr>
                         <td>In Vehicle Camera:</td>
                         <td>
-                            {if isset($number5)}
-                                <span class="underline">{$number5}</span>%
+                            {if isset($inVehicleCameraFleet)}
+                                <span class="underline">{$inVehicleCameraFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime6) && $dateTime6 != ""))}
-                                <span class="underline">{$dateTime6}</span>
+                            {if ((isset($inVehicleCameraDate) && $inVehicleCameraDate != ""))}
+                                <span class="underline">{$inVehicleCameraDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3443,15 +3514,15 @@
                     <tr>
                         <td>Anti-Rollover Device:</td>
                         <td>
-                            {if isset($number6)}
-                                <span class="underline">{$number6}</span>%
+                            {if isset($antiRolloverDeviceFleet)}
+                                <span class="underline">{$antiRolloverDeviceFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime7) && $dateTime7 != ""))}
-                                <span class="underline">{$dateTime7}</span>
+                            {if ((isset($antiRolloverDeviceDate) && $antiRolloverDeviceDate != ""))}
+                                <span class="underline">{$antiRolloverDeviceDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3460,15 +3531,15 @@
                     <tr>
                         <td>Telematics:</td>
                         <td>
-                            {if isset($number7)}
-                                <span class="underline">{$number7}</span>%
+                            {if isset($telematicsFleet)}
+                                <span class="underline">{$telematicsFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime8) && $dateTime8 != ""))}
-                                <span class="underline">{$dateTime8}</span>
+                            {if ((isset($telematicsDate) && $telematicsDate != ""))}
+                                <span class="underline">{$telematicsDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3477,15 +3548,15 @@
                     <tr>
                         <td>Other:</td>
                         <td>
-                            {if isset($number8)}
-                                <span class="underline">{$number8}</span>%
+                            {if isset($otherFleet)}
+                                <span class="underline">{$otherFleet}</span>%
                             {else}
                                 <span>_________%</span>
                             {/if}
                         </td>
                         <td>
-                            {if ((isset($dateTime9) && $dateTime9 != ""))}
-                                <span class="underline">{$dateTime9}</span>
+                            {if ((isset($otherFleetDate) && $otherFleetDate != ""))}
+                                <span class="underline">{$otherFleetDate|date_format:"%m/%d/%Y"}</span>
                             {else}
                                 <span>_________</span>
                             {/if}
@@ -3507,10 +3578,9 @@
             <div id="sectionContent">
                 <table>
                     <tr class="bottom-text">
-                        <th>Sl No.</th>
                         <th>Loc.</th>
                         <th>Address</th>
-                        <th class="rotated-text">Function</th>
+                        <th>Function</th>
                         <th class="rotated-text"> Fenced </th>
                         <th class="rotated-text"> Guarded </th>
                         <th class="rotated-text"> Public Access </th>
@@ -3518,70 +3588,63 @@
                         <th class="rotated-text"> # of Employees </th>
                         <th>Owned or Leased</th>
                     </tr>
-                    {foreach from=$dataGrid1 item=item key=key}
+                    {foreach from=$generalLiabilityList item=item key=key}
                         <tr>
                             <td>
                                 {$key+1}.
                             </td>
                             <td>
-                                {if isset($item['address7']['display_name'])}
-                                    {$item.address7.display_name}
+                                {if isset($item['generalLiabilityAddress'])}
+                                    {$item.generalLiabilityAddress}
                                 {else}
                                     <span>_________</span>
                                 {/if}
                             </td>
                             <td>
-                                {if isset($item['number13'])}
-                                    {$item['number13']}
+                                {if isset($item['generalLiabilityFunction'])}
+                                    {$item['generalLiabilityFunction']}
                                 {else}
                                     <span>_________</span>
                                 {/if}
                             </td>
                             <td class="rotated-data">
-                                {if isset($item['fenced']) && ($item['fenced'] === "true" || $item['fenced'] === true)}
-                                    <input id="fenced" type="checkbox" name="fenced" checked readonly />
+                                {if isset($item['glFenced']) && ($item['glFenced'] === "true" || $item['glFenced'] === true)}
+                                    <input id="glFenced" type="checkbox" name="glFenced" checked readonly />
                                 {else}
-                                    <input id="fenced" type="checkbox" name="fenced" readonly />
+                                    <input id="glFenced" type="checkbox" name="glFenced" readonly />
                                 {/if}
                             </td>
                             <td class="rotated-data">
-                                {if isset($item['guarded1']) && ($item['guarded1'] === "true" || $item['guarded1'] === true)}
-                                    <input id="guarded1" type="checkbox" name="guarded1" checked readonly />
+                                {if isset($item['glGuardDogS']) && ($item['glGuardDogS'] === "true" || $item['glGuardDogS'] === true)}
+                                    <input id="glGuardDogS" type="checkbox" name="glGuardDogS" checked readonly />
                                 {else}
-                                    <input id="guarded1" type="checkbox" name="guarded1" readonly />
+                                    <input id="glGuardDogS" type="checkbox" name="glGuardDogS" readonly />
                                 {/if}
                             </td>
                             <td class="rotated-data">
-                                {if isset($item['publicAccess']) && ($item['publicAccess'] === "true" || $item['publicAccess'] === true)}
-                                    <input id="publicAccess" type="checkbox" name="publicAccess" checked readonly />
+                                {if isset($item['glPublicAccess']) && ($item['glPublicAccess'] === "true" || $item['glPublicAccess'] === true)}
+                                    <input id="glPublicAccess" type="checkbox" name="glPublicAccess" checked readonly />
                                 {else}
-                                    <input id="publicAccess" type="checkbox" name="publicAccess" readonly />
+                                    <input id="glPublicAccess" type="checkbox" name="glPublicAccess" readonly />
                                 {/if}
                             </td>
                             <td class="rotated-data">
-                                {if isset($item['lighted']) && ($item['lighted'] === "true" || $item['lighted'] === true)}
-                                    <input id="lighted" type="checkbox" name="lighted" checked readonly />
+                                {if isset($item['glLighted']) && ($item['glLighted'] === "true" || $item['glLighted'] === true)}
+                                    <input id="glLighted" type="checkbox" name="glLighted" checked readonly />
                                 {else}
-                                    <input id="lighted" type="checkbox" name="lighted" readonly />
+                                    <input id="glLighted" type="checkbox" name="glLighted" readonly />
                                 {/if}
                             </td>
                             <td class="rotated-data">
-                                {if isset($item['guardDogS']) && ($item['guardDogS'] === "true" || $item['guardDogS'] === true)}
-                                    <input id="guardDogS" type="checkbox" name="guardDogS" checked readonly />
-                                {else}
-                                    <input id="guardDogS" type="checkbox" name="guardDogS" readonly />
-                                {/if}
-                            </td>
-                            <td class="rotated-data">
-                                {if isset($item['ofEmployees'])}
-                                    {$item.ofEmployees}
+                                {if isset($item['gLNoOfEmployees'])}
+                                    {$item.gLNoOfEmployees}
                                 {else}
                                     <span>_________</span>
                                 {/if}
                             </td>
                             <td>
-                                {if isset($item['ownedLeased'])}
-                                    {$item.ownedLeased}
+                                {if isset($item['generalLiabilityOwnedLeased'])}
+                                    {$item.generalLiabilityOwnedLeased}
                                 {else}
                                     <span>_________</span>
                                 {/if}
