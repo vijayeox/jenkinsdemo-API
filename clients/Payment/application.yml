@@ -1,0 +1,64 @@
+app:
+    name: Payment
+    description: 'Payment App for EOX'
+    category: EXAMPLE_CATEGORY
+    type: 1
+    autostart: true
+    autoinstall: true
+    version: 1
+    uuid: cec14502-3c24-4616-a0dd-5a6bf25fabf4
+    status: 4
+    isdefault: true
+    logo: default_app.png
+    start_options: null
+    title: Payment
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
+entity:
+    -
+        name: Invoice
+        field:
+            -
+                name: name
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: invoiceDate
+                text: InvoiceDate
+                index: true
+                data_type: text
+            -
+                name: total
+                text: Total
+                data_type: text
+privilege:
+    -
+        name: MANAGE_INVOICE
+        permission: 3
+pages:
+    -
+        page_name: InvoicePage.yml
+        uuid: e281d040-c089-4f32-bf2a-c99b0bfa3e7f
+    -
+        page_name: ViewInvoices.yml
+        uuid: 10069a2d-f2b6-4f5b-89d4-0080900ebb9c
+menu:
+    -
+        name: 'Manage Invoices'
+        icon: 'fas fa-home'
+        page_uuid: e281d040-c089-4f32-bf2a-c99b0bfa3e7f
+        uuid: ad78fb87-2dc7-491b-abf0-8c6e54967b36
+        privilege: MANAGE_INVOICE_WRITE
+    -
+        name: 'View Invoices'
+        icon: 'fas fa-file-invoice'
+        page_uuid: 10069a2d-f2b6-4f5b-89d4-0080900ebb9c
+        uuid: 3c845c53-f5fc-4741-9c98-99cb5e3a5cc0
+        privilege: MANAGE_INVOICE_READ
+form:
+    -
+        name: 'Create Invoice Form'
+        uuid: 746a1a46-684a-43d5-b69f-a8447d14489a
+        description: 'Create Invoice'
+        template_file: invoiceCreation.json
+        entity: Invoice

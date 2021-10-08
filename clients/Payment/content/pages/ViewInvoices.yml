@@ -1,0 +1,71 @@
+name: 'Invoice Page'
+description: 'Shows a list of a customers invoices'
+content:
+    -
+        type: List
+        content:
+            route: 'billing/invoice'
+            disableAppId: true
+            filterable: false                        
+            resizable: true
+            actionsWidth: 340px
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            sortable: 
+                allowUnsort: true
+                mode: single
+            actions:
+              -
+                  name: View
+                  icon: 'fa fa-eye'
+                  rule: 'true'
+                  details:
+                      -
+                          type: InvoiceViewer
+                          page_id: ''
+                          externalDataSource: ''
+                          formSource: ''
+                          form_name: {  }
+                          formUrl: ''
+                          urlPostParams: ''
+                          dashboard_uuid: ''
+                          url: ''
+                          useRowData: true
+                  paramsDuplicate:
+                      -
+                          parameterKey: ''
+                          parameterValue: ''
+                  contentDuplicate:
+                      data:
+                          content:
+                              -
+                                  type: InvoiceViewer
+                                  page_id: ''
+                                  externalDataSource: ''
+                                  formSource: ''
+                                  form_name: {  }
+                                  formUrl: ''
+                                  urlPostParams: ''
+                                  dashboard_uuid: ''
+                                  url: ''
+                                  useRowData: true
+                          listActionContent: true
+                          listAction: true
+                      metadata: {  }
+                  defaultAction: true
+                  
+            columnConfig:
+                -
+                    title: Client
+                    field: name
+                -
+                    title: Date
+                    field: date_created
+                -
+                    title: Total
+                    field: amount

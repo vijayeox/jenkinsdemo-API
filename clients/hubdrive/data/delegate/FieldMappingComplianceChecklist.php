@@ -190,8 +190,12 @@ return array(
             "fieldname" => 'acord25Version',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
-        'policiesAreEffective' => [
-            "fieldname" => 'policiesAreEffective',
+        'policiesAreNotEffective' => [
+            "fieldname" => 'policiesAreNotEffective',
+            "options" => ["true" => "Yes", "false" => "No"]
+        ],
+        'certificateIssueDateMustBeRecentCurrent' => [
+            "fieldname" => 'certificateIssueDateMustBeRecentCurrent',
             "options" => ["true" => "Yes", "false" => "No"]
         ],
         'insuredNameListed' => [
