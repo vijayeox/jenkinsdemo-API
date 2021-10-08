@@ -1,12 +1,12 @@
 name: 'Invoice Page'
-description: 'Shows a list of a customers invoices'
+description: 'Invoice management page'
 content:
     -
         type: List
         content:
-            route: 'billing/invoice'
-            disableAppId: true
-            filterable: false                        
+            route: file
+            filterable: true
+            defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Invoice"}]},"sort": [{"field": "date_created","dir": "desc"}]}'                      
             resizable: true
             actionsWidth: 340px
             pageable:
@@ -20,44 +20,53 @@ content:
                 allowUnsort: true
                 mode: single
             actions:
-              -
-                  name: View
-                  icon: 'fa fa-eye'
-                  rule: 'true'
-                  details:
-                      -
-                          type: InvoiceViewer
-                          page_id: ''
-                          externalDataSource: ''
-                          formSource: ''
-                          form_name: {  }
-                          formUrl: ''
-                          urlPostParams: ''
-                          dashboard_uuid: ''
-                          url: ''
-                          useRowData: true
-                  paramsDuplicate:
-                      -
-                          parameterKey: ''
-                          parameterValue: ''
-                  contentDuplicate:
-                      data:
-                          content:
-                              -
-                                  type: InvoiceViewer
-                                  page_id: ''
-                                  externalDataSource: ''
-                                  formSource: ''
-                                  form_name: {  }
-                                  formUrl: ''
-                                  urlPostParams: ''
-                                  dashboard_uuid: ''
-                                  url: ''
-                                  useRowData: true
-                          listActionContent: true
-                          listAction: true
-                      metadata: {  }
-                  defaultAction: true
+                -
+                    name: ViewPDF
+                    icon: 'fa fa-eye'
+                    rule: 'true'
+                    details:
+                        -
+                            type: InvoiceViewer
+                            page_id: ''
+                            externalDataSource: ''
+                            formSource: ''
+                            form_name: {  }
+                            formUrl: ''
+                            urlPostParams: ''
+                            dashboard_uuid: ''
+                            url: ''
+                            useRowData: true
+                    paramsDuplicate:
+                        -
+                            parameterKey: ''
+                            parameterValue: ''
+                    contentDuplicate:
+                        data:
+                            content:
+                                -
+                                    type: InvoiceViewer
+                                    page_id: ''
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    useRowData: true
+                            listActionContent: true
+                            listAction: true
+                        metadata: {  }
+                    defaultAction: true
+                -
+                    name: Edit
+                    rule: 'true'
+                    details:
+                        -
+                            type: Form
+                            form_id: 746a1a46-684a-43d5-b69f-a8447d14489a
+                            fileId: '{{uuid}}'
+                    icon: 'far fa-pencil-alt'
 
             operations:
                 title: 'Create Invoice'
@@ -73,11 +82,14 @@ content:
                                 form_id: 746a1a46-684a-43d5-b69f-a8447d14489a
             columnConfig:
                 -
-                    title: Client
-                    field: name
+                    title: Invoice Number
+                    field: invoiceNumber 
                 -
-                    title: Date
-                    field: date_created
+                    title: Due Date
+                    field: invoiceDueDate
                 -
-                    title: Total
-                    field: amount
+                    title: Amount Due
+                    field: total
+                -
+                    title: Amount Paid
+                    field: amountPaid
