@@ -261,6 +261,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
+        enable_generatelink: true
+        enable_print: true
         field:
             -
                 name: name
@@ -309,6 +311,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
+        enable_generatelink: true
+        enable_print: true
         field:
             -
                 name: name
@@ -357,6 +361,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -386,6 +392,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -432,6 +440,15 @@ entity:
                 name: companyName
                 data_type: text
                 index: true
+            -
+                name: pleaseSelectDriverType
+                data_type: text
+                index: true
+            -
+                name: pleaseSelectTheFacility
+                data_type: text
+                index: true
+            
         identifiers:
             -
                 identifier: iCEmail
@@ -446,15 +463,15 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
-        enable_generatelink: false
-        enable_print: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
                     -
                         type: HTMLViewer
                         page_id: ''
-                        htmlContent: '<div style="width:100%">   <style>{"td,th {padding: 10px;border: 1px solid black;border-collapse: collapse;}"}</style>   <table style="width:100%;margin-bottom:1rem">      <tr>         <th>Name</th>         <th>Status</th>      </tr>      <tr>         <td>{data.name}</td>         <td>{data.status}</td>      </tr>   </table>   <table style="width:100%">      <tr>         <th>Insurance Requirement</th>         <th>Status</th>      </tr>      <tr>         <td>Auto</td>         <td>{data.auto==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Motor Truck Cargo</td>         <td>{data.motorTruckCargo==true?"Compliant":"Non Compliant"}</td>      </tr>      { (data.trailerInterchange) ?      (<tr>         <td>Trailer Interchange</td>         <td>{data.trailerInterchange==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty1)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty1==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.generalCommercial) ?      (<tr>         <td>General Commercial</td>         <td>{data.generalCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHCombinedSingleLimit) ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.FLHCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.FLHaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.FLHanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHownedAuto) ?      (<tr>         <td>Owned Auto</td>         <td>{data.FLHownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>Motor Truck Cargo - $250,000 Per Occurrence</td>         <td>{data.FLHMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.FLHscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHDishonestyCoveragenoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.FLHDishonestyCoveragenoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.FLHGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHnoLessThan)  ?      (<tr>         <td>Trailer Interchange - Minimum Limit for all states should be no less than $30,000</td>         <td>{data.FLHnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDgeneralCommercial)  ?      (<tr>         <td>General Commercial Liability</td>         <td>{data.PDgeneralCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.PDCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.PDaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.PDanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.PDownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.PDscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$100,000 Per Occurrence</td>         <td>{data.PDMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDnoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.PDnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.PDGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.PDGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.RSPCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.RSPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.RSPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPscheduledOrOwnedAuto)  ?      (<tr>         <td>Scheduled Or Owned Auto</td>         <td>{data.RSPscheduledOrOwnedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$25,000 Per Occurrence</td>         <td>{data.RSPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.ASPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.ASPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.ASPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.ASPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.ASPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.ASPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.SPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.SPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.SPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.SPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.SPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.SPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      <tr>         <td>OnTrac Logistics Inc DBA OnTrac 2501 s Price Rd STE 201. Chandler, AZ, 85286</td>         <td>{data.onTracLogistics==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Signed COI</td>         <td>{data.signedCoi==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>ACORD 25 Version</td>         <td>{data.acord25Version==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policies are Effective</td>         <td>{data.policiesAreEffective==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Name Listed</td>         <td>{data.insuredNameListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Address Completed</td>         <td>{data.insuredAddressCompleted==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policy Number Listed</td>         <td>{data.policyNumberListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Letter described as per the Insurance Company from Insurer affording coverages</td>         <td>{data.letterDescribed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Specified Number of Days listed for Notice of Cancellation </td>         <td>{data.specifiedNumber==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Broad Form Cargo Was Evidenced Therefore The Exclusions Must Be Listed In The Compliance Area</td>         <td>{data.broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Inland Marine Must Specify That It Includes Cargo In Transit</td>         <td>{data.inlandMarineMustSpecifyThatItIncludesCargoInTransit==true?"Compliant":"Non Compliant"}</td>      </tr>   </table></div>'
+                        htmlContent: '<div style="width:100%">   <style>{"td,th {padding: 10px;border: 1px solid black;border-collapse: collapse;}"}</style>   <table style="width:100%;margin-bottom:1rem">      <tr>         <th>Name</th>         <th>Status</th>      </tr>      <tr>         <td>{data.name}</td>         <td>{data.status}</td>      </tr>   </table>   <table style="width:100%">      <tr>         <th>Insurance Requirement</th>         <th>Status</th>      </tr>      <tr>         <td>Auto</td>         <td>{data.auto==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Motor Truck Cargo</td>         <td>{data.motorTruckCargo==true?"Compliant":"Non Compliant"}</td>      </tr>      { (data.trailerInterchange) ?      (<tr>         <td>Trailer Interchange</td>         <td>{data.trailerInterchange==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty1)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty1==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.generalCommercial) ?      (<tr>         <td>General Commercial</td>         <td>{data.generalCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHCombinedSingleLimit) ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.FLHCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.FLHaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.FLHanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHownedAuto) ?      (<tr>         <td>Owned Auto</td>         <td>{data.FLHownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>Motor Truck Cargo - $250,000 Per Occurrence</td>         <td>{data.FLHMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.FLHscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHDishonestyCoveragenoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.FLHDishonestyCoveragenoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.FLHGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHnoLessThan)  ?      (<tr>         <td>Trailer Interchange - Minimum Limit for all states should be no less than $30,000</td>         <td>{data.FLHnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDgeneralCommercial)  ?      (<tr>         <td>General Commercial Liability</td>         <td>{data.PDgeneralCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.PDCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.PDaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.PDanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.PDownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.PDscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$100,000 Per Occurrence</td>         <td>{data.PDMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDnoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.PDnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.PDGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.PDGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.RSPCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.RSPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.RSPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPscheduledOrOwnedAuto)  ?      (<tr>         <td>Scheduled Or Owned Auto</td>         <td>{data.RSPscheduledOrOwnedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$25,000 Per Occurrence</td>         <td>{data.RSPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.ASPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.ASPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.ASPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.ASPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.ASPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.ASPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.SPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.SPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.SPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.SPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.SPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.SPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      <tr>         <td>OnTrac Logistics Inc DBA OnTrac 2501 s Price Rd STE 201. Chandler, AZ, 85286</td>         <td>{data.onTracLogistics==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Signed COI</td>         <td>{data.signedCoi==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>ACORD 25 Version</td>         <td>{data.acord25Version==true?"Compliant":"Non Compliant"}</td>      </tr>    { (data.policiesAreNotEffective) ? (<tr><td>Policies are Not Effective</td><td>{data.policiesAreNotEffective==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.certificateIssueDateMustBeRecentCurrent) ? (<tr><td>Certificate Issue Date Must Be Recent Current</td><td>{data.certificateIssueDateMustBeRecentCurrent==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.policiesAreEffective) ?(<tr>         <td>Policies are Effective</td>         <td>{data.policiesAreEffective==true?"Compliant":"Non Compliant"}</td>      </tr>)   : null}    <tr>         <td>Insured Name Listed</td>         <td>{data.insuredNameListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Address Completed</td>         <td>{data.insuredAddressCompleted==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policy Number Listed</td>         <td>{data.policyNumberListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Letter described as per the Insurance Company from Insurer affording coverages</td>         <td>{data.letterDescribed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Specified Number of Days listed for Notice of Cancellation </td>         <td>{data.specifiedNumber==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Broad Form Cargo Was Evidenced Therefore The Exclusions Must Be Listed In The Compliance Area</td>         <td>{data.broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Inland Marine Must Specify That It Includes Cargo In Transit</td>         <td>{data.inlandMarineMustSpecifyThatItIncludesCargoInTransit==true?"Compliant":"Non Compliant"}</td>      </tr>   </table></div>'
                         externalDataSource: ''
                         formSource: ''
                         form_name: {  }
@@ -462,7 +479,7 @@ entity:
                         urlPostParams: ''
                         dashboard_uuid: ''
                         url: ''
-                        content: '<div style="width:100%">   <style>{"td,th {padding: 10px;border: 1px solid black;border-collapse: collapse;}"}</style>   <table style="width:100%;margin-bottom:1rem">      <tr>         <th>Name</th>         <th>Status</th>      </tr>      <tr>         <td>{data.name}</td>         <td>{data.status}</td>      </tr>   </table>   <table style="width:100%">      <tr>         <th>Insurance Requirement</th>         <th>Status</th>      </tr>      <tr>         <td>Auto</td>         <td>{data.auto==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Motor Truck Cargo</td>         <td>{data.motorTruckCargo==true?"Compliant":"Non Compliant"}</td>      </tr>      { (data.trailerInterchange) ?      (<tr>         <td>Trailer Interchange</td>         <td>{data.trailerInterchange==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty1)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty1==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.generalCommercial) ?      (<tr>         <td>General Commercial</td>         <td>{data.generalCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHCombinedSingleLimit) ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.FLHCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.FLHaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.FLHanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHownedAuto) ?      (<tr>         <td>Owned Auto</td>         <td>{data.FLHownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>Motor Truck Cargo - $250,000 Per Occurrence</td>         <td>{data.FLHMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.FLHscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHDishonestyCoveragenoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.FLHDishonestyCoveragenoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.FLHGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHnoLessThan)  ?      (<tr>         <td>Trailer Interchange - Minimum Limit for all states should be no less than $30,000</td>         <td>{data.FLHnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDgeneralCommercial)  ?      (<tr>         <td>General Commercial Liability</td>         <td>{data.PDgeneralCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.PDCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.PDaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.PDanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.PDownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.PDscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$100,000 Per Occurrence</td>         <td>{data.PDMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDnoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.PDnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.PDGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.PDGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.RSPCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.RSPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.RSPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPscheduledOrOwnedAuto)  ?      (<tr>         <td>Scheduled Or Owned Auto</td>         <td>{data.RSPscheduledOrOwnedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$25,000 Per Occurrence</td>         <td>{data.RSPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.ASPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.ASPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.ASPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.ASPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.ASPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.ASPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.SPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.SPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.SPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.SPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.SPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.SPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      <tr>         <td>OnTrac Logistics Inc DBA OnTrac 2501 s Price Rd STE 201. Chandler, AZ, 85286</td>         <td>{data.onTracLogistics==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Signed COI</td>         <td>{data.signedCoi==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>ACORD 25 Version</td>         <td>{data.acord25Version==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policies are Effective</td>         <td>{data.policiesAreEffective==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Name Listed</td>         <td>{data.insuredNameListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Address Completed</td>         <td>{data.insuredAddressCompleted==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policy Number Listed</td>         <td>{data.policyNumberListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Letter described as per the Insurance Company from Insurer affording coverages</td>         <td>{data.letterDescribed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Specified Number of Days listed for Notice of Cancellation </td>         <td>{data.specifiedNumber==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Broad Form Cargo Was Evidenced Therefore The Exclusions Must Be Listed In The Compliance Area</td>         <td>{data.broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Inland Marine Must Specify That It Includes Cargo In Transit</td>         <td>{data.inlandMarineMustSpecifyThatItIncludesCargoInTransit==true?"Compliant":"Non Compliant"}</td>      </tr>   </table></div>'
+                        content: '<div style="width:100%">   <style>{"td,th {padding: 10px;border: 1px solid black;border-collapse: collapse;}"}</style>   <table style="width:100%;margin-bottom:1rem">      <tr>         <th>Name</th>         <th>Status</th>      </tr>      <tr>         <td>{data.name}</td>         <td>{data.status}</td>      </tr>   </table>   <table style="width:100%">      <tr>         <th>Insurance Requirement</th>         <th>Status</th>      </tr>      <tr>         <td>Auto</td>         <td>{data.auto==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Motor Truck Cargo</td>         <td>{data.motorTruckCargo==true?"Compliant":"Non Compliant"}</td>      </tr>      { (data.trailerInterchange) ?      (<tr>         <td>Trailer Interchange</td>         <td>{data.trailerInterchange==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty1)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty1==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.generalCommercial) ?      (<tr>         <td>General Commercial</td>         <td>{data.generalCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHCombinedSingleLimit) ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.FLHCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.FLHaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.FLHanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHownedAuto) ?      (<tr>         <td>Owned Auto</td>         <td>{data.FLHownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>Motor Truck Cargo - $250,000 Per Occurrence</td>         <td>{data.FLHMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.FLHscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHDishonestyCoveragenoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.FLHDishonestyCoveragenoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.FLHGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHnoLessThan)  ?      (<tr>         <td>Trailer Interchange - Minimum Limit for all states should be no less than $30,000</td>         <td>{data.FLHnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDgeneralCommercial)  ?      (<tr>         <td>General Commercial Liability</td>         <td>{data.PDgeneralCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.PDCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.PDaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.PDanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.PDownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.PDscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$100,000 Per Occurrence</td>         <td>{data.PDMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDnoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.PDnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.PDGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.PDGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.RSPCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.RSPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.RSPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPscheduledOrOwnedAuto)  ?      (<tr>         <td>Scheduled Or Owned Auto</td>         <td>{data.RSPscheduledOrOwnedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$25,000 Per Occurrence</td>         <td>{data.RSPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.ASPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.ASPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.ASPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.ASPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.ASPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.ASPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.SPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.SPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.SPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.SPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.SPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.SPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      <tr>         <td>OnTrac Logistics Inc DBA OnTrac 2501 s Price Rd STE 201. Chandler, AZ, 85286</td>         <td>{data.onTracLogistics==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Signed COI</td>         <td>{data.signedCoi==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>ACORD 25 Version</td>         <td>{data.acord25Version==true?"Compliant":"Non Compliant"}</td>      </tr>    { (data.policiesAreNotEffective) ? (<tr><td>Policies are Not Effective</td><td>{data.policiesAreNotEffective==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.certificateIssueDateMustBeRecentCurrent) ? (<tr><td>Certificate Issue Date Must Be Recent Current</td><td>{data.certificateIssueDateMustBeRecentCurrent==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.policiesAreEffective) ?(<tr>         <td>Policies are Effective</td>         <td>{data.policiesAreEffective==true?"Compliant":"Non Compliant"}</td>      </tr>)   : null}    <tr>         <td>Insured Name Listed</td>         <td>{data.insuredNameListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Address Completed</td>         <td>{data.insuredAddressCompleted==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policy Number Listed</td>         <td>{data.policyNumberListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Letter described as per the Insurance Company from Insurer affording coverages</td>         <td>{data.letterDescribed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Specified Number of Days listed for Notice of Cancellation </td>         <td>{data.specifiedNumber==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Broad Form Cargo Was Evidenced Therefore The Exclusions Must Be Listed In The Compliance Area</td>         <td>{data.broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Inland Marine Must Specify That It Includes Cargo In Transit</td>         <td>{data.inlandMarineMustSpecifyThatItIncludesCargoInTransit==true?"Compliant":"Non Compliant"}</td>      </tr>   </table></div>'
                         useRowData: false
             metadata: {  }
         page_uuid: 5a466ac9-e137-48ac-b999-c7e8a42be57e
@@ -478,6 +495,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -507,6 +526,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -536,6 +557,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -565,6 +588,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -593,6 +618,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -622,6 +649,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -651,6 +680,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -680,6 +711,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -709,6 +742,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -738,6 +773,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -759,12 +796,12 @@ entity:
         name: 'Excess Liability'
         start_date_field: start_date
         end_date_field: end_date
-        status_field: status
+        status_field: policyStatus
         subscriber_field: observers
         field:
             -
-                name: attachments
-                text: Attachment
+                name: documents
+                text: Documents
                 data_type: document
             -
                 name: insuredName
@@ -780,27 +817,32 @@ entity:
                 name: companyName
                 data_type: text
                 index: true
+            -   
+                name: policyStatus
+                data_type: text
+                index: true
         identifiers:
             -
                 identifier: usDot
         participantRole:
-            -
-                businessRole: 'Independent Contractor'
             -
                 businessRole: 'Contract Carrier - Excess Only'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
         enable_documents: true
+        documents_label: "Documents"
         enable_comments: true
         enable_view: true
+        enable_print: false
+        enable_generatelink: false
         pageContent:
             data:
                 content:
                     -
                         type: HTMLViewer
                         page_id: ''
-                        htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                        htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                         externalDataSource: ''
                         formSource: ''
                         form_name: {  }
@@ -808,7 +850,7 @@ entity:
                         urlPostParams: ''
                         dashboard_uuid: ''
                         url: ''
-                        content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                        content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                         useRowData: false
             metadata: {  }
         page_uuid: 29f8c79a-d89c-11eb-b8bc-0242ac130003
@@ -1146,6 +1188,12 @@ pages:
                             cell: '<td>{formatDate(item.date_created)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+                        -
+                            title: Driver Types 
+                            field: pleaseSelectDriverType
+                        -
+                            title: Terminal 
+                            field: pleaseSelectTheFacility
     -
         name: 'Compliance OI'
         uuid: 7a395567-1292-4a79-88e8-927577198b52
@@ -1224,7 +1272,7 @@ pages:
                                 -
                                     type: EntityViewer
                                     page_id: ''
-                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     externalDataSource: ''
                                     formSource: ''
                                     form_name: {  }
@@ -1232,7 +1280,7 @@ pages:
                                     urlPostParams: ''
                                     dashboard_uuid: ''
                                     url: ''
-                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     useRowData: false
                             paramsDuplicate:
                                 -
@@ -1300,7 +1348,7 @@ pages:
                 content:
                     route: file
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -1322,7 +1370,7 @@ pages:
                                 -
                                     type: EntityViewer
                                     page_id: ''
-                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     externalDataSource: ''
                                     formSource: ''
                                     form_name: {  }
@@ -1330,7 +1378,7 @@ pages:
                                     urlPostParams: ''
                                     dashboard_uuid: ''
                                     url: ''
-                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.status}</td></tr></table>'
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
                                     useRowData: false
                             paramsDuplicate:
                                 -
@@ -1410,17 +1458,11 @@ menu:
         privilege: MANAGE_ACCOUNT_MANAGER_WRITE
     -
         name: 'Approval Requests'
-        icon: 'fas fa-list'
+        icon: 'fas fa-clipboard-check'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
         privilege: MANAGE_EXCESS_WRITE
 form:
-    -
-        name: 'Excess Liability Form'
-        uuid: 29f8c4a2-d89c-11eb-b8bc-0242ac130003
-        description: 'Excess Liability'
-        template_file: abExcessLiability.json
-        entity: 'Excess Liability'
     -
         name: 'Compliance CheckList Form'
         uuid: e26bd719-f47f-455b-9be4-9b26c18a0b78

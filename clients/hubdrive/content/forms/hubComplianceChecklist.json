@@ -150,7 +150,6 @@
 							"custom": "values = data.stateJsonList;"
 						},
 						"template": "<span>{{ item.name }}</span>",
-						"selectThreshold": 0.3,
 						"clearOnHide": false,
 						"validate": {
 							"required": true
@@ -273,15 +272,15 @@
 				"label": "Columns",
 				"columns": [{
 					"components": [{
-						"label": "Vendor #\t",
+						"label": "Vendor Number",
 						"mask": false,
-						"spellcheck": true,
 						"tableView": false,
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"key": "vendorNumber",
 						"type": "number",
+						"spellcheck": true,
 						"input": true,
 						"hideOnChildrenHidden": false
 					}],
@@ -308,7 +307,7 @@
 					"currentWidth": 3
 				}, {
 					"components": [{
-						"label": "Please select the facility",
+						"label": "Please select the terminal",
 						"placeholder": "Please select",
 						"tableView": true,
 						"data": {
@@ -422,7 +421,6 @@
 								"value": "lincolnLin"
 							}]
 						},
-						"selectThreshold": 0.3,
 						"key": "pleaseSelectTheFacility",
 						"type": "select",
 						"input": true,
@@ -478,11 +476,9 @@
 					"value": "rsp"
 				}]
 			},
-			"selectThreshold": 0.3,
 			"validate": {
 				"required": true,
-				"onlyAvailableItems": true,
-				"custom": "valid = ((data.pleaseSelectDriverType == 'fleetLineHaul') || (data.pleaseSelectDriverType == 'areaServiceProvider') || (data.pleaseSelectDriverType == 'serviceProvider') || (data.pleaseSelectDriverType == 'rsp') || (data.pleaseSelectDriverType == 'pickupDelivery')) : true ? \"Kindly Select Driver Type From Given Options\""
+				"onlyAvailableItems": true
 			},
 			"key": "pleaseSelectDriverType",
 			"type": "select",
@@ -642,7 +638,6 @@
 							"template": "<span>{{ item.name }}</span>",
 							"refreshOn": "country",
 							"clearOnRefresh": true,
-							"selectThreshold": 0.3,
 							"clearOnHide": false,
 							"validate": {
 								"required": true
@@ -1123,7 +1118,6 @@
 						"label": "Table",
 						"cellAlignment": "left",
 						"key": "table2",
-						"customConditional": "if (data.RSPscheduledOrOwnedAuto == true)\n  show = true;\nelse show = false;",
 						"type": "table",
 						"numCols": 1,
 						"input": false,
@@ -1199,7 +1193,8 @@
 			"rows": [
 				[{
 					"components": [{
-						"label": "Arizona: $100,000/$300,000/$50,000 Split Limit       California: $300,000 Combined Single Limit       Colorado: $100,000/$300,000/$50,000 Split Limit       Idaho: $100,000/$300,000/$50,000 Split Limit       Iowa: $100,000/$300,000/$50,000 Split Limit       Kentucky: $100,000/$300,000/$50,000 Split Limit       Minnesota: $100,000/$300,000/$50,000 Split Limit       Nebraska: $100,000/$300,000/$50,000 Split Limit       Nevada: $100,000/$300,000/$50,000 Split Limit       Oregon: $100,000/$300,000/$50,000 Split Limit       South Dakota: $100,000/$300,000/$50,000 Split Limit       Utah: $100,000/$300,000/$50,000 Split Limit       Washington: $100,000/$300,000/$50,000 Split Limit",
+						"label": "checkbox",
+						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": false,
 						"key": "ASPSplitLimitOrCombinedSingleLimitCa",
@@ -1211,6 +1206,18 @@
 						"customConditional": "show = (data.pleaseSelectDriverType == 'areaServiceProvider') ? true : false",
 						"type": "checkbox",
 						"input": true
+					}, {
+						"label": "aspautoliability",
+						"attrs": [{
+							"attr": "",
+							"value": ""
+						}],
+						"content": "Arizona: $100,000/$300,000/$50,000 Split Limit       California: $300,000 Combined Single Limit       Colorado: $100,000/$300,000/$50,000 Split Limit       Idaho: $100,000/$300,000/$50,000 Split Limit       Iowa: $100,000/$300,000/$50,000 Split Limit       Kentucky: $100,000/$300,000/$50,000 Split Limit       Minnesota: $100,000/$300,000/$50,000 Split Limit       Nebraska: $100,000/$300,000/$50,000 Split Limit       Nevada: $100,000/$300,000/$50,000 Split Limit       Oregon: $100,000/$300,000/$50,000 Split Limit       South Dakota: $100,000/$300,000/$50,000 Split Limit       Utah: $100,000/$300,000/$50,000 Split Limit       Washington: $100,000/$300,000/$50,000 Split Limit",
+						"refreshOnChange": false,
+						"key": "aspautoliability",
+						"type": "htmlelement",
+						"input": false,
+						"tableView": false
 					}]
 				}]
 			]
@@ -1260,11 +1267,6 @@
 					}, {
 						"label": "well7",
 						"key": "well7",
-						"conditional": {
-							"show": true,
-							"when": "ASPownedAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -1295,11 +1297,6 @@
 					}, {
 						"label": "well8",
 						"key": "well8",
-						"conditional": {
-							"show": true,
-							"when": "ASPscheduledAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -1350,7 +1347,8 @@
 			"rows": [
 				[{
 					"components": [{
-						"label": "Arizona: $100,000/$300,000/$50,000 Split Limit       California: $300,000 Combined Single Limit       Colorado: $100,000/$300,000/$50,000 Split Limit       Idaho: $100,000/$300,000/$50,000 Split Limit       Iowa: $100,000/$300,000/$50,000 Split Limit       Kentucky: $100,000/$300,000/$50,000 Split Limit       Minnesota: $100,000/$300,000/$50,000 Split Limit       Nebraska: $100,000/$300,000/$50,000 Split Limit       Nevada: $100,000/$300,000/$50,000 Split Limit       Oregon: $100,000/$300,000/$50,000 Split Limit       South Dakota: $100,000/$300,000/$50,000 Split Limit       Utah: $100,000/$300,000/$50,000 Split Limit       Washington: $100,000/$300,000/$50,000 Split Limit",
+						"label": "checkbox",
+						"hideLabel": true,
 						"tableView": false,
 						"defaultValue": false,
 						"key": "SPSplitLimitOrCombinedSingleLimitCa",
@@ -1362,6 +1360,18 @@
 						"customConditional": "show = (data.pleaseSelectDriverType == 'serviceProvider') ? true : false",
 						"type": "checkbox",
 						"input": true
+					}, {
+						"label": "serviceproviderautoliability",
+						"attrs": [{
+							"attr": "",
+							"value": ""
+						}],
+						"content": "Arizona: $100,000/$300,000/$50,000 Split Limit       California: $300,000 Combined Single Limit       Colorado: $100,000/$300,000/$50,000 Split Limit       Idaho: $100,000/$300,000/$50,000 Split Limit       Iowa: $100,000/$300,000/$50,000 Split Limit       Kentucky: $100,000/$300,000/$50,000 Split Limit       Minnesota: $100,000/$300,000/$50,000 Split Limit       Nebraska: $100,000/$300,000/$50,000 Split Limit       Nevada: $100,000/$300,000/$50,000 Split Limit       Oregon: $100,000/$300,000/$50,000 Split Limit       South Dakota: $100,000/$300,000/$50,000 Split Limit       Utah: $100,000/$300,000/$50,000 Split Limit       Washington: $100,000/$300,000/$50,000 Split Limit",
+						"refreshOnChange": false,
+						"key": "serviceproviderautoliability",
+						"type": "htmlelement",
+						"input": false,
+						"tableView": false
 					}]
 				}]
 			]
@@ -1415,11 +1425,6 @@
 					}, {
 						"label": "well7",
 						"key": "well10",
-						"conditional": {
-							"show": true,
-							"when": "SPownedAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -1450,11 +1455,6 @@
 					}, {
 						"label": "well8",
 						"key": "well11",
-						"conditional": {
-							"show": true,
-							"when": "SPscheduledAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -1544,11 +1544,6 @@
 					}, {
 						"label": "well7",
 						"key": "well13",
-						"conditional": {
-							"show": true,
-							"when": "PDownedAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -1579,11 +1574,6 @@
 					}, {
 						"label": "well8",
 						"key": "well14",
-						"conditional": {
-							"show": true,
-							"when": "PDscheduledAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -1690,11 +1680,6 @@
 					}, {
 						"label": "well7",
 						"key": "well16",
-						"conditional": {
-							"show": true,
-							"when": "FLHownedAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -1728,11 +1713,6 @@
 					}, {
 						"label": "well8",
 						"key": "well17",
-						"conditional": {
-							"show": true,
-							"when": "FLHscheduledAuto",
-							"eq": "true"
-						},
 						"type": "well",
 						"input": false,
 						"tableView": false,
@@ -2198,7 +2178,6 @@
 			"cellAlignment": "left",
 			"key": "table4",
 			"type": "table",
-			"numRows": 9,
 			"numCols": 1,
 			"input": false,
 			"tableView": false,
@@ -2219,6 +2198,11 @@
 						"tableView": false,
 						"defaultValue": false,
 						"key": "policiesAreEffective",
+						"conditional": {
+							"show": false,
+							"when": "pleaseSelectDriverType",
+							"eq": "rsp"
+						},
 						"type": "checkbox",
 						"input": true
 					}]
@@ -2318,8 +2302,39 @@
 						"input": true,
 						"defaultValue": false
 					}]
+				}],
+				[{
+					"components": [{
+						"label": "Policies Are Not Effective",
+						"tableView": false,
+						"defaultValue": false,
+						"key": "policiesAreNotEffective",
+						"conditional": {
+							"show": true,
+							"when": "pleaseSelectDriverType",
+							"eq": "rsp"
+						},
+						"type": "checkbox",
+						"input": true
+					}]
+				}],
+				[{
+					"components": [{
+						"label": "Certificate issue date must be recent/current",
+						"tableView": false,
+						"defaultValue": false,
+						"key": "certificateIssueDateMustBeRecentCurrent",
+						"conditional": {
+							"show": true,
+							"when": "pleaseSelectDriverType",
+							"eq": "rsp"
+						},
+						"type": "checkbox",
+						"input": true
+					}]
 				}]
-			]
+			],
+			"numRows": 11
 		}]
 	}, {
 		"title": "Insurance Details",
@@ -2762,7 +2777,7 @@
 		}]
 	}],
 	"revisions": "current",
-	"_vid": 215,
+	"_vid": 222,
 	"title": "HUB Compliance Checklist",
 	"display": "wizard",
 	"access": [{
@@ -2781,6 +2796,6 @@
 	"path": "hubcompliancechecklist",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-04-22T04:57:04.358Z",
-	"modified": "2021-08-31T07:25:13.836Z",
+	"modified": "2021-10-07T10:50:57.129Z",
 	"machineName": "insuranceprocurement-eoxvantage:hubComplianceChecklist"
 }

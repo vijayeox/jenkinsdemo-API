@@ -397,15 +397,18 @@ class CheckCompliance extends AbstractAppDelegate
             }
         }
         
-        if((isset($data['acord25Version']) && $data['acord25Version'] == true) && (isset($data['policiesAreEffective']) && $data['policiesAreEffective'] == true) && (isset($data['insuredNameListed']) && $data['insuredNameListed'] == true) && (isset($data['insuredAddressCompleted']) && $data['insuredAddressCompleted'] == true)
-        && (isset($data['policyNumberListed']) && $data['policyNumberListed'] == true) && (isset($data['letterDescribed']) && $data['letterDescribed'] == true) && (isset($data['specifiedNumber']) && $data['specifiedNumber'] == true)) {
+        if((isset($data['acord25Version']) && $data['acord25Version'] == true) && (isset($data['policiesAreNotEffective']) && $data['policiesAreNotEffective'] == true) && (isset($data['insuredNameListed']) && $data['insuredNameListed'] == true) && (isset($data['insuredAddressCompleted']) && $data['insuredAddressCompleted'] == true)
+        && (isset($data['policyNumberListed']) && $data['policyNumberListed'] == true) && (isset($data['letterDescribed']) && $data['letterDescribed'] == true) && (isset($data['specifiedNumber']) && $data['specifiedNumber'] == true) && (isset($data['certificateIssueDateMustBeRecentCurrent']) && $data['certificateIssueDateMustBeRecentCurrent'] == true)) {
             $compliance=true;
         }
         else {
             if(!$data['acord25Version']==true) {
                 $compliant=false;
             }
-            if(!$data['policiesAreEffective']==true) {
+            if(isset($data['policiesAreNotEffective']) && !$data['policiesAreNotEffective']==true) {
+                $compliant=false;
+            }
+            if(isset($data['certificateIssueDateMustBeRecentCurrent']) && !$data['certificateIssueDateMustBeRecentCurrent']==true) {
                 $compliant=false;
             }
             if(!$data['insuredNameListed']==true) {

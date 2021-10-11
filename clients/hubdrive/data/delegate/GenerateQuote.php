@@ -30,7 +30,7 @@ class GenerateQuote extends AbstractDocumentAppDelegate
         $fileData = $this->getFile($data['fileId'],false,$data['accountId']);
         $data = array_merge($data,$fileData['data']);
         $this->logger->info("ACCOUT IS ____" . $accountId);
-        $path = "https://i.imgur.com/1zkaS1p.jpeg";
+        $path = $this->applicationUrl . '/public/img/avant.png';
         $img = file_get_contents($path);
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data['avantImageSrc'] = 'data:image/' . $type . ';base64,' . base64_encode($img);
@@ -41,12 +41,12 @@ class GenerateQuote extends AbstractDocumentAppDelegate
         }
         $doc = $this->documentBuilder->generateDocument($template,$data,$fileDestination);
         $documentpdf = $folderDestination['relativePath'] . $quotePdfName;
-        if(isset($data['attachments'])){
-            $data['attachments'] = is_string($data['attachments']) ? json_decode($data['attachments'],true) : $data['attachments'];
+        if(isset($data['documents'])){
+            $data['documents'] = is_string($data['documents']) ? json_decode($data['documents'],true) : $data['documents'];
         }else{
-            $data['attachments'] = array();
+            $data['documents'] = array();
         }
-        $data['attachments']['quote_pdf'] = array(
+        $data['documents']['quote_pdf'] = array(
             "name" => $quotePdfName,
             "fullPath" => $fileDestination,
             "file" => $documentpdf,

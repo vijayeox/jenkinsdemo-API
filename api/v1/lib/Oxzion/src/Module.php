@@ -735,12 +735,14 @@ class Module
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $paymentService = $container->get(Service\PaymentService::class);
                     $appDelegateService = $container->get(AppDelegate\AppDelegateService::class);
+                    $fileService = $container->get(Service\FileService::class);
 
                     return new Service\InvoiceService(
                         $container->get('config'),
                         $dbAdapter,
                         $paymentService,
-                        $appDelegateService
+                        $appDelegateService,
+                        $fileService
                     );
                 },
                 Service\CommandService::class => function ($container) {
