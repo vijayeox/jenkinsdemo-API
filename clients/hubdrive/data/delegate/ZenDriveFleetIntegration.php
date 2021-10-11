@@ -98,11 +98,11 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             $email  = $driver['driverEmail'] ;
 
             $username = str_replace('@', '.', $driver['driverEmail']);
-            $uuidresponse = $this->getUserByUsername($fleet_account_id, $username);
-            $this->logger->info("in zendrive delegate uuid ".print_r($uuidresponse,true));
+           // $uuidresponse = $this->getUserByUsername($fleet_account_id, $username);
+           // $this->logger->info("in zendrive delegate uuid ".print_r($uuidresponse,true));
 
-            if(count($uuidresponse) < 1)
-                continue;
+            //if(count($uuidresponse) < 1)
+              //  continue;
 
             $driveruuid = $driver['driveruuid'];
             
