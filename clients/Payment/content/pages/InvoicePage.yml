@@ -84,6 +84,7 @@ content:
                 -
                     title: Invoice Number
                     field: invoiceNumber 
+                    cell: '<td style={{textAlign:"right"}} >{item.invoiceNumber}</td>'
                 -
                     title: Customer
                     field: customerName
@@ -96,9 +97,12 @@ content:
                 -
                     title: Due Date
                     field: invoiceDueDate
+                    cell: '<td>{item.invoiceDueDate}</td>'
                 -
                     title: Amount Due
                     field: total
+                    cell: '<td>{item.total.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
                 -
                     title: Amount Paid
                     field: amountPaid
+                    cell: '<td>{item.amountPaid.toLocaleString("en-US", {style: "currency", currency: "USD",})}</td>'
