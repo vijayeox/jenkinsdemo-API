@@ -37,7 +37,6 @@ class CreateInvoicePDF extends AbstractDocumentAppDelegate
         $appId = $data['appId'];
 
         
-        $this->getAppropriateDataForPDF($data);
         $folderDestination =  ArtifactUtils::getDocumentFilePath($this->destination,"invoice/".$appId, array('accountId' => $accountId));
         $fileDestination = $folderDestination['absolutePath'].$invoicePDFName;
         if(FileUtils::fileExists($fileDestination)) {
@@ -56,22 +55,8 @@ class CreateInvoicePDF extends AbstractDocumentAppDelegate
             )
         );
         $data['attachments'] = $generatedInvoicePDF;
-        // $this->saveFile($data, $fileUUID);
         return $data;
     }
 
-    private function getAppropriateDataForPDF(&$data) {
-        foreach($data['ledgerData'] as $key => $lineItem)
-        {
-            $data['ledgerData'][$key]['amount'] = (double) $lineItem['amount'];
-            if(isset($lineItem['transactionEffectiveDate']))
-            {
-                $data['ledgerData'][$key]['transactionEffectiveDate'] = explode("T",$lineItem['transactionEffectiveDate'])[0];
-            }
-            if(isset($lineItem['transactionDueDate']))
-            {
-                $data['ledgerData'][$key]['transactionDueDate'] = explode("T",$lineItem['transactionDueDate'])[0];
-            }
-        }
-    }
+
 }
