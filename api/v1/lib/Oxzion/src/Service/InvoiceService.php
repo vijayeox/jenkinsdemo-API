@@ -124,10 +124,6 @@ class InvoiceService extends AbstractService
             $data['appName'] = $customerData['appName'];
             $data['customerName'] = $customerData['customerName'];
     
-
-    
-    
-    
             $invoiceUuid = UuidUtil::uuid();
             $data['invoiceUuid'] = $invoiceUuid;
             try {
@@ -226,7 +222,7 @@ class InvoiceService extends AbstractService
 
         $data['appId'] = $appId;
         $data['invoiceUuid'] = $invoiceUuid;
-
+        
         $invoiceAmount = $data['total'];
         $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
         $amountDue = $invoiceAmount - $amountPaid;
@@ -234,7 +230,7 @@ class InvoiceService extends AbstractService
 
         $data = $this->formatInvoiceData($data);
 
-    $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
+        $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
         
         $invoiceData = [
             "amountPaid" => $data['amountPaid'],
@@ -471,19 +467,13 @@ class InvoiceService extends AbstractService
         $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
         $amountDue = $invoiceAmount - $amountPaid;
 
-        $data['amountDue'] = number_format($amountDue, 2, '.', ',');
-        $data['amountPaid'] = isset($data['amountPaid'])?number_format($data['amountPaid'], 2, '.', ','):'0.0';
-        $data['total'] = number_format($data['total'], 2, '.', ',');
-        $data['subtotal'] = number_format($data['subtotal'], 2, '.', ',');
-        $data['tax'] = number_format($data['tax'], 2, '.', ',');
+        $data['amountDue'] = $amountDue;
 
         $data['invoiceDate'] = isset($data['invoiceDate'])?$this->formatInvoiceDate($data['invoiceDate']):date('d-m-Y');
         $data['invoiceDueDate'] = isset($data['invoiceDueDate'])?$this->formatInvoiceDate($data['invoiceDueDate']):date('d-m-Y');
         
         foreach($data['ledgerData'] as $key=> $lineItem)
         {
-            $data['ledgerData'][$key]['amount'] = number_format($lineItem['amount'], 2, '.', ',');
-            $data['ledgerData'][$key]['unitCost'] = number_format($lineItem['unitCost'], 2, '.', ',');
             if(isset($lineItem['transactionEffectiveDate']))
             {
                 $data['ledgerData'][$key]['transactionEffectiveDate'] = isset($lineItem['transactionEffectiveDate'])?$this->formatInvoiceDate($lineItem['transactionEffectiveDate']):date('d-m-Y');
@@ -494,6 +484,7 @@ class InvoiceService extends AbstractService
             }
         } 
 
+        
         return $data;
     }
 
