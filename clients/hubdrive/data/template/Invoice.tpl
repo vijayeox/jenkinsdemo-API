@@ -105,7 +105,7 @@
 
     table th,
     table td {
-    text-align: center;
+    text-align: left;
     }
 
     table th {
@@ -157,6 +157,10 @@
     text-align: center;
     }
 
+/* new CSS */
+    .align-left{
+      text-align: left;
+    }
     </style>
   </head>
   <body>
@@ -243,43 +247,46 @@
             <th class="desc">DESCRIPTION</th>
             <th>Effective Date</th>
             <th>Due Date</th>
-            <th>TOTAL</th>
+            <th class="align_right">TOTAL</th>
           </tr>
         </thead>
         <tbody>
             {foreach from=$ledgerData item=lineItem key=key}
                 <tr>
-                    <td class="service">{$key+1}</td>
-                    <td class="desc">{$lineItem['description']}</td>
+                    <td class="service align-left">{$key+1}</td>
+                    <td class="desc align-left">{$lineItem['description']}</td>
+                    
                     {if isset($lineItem['transactionEffectiveDate'])}
-                    <td class="unit">{$lineItem['transactionEffectiveDate']}</td>
+                    <td class="unit align-left">{$lineItem['transactionEffectiveDate']}</td>
                     {else}
-                    <td class="unit">--</td>
+                    <td class="unit align-left">--</td>
                     {/if}
+
                     {if isset($lineItem['transactionDueDate'])}
-                    <td class="qty">{$lineItem['transactionDueDate']}</td>
+                    <td class="qty align-left">{$lineItem['transactionDueDate']}</td>
                     {else}
-                    <td class="qty">--</td>
+                    <td class="qty align-left">--</td>
                     {/if}
-                    <td class="total">{"$`$lineItem['amount']`"}</td>
+                    
+                    <td class="total align-left">{"$`$lineItem['amount']`"}</td>
                 </tr>
             {/foreach}
           <tr>
             <td colspan="4">SUBTOTAL</td>
-            <td class="total">{"$`$subtotal`"}</td>
+            <td class="total align-left">{"$`$subtotal`"}</td>
           </tr>
           <tr>
             <td colspan="4">TAX</td>
             {if isset($tax)}
-                <td class="total">{"$`$tax`"}</td>
+                <td class="total align-left">{"$`$tax`"}</td>
             {else}
-                <td class="total">--</td>
+                <td class="total align-left">--</td>
             {/if}
 
           </tr>
           <tr>
             <td colspan="4" class="grand total">GRAND TOTAL</td>
-            <td class="grand total">{"$`$total`"}</td>
+            <td class="grand total align-left">{"$`$total`"}</td>
           </tr>
         </tbody>
       </table>
