@@ -67,7 +67,7 @@ content:
                             form_id: 746a1a46-684a-43d5-b69f-a8447d14489a
                             fileId: '{{uuid}}'
                     icon: 'far fa-pencil-alt'
-
+                    
             operations:
                 title: 'Create Invoice'
                 icon: 'fa fa-plus'
@@ -84,6 +84,15 @@ content:
                 -
                     title: Invoice Number
                     field: invoiceNumber 
+                -
+                    title: Customer
+                    field: customerName
+                -
+                    title: App
+                    field: appName
+                -   
+                    title: Created On
+                    field: invoiceDate
                 -
                     title: Due Date
                     field: invoiceDueDate
