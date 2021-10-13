@@ -170,9 +170,8 @@ execution.setVariable("mailAttachments",true);</camunda:script>
       <bpmn:outgoing>SequenceFlow_1jnzggu</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="EndEvent_0ogi8ew">
-      <bpmn:incoming>SequenceFlow_0o03zd6</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_1qlby7f</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0ixsd2w</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1sxhydg</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1249u42" sourceRef="Task_11luahe" targetRef="Task_191wd79" />
     <bpmn:serviceTask id="Task_1n5oxi0" name="Generate policy number" camunda:expression="0">
@@ -210,11 +209,11 @@ execution.setVariable("mailAttachments",true);</camunda:script>
     <bpmn:serviceTask id="Task_017u3xh" name="Update status to Received" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus','Received');
-execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
+          <camunda:script scriptFormat="groovy">execution.setVariable('policyStatus','Received');</camunda:script>
         </camunda:executionListener>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">fileSave</camunda:inputParameter>
+          <camunda:inputParameter name="return">true</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_00ony52</bpmn:incoming>
@@ -287,9 +286,9 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1hzifn5</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0o03zd6</bpmn:outgoing>
+      <bpmn:incoming>SequenceFlow_1qlby7f</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1sxhydg</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0o03zd6" sourceRef="ServiceTask_1ixzu85" targetRef="EndEvent_0ogi8ew" />
     <bpmn:serviceTask id="ServiceTask_0mg9nh9" name="Update Policy Status to Policy Issued" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
@@ -310,7 +309,7 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_176cfvn" name="Mail to Genre" sourceRef="Task_191wd79" targetRef="Task_11luahe">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${genreApproval == "mailToGenRe"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1qlby7f" name="Rejected" sourceRef="Task_191wd79" targetRef="EndEvent_0ogi8ew">
+    <bpmn:sequenceFlow id="SequenceFlow_1qlby7f" name="Rejected" sourceRef="Task_191wd79" targetRef="ServiceTask_1ixzu85">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${genreApproval == "reject"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1l83mrl" sourceRef="Task_0heajnu" targetRef="Task_0nhilfs" />
@@ -393,6 +392,7 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
       <bpmn:outgoing>SequenceFlow_0mq4kon</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0mq4kon" sourceRef="ServiceTask_1y92avs" targetRef="ServiceTask_0e8thm5" />
+    <bpmn:sequenceFlow id="SequenceFlow_1sxhydg" sourceRef="ServiceTask_1ixzu85" targetRef="EndEvent_0ogi8ew" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="New_Excess_Application_Submission">
@@ -484,17 +484,17 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_079nplo_di" bpmnElement="SequenceFlow_079nplo">
         <di:waypoint x="2640" y="310" />
-        <di:waypoint x="2820" y="310" />
+        <di:waypoint x="2740" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0h17qob_di" bpmnElement="Task_0xvxkce">
-        <dc:Bounds x="2820" y="270" width="100" height="80" />
+        <dc:Bounds x="2740" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0qui7o5_di" bpmnElement="SequenceFlow_0qui7o5">
-        <di:waypoint x="2920" y="310" />
-        <di:waypoint x="3040" y="310" />
+        <di:waypoint x="2840" y="310" />
+        <di:waypoint x="2970" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_1rr8dhp_di" bpmnElement="Task_052gkzv">
-        <dc:Bounds x="3040" y="270" width="100" height="80" />
+        <dc:Bounds x="2970" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0ogi8ew_di" bpmnElement="EndEvent_0ogi8ew">
         <dc:Bounds x="3562" y="292" width="36" height="36" />
@@ -548,10 +548,10 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
       <bpmndi:BPMNEdge id="SequenceFlow_1hzifn5_di" bpmnElement="SequenceFlow_1hzifn5">
         <di:waypoint x="1170" y="335" />
         <di:waypoint x="1170" y="400" />
-        <di:waypoint x="1460" y="400" />
+        <di:waypoint x="2270" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1jnzggu_di" bpmnElement="SequenceFlow_1jnzggu">
-        <di:waypoint x="3140" y="310" />
+        <di:waypoint x="3070" y="310" />
         <di:waypoint x="3170" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0xmv21d_di" bpmnElement="SequenceFlow_0xmv21d">
@@ -562,13 +562,8 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
         <dc:Bounds x="1910" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1ixzu85_di" bpmnElement="ServiceTask_1ixzu85">
-        <dc:Bounds x="1460" y="360" width="100" height="80" />
+        <dc:Bounds x="2270" y="360" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0o03zd6_di" bpmnElement="SequenceFlow_0o03zd6">
-        <di:waypoint x="1560" y="400" />
-        <di:waypoint x="3580" y="400" />
-        <di:waypoint x="3580" y="328" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0mg9nh9_di" bpmnElement="ServiceTask_0mg9nh9">
         <dc:Bounds x="3170" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -588,10 +583,9 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
       <bpmndi:BPMNEdge id="SequenceFlow_1qlby7f_di" bpmnElement="SequenceFlow_1qlby7f">
         <di:waypoint x="1790" y="350" />
         <di:waypoint x="1790" y="400" />
-        <di:waypoint x="3580" y="400" />
-        <di:waypoint x="3580" y="330" />
+        <di:waypoint x="2270" y="400" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2664" y="382" width="44" height="14" />
+          <dc:Bounds x="2854" y="382" width="44" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1l83mrl_di" bpmnElement="SequenceFlow_1l83mrl">
@@ -622,6 +616,11 @@ execution.setVariable('avantPolicyStatus','In Progress');</camunda:script>
       <bpmndi:BPMNEdge id="SequenceFlow_0mq4kon_di" bpmnElement="SequenceFlow_0mq4kon">
         <di:waypoint x="2070" y="100" />
         <di:waypoint x="1950" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1sxhydg_di" bpmnElement="SequenceFlow_1sxhydg">
+        <di:waypoint x="2370" y="400" />
+        <di:waypoint x="3580" y="400" />
+        <di:waypoint x="3580" y="328" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
