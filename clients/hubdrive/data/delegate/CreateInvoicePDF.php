@@ -36,14 +36,13 @@ class CreateInvoicePDF extends AbstractDocumentAppDelegate
         $accountId = $data['accountId'];
         $appId = $data['appId'];
 
-        
-        $this->getAppropriateDataForPDF($data);
+        $data = $this->formatInvoiceData($data);
         $folderDestination =  ArtifactUtils::getDocumentFilePath($this->destination,"invoice/".$appId, array('accountId' => $accountId));
         $fileDestination = $folderDestination['absolutePath'].$invoicePDFName;
         if(FileUtils::fileExists($fileDestination)) {
             FileUtils::deleteFile($invoicePDFName,$folderDestination['absolutePath']);
         }
-    $doc = $this->documentBuilder->generateDocument($invoicePDFTemplate,$data,$fileDestination);
+        $doc = $this->documentBuilder->generateDocument($invoicePDFTemplate,$data,$fileDestination);
         $documentpdf = $folderDestination['relativePath'] . $invoicePDFName;
         array_push(
             $generatedInvoicePDF,
@@ -56,22 +55,31 @@ class CreateInvoicePDF extends AbstractDocumentAppDelegate
             )
         );
         $data['attachments'] = $generatedInvoicePDF;
-        // $this->saveFile($data, $fileUUID);
         return $data;
     }
 
-    private function getAppropriateDataForPDF(&$data) {
-        foreach($data['ledgerData'] as $key => $lineItem)
+    public function formatInvoiceData($data)
+    {
+        $invoiceAmount = $data['total'];
+        $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
+        $amountDue = $invoiceAmount - $amountPaid;
+
+        $data['amountDue'] = number_format($amountDue, 2, '.', ',');
+        $data['amountPaid'] = isset($data['amountPaid'])?number_format($data['amountPaid'], 2, '.', ','):'0.0';
+        $data['total'] = number_format($data['total'], 2, '.', ',');
+        $data['subtotal'] = number_format($data['subtotal'], 2, '.', ',');
+        $data['tax'] = number_format($data['tax'], 2, '.', ',');
+
+        
+        foreach($data['ledgerData'] as $key=> $lineItem)
         {
-            $data['ledgerData'][$key]['amount'] = (double) $lineItem['amount'];
-            if(isset($lineItem['transactionEffectiveDate']))
-            {
-                $data['ledgerData'][$key]['transactionEffectiveDate'] = explode("T",$lineItem['transactionEffectiveDate'])[0];
-            }
-            if(isset($lineItem['transactionDueDate']))
-            {
-                $data['ledgerData'][$key]['transactionDueDate'] = explode("T",$lineItem['transactionDueDate'])[0];
-            }
-        }
+            $data['ledgerData'][$key]['amount'] = number_format($lineItem['amount'], 2, '.', ',');
+            $data['ledgerData'][$key]['unitCost'] = number_format($lineItem['unitCost'], 2, '.', ',');
+        } 
+
+        
+        return $data;
     }
+
+
 }
