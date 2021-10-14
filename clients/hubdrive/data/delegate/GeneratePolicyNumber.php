@@ -35,7 +35,7 @@ class GeneratePolicyNumber extends AbstractAppDelegate
             $updatepolicyNumber = $persistenceService->updateQuery($updateQuery, $params);
             $id = $updatepolicyNumber->getGeneratedValue();
         }
-        $file['policyStatus'] = "Quote Approved";
+        $file['policyStatus'] = "Bound";
         $this->saveFile($file, $fileUUID);
         return $data;
     }
