@@ -42,7 +42,7 @@
             </div>
             <div  class = "rowInfo">
                 <p class = "column1"><b>Proposed Policy Period:</b></p>
-                <p class = "column2">{$policyStartDate|date_format:"%B %e, %Y"} to {$proposedPolicyEndDate|date_format:"%B %e, %Y"}</p>
+                <p class = "column2">{$start_date|date_format:"%B %e, %Y"} to {$proposedPolicyEndDate|date_format:"%B %e, %Y"}</p>
             </div>
             <div class = "rowInfo">
                 <p class = "column1"><b>Quotation is Valid Thru:</b></p>
