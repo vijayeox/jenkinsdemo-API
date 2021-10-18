@@ -1238,6 +1238,12 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
                         -
+                            title: 'Date Modified'
+                            field: date_modified
+                            cell: '<td>{formatDate(item.date_modified)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+                        -
                             title: Driver Types 
                             field: pleaseSelectDriverType
                         -
