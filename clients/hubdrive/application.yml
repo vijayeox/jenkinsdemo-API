@@ -274,6 +274,9 @@ entity:
                 name: contractDate
                 data_type: datetime
                 index: true
+            -   
+                name: ICUserId
+                index: true
         identifiers:
             -
                 identifier: email
@@ -323,6 +326,9 @@ entity:
             -
                 name: contractDate
                 data_type: datetime
+                index: true
+            -   
+                name: ICUserId
                 index: true
         identifiers:
             -
