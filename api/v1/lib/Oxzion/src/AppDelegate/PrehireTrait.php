@@ -33,5 +33,13 @@ trait PrehireTrait
         return $this->foleyService->invokeCHQueryAPI($endpoint, $data);
     }
 
+    protected function createBGCOrder($endpoint, $data) {
+        return $this->foleyService->invokeBGCAPI($endpoint, $data);
+    }
+
+    protected function createdrugtest($endpoint, $data) {
+        return $this->foleyService->invokeDrugTestAPI($endpoint, $data);
+    }
+
     
 }

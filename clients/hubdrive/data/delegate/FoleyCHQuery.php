@@ -46,9 +46,9 @@ class FoleyCHQuery extends AbstractAppDelegate
         
         $dataToPost['CHQueryOrder']['Query']['QueryType'] = 'Pre-Employment';
         $dataToPost['CHQueryOrder']['Query']['LimitedConsentOnFile'] = 'Y';
-        $dataToPost['CHQueryOrder']['Query']['RequesterName'] = '';
-        $dataToPost['CHQueryOrder']['Query']['RequesterOrganization'] = '';
-        $dataToPost['CHQueryOrder']['Query']['OrderReferenceID'] = '';
+        $dataToPost['CHQueryOrder']['Query']['RequesterName'] = 'gggg'; //IC NAme
+        $dataToPost['CHQueryOrder']['Query']['RequesterOrganization'] = 'Hub International Limited';
+        $dataToPost['CHQueryOrder']['Query']['OrderReferenceID'] = 'driverreport'.$driver_id;
         $dataToPost['CHQueryOrder']['Query']['LinkedRequestID'] = '';
         
         $result = $this->createCHQuery('CHQueryOrder/',$dataToPost);

@@ -44,10 +44,10 @@ class FoleyController extends AbstractApiController
                     $result = $this->foleyService->invokeCHQueryAPI('CHQueryOrder/',$data);
                     break;
                 case 'OrderDrugTest':
-                    
+                    $result = $this->foleyService->invokeBGCAPI('ordertest/',$data);
                     break;
                 case 'OrderBGC':
-                    
+                    $result = $this->foleyService->invokeBGCAPI('orderbgc/',$data);
                     break;
                 default:
                     throw new InvalidParameterException('Incorrect Request Type '.$routeparams['type']);

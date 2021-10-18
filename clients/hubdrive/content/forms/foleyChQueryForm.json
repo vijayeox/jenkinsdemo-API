@@ -232,7 +232,7 @@
 	}],
 	"submissionAccess": [],
 	"controller": "",
-	"properties": {},
+	"properties": {"submission_commands": "[{ \t\"command\": \"delegate\", \t\"entity_name\": \"Foley\", \t\"delegate\": \"FoleyCHQuery\" }]"},
 	"settings": {},
 	"name": "foleyChQueryForm",
 	"path": "foleychqueryform",

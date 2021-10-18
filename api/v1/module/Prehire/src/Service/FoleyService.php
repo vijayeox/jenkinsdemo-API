@@ -153,6 +153,62 @@ class FoleyService extends AbstractService{
             throw new Exception("Foley Integration Failed.", 0, $e);
         }
     }
+
+    public function invokeBGCAPI($endpoint, $data){
+        $dataToPost = json_encode($data);
+        try{
+            $response = $this->getResponse($endpoint, $dataToPost);
+            
+            //save entry in table
+            $form = new Prehire($this->table);
+            $datatoSave['user_id'] = $this->getIdFromUuid('ox_user','ea040af7-bad4-4292-83ad-3ac1b33b1a6b');
+            $datatoSave['implementation'] = 'foley';
+            $datatoSave['request_type'] = $endpoint;
+            $datatoSave['request'] = $dataToPost;
+            $form->assign($datatoSave);
+            try {
+                $this->beginTransaction();
+                $form->save();
+                $this->commit();
+            } catch (Exception $e) {
+                $this->rollback();
+                throw $e;
+            }
+            
+            return $response;
+
+        }catch (Exception $e) {
+            throw new Exception("Foley Integration Failed.", 0, $e);
+        }
+    }
+
+    public function invokeDrugTestAPI($endpoint, $data){
+        $dataToPost = json_encode($data);
+        try{
+            $response = $this->getResponse($endpoint, $dataToPost);
+            
+            //save entry in table
+            $form = new Prehire($this->table);
+            $datatoSave['user_id'] = $this->getIdFromUuid('ox_user','ea040af7-bad4-4292-83ad-3ac1b33b1a6b');
+            $datatoSave['implementation'] = 'foley';
+            $datatoSave['request_type'] = $endpoint;
+            $datatoSave['request'] = $dataToPost;
+            $form->assign($datatoSave);
+            try {
+                $this->beginTransaction();
+                $form->save();
+                $this->commit();
+            } catch (Exception $e) {
+                $this->rollback();
+                throw $e;
+            }
+            
+            return $response;
+
+        }catch (Exception $e) {
+            throw new Exception("Foley Integration Failed.", 0, $e);
+        }
+    }
 }
 
 
