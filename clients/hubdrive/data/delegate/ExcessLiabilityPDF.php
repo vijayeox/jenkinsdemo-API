@@ -76,7 +76,6 @@ class ExcessLiabilityPDF extends AbstractDocumentAppDelegate
                 $comments = array();
                 $comments['text'] = $data[$value];
                 $this->createComment($comments, $fileUUID);
-                $data[$value] = "";
             }
         }
         $this->saveFile($data, $fileUUID);

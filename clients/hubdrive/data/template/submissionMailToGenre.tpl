@@ -22,6 +22,7 @@
 {assign var=list value=$stateObj|json_decode:true}
 <div style='line-height: 24px'>
 	<p>Hi,</p>
+    <p>{$avantNote}</p>
     <p>Please quote the attached submission.</p>
  	<br/>
     <p><b>Account Name :</b> {$insuredName} </p>

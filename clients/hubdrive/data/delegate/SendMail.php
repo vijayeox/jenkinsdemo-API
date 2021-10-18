@@ -17,6 +17,9 @@ class SendMail extends MailDelegate
         $this->logger->info("Executing Excess Mail with data- " . print_r($data, true));
         $fileData = $this->getFile($data['fileId'],false,$data['accountId']);
         $file = array_merge($data,$fileData['data']);
+        $fileData['data']['hubNote'] = "";
+        $fileData['data']['avantNote'] = "";
+        $this->saveFile($fileData['data'], $data['fileId']);
         // Add logs for created by id and producer name who triggered submission
         $mailOptions = [];
         $fileData = array();
