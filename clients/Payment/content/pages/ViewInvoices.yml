@@ -6,7 +6,6 @@ content:
         content:
             route: 'billing/invoice'
             disableAppId: true
-            filterable: false                        
             resizable: true
             actionsWidth: 340px
             pageable:
@@ -61,11 +60,26 @@ content:
                   
             columnConfig:
                 -
+                    title: Invoice Number
+                    field: data.invoiceNumber
+                    cell: '<td style={{textAlign:"left"}}> {item.data.invoiceNumber} </td>'
+                -
                     title: Client
                     field: name
+                    cell: '<td style={{textAlign:"left"}}> {item.name} </td>'
                 -
-                    title: Date
-                    field: date_created
+                    title: Invoice Date
+                    field: data.invoiceDate
+                    cell: '<td style={{textAlign:"left"}}> {item.data.invoiceDate} </td>'
                 -
-                    title: Total
-                    field: amount
+                    title: Due Date
+                    field: data.invoiceDueDate
+                    cell: '<td style={{textAlign:"left"}}> {item.data.invoiceDueDate} </td>'
+                -
+                    title: Invoice Amount
+                    field: data.total
+                    cell: '<td style={{textAlign:"left"}}> {item.data.total} </td>'
+                -
+                    title: Amount Paid
+                    field: data.amountPaid
+                    cell: '<td style={{textAlign:"left"}}> {item.data.amountPaid} </td>'

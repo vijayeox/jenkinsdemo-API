@@ -11,6 +11,7 @@ abstract class AbstractDocumentAppDelegate implements DocumentAppDelegate
     protected $documentBuilder;
 	protected $baseUrl;
     protected $destination;
+    protected $applicationUrl;
 
     public function __construct()
     {
@@ -27,5 +28,9 @@ abstract class AbstractDocumentAppDelegate implements DocumentAppDelegate
     }
     public function setBaseUrl($url) {
     	$this->baseUrl = $url;
+    }
+
+    public function setApplicationUrl($url) {
+    	$this->applicationUrl = $url;
     }
 }

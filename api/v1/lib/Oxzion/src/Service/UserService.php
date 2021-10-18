@@ -1515,4 +1515,13 @@ class UserService extends AbstractService
         $this->logger->info("INFO---$select with Parasm--".print_r($selectQuery,true));
         return $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
     }
+
+    public function getUserByUsername($account_id, $username){
+        $select = "SELECT uuid
+                    FROM ox_user 
+                    WHERE username = :username AND account_id = :account_id";
+        $selectQuery = array("username" => $username, "account_id" => $account_id);
+        $this->logger->info("INFO of username select---$select with param--".print_r($selectQuery,true));
+        return $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+    }
 }

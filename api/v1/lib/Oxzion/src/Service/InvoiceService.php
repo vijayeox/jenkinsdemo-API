@@ -67,7 +67,11 @@ class InvoiceService extends AbstractService
             throw new ServiceException("App does not belong to the account","invalid.app.and.account.id");
         }
 
-        $customerId = $this->getCustomerForAccount($appId,$accountId);
+        $customerData = $this->getCustomerForAccount($appId,$accountId);
+        $customerId = $customerData['customer_id'];
+        $appName = $customerData['app_name'];
+        $customerName = $customerData['customer_name'];
+
         if(!isset($customerId))
         {
             $insert = "INSERT INTO ox_billing_customer (`uuid`,`account_id`,`app_id`) VALUES (:uuid,:accountId,:appId)";
@@ -76,12 +80,17 @@ class InvoiceService extends AbstractService
                 "accountId" => $accountId,
                 "appId" => $appId
             ]);
-            $customerId = $this->getCustomerForAccount($appId,$accountId);
+            $customerData = $this->getCustomerForAccount($appId,$accountId);
+            $customerId = $customerData['customer_id'];
+            $appName = $customerData['app_name'];
+            $customerName = $customerData['customer_name'];
         }
         return [
-            "appId" => $data['appId'],
-            "accountId" => $data['accountId'],
-            "customerId" => $customerId
+            "appUuid" => $data['appId'],
+            "accountUuid" => $data['accountId'],
+            "customerId" => $customerId,
+            "appName" =>$appName,
+            "customerName" =>$customerName
         ];
 
     }
@@ -101,21 +110,19 @@ class InvoiceService extends AbstractService
             {
                 throw new ServiceException("Invalid parameters specified in request","invalid.params");
             }
-            $data['total'] = (double) $data['total'];
-            $data['subtotal'] = (double) $data['subtotal'];
-            $data['tax'] = (double) $data['tax'];
-    
+            
+            $invoiceAmount = $data['total'];
+            $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
+            $amountDue = $invoiceAmount - $amountPaid;
+
+
+            $data = $this->formatInvoiceData($data);
             $customerData = $this->createOrGetCustomer($data);
             $customerId = $customerData['customerId'];
-    
-            $totalAmount = isset($data['amountPaid'])?$data['total']-(double) $data['amountPaid']:$data['total'];
-            $invoiceDate = isset($data['invoiceDate'])?explode("T",$data['invoiceDate'])[0]:date('d-m-Y');
-            $invoiceDueDate = isset($data['invoiceDueDate'])?explode("T",$data['invoiceDueDate'])[0]:date('d-m-Y');
-    
-            $data['invoiceDate'] = $invoiceDate;
-            $data['invoiceDueDate'] = $invoiceDueDate;
-    
-    
+
+
+            $data['appName'] = $customerData['appName'];
+            $data['customerName'] = $customerData['customerName'];
     
             $invoiceUuid = UuidUtil::uuid();
             $data['invoiceUuid'] = $invoiceUuid;
@@ -123,19 +130,22 @@ class InvoiceService extends AbstractService
                 $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
     
                 $invoiceData = [
-                    "amountPaid" => isset($data['amountPaid'])?$data['amountPaid']:0.0,
+                    "amountPaid" => $data['amountPaid'],
                     "ledgerData" => $data['ledgerData'],
                     "subtotal" => $data['subtotal'],
                     "total" => $data['total'],
-                    "tax" => $data['tax']
+                    "tax" => $data['tax'],
+                    "invoiceNumber" =>$data['invoiceNumber'],
+                    "invoiceDate" =>$data['invoiceDate'],
+                    "invoiceDueDate" =>$data['invoiceDueDate']
                 ];
                 $insert = "INSERT INTO ox_billing_invoice (`uuid`,`customer_id`,`amount`,`data`,`date_created`,`created_by`) VALUES (:uuid,:customerId,:amount,:data,:invoiceDate,:createdBy)";
                 $this->executeQuerywithBindParameters($insert,[
                     "uuid"=> $invoiceUuid,
                     "customerId" => $customerId,
-                    "amount" => $totalAmount,
+                    "amount" => $invoiceAmount,
                     "data" => json_encode($invoiceData),
-                    "invoiceDate" => $invoiceDate,
+                    "invoiceDate" => $data['invoiceDate'],
                     "createdBy" => AuthContext::get(AuthConstants::USER_ID)
                 ]);
 
@@ -170,6 +180,7 @@ class InvoiceService extends AbstractService
 
     public function updateInvoice($invoiceUuid,$data)
     {
+
         if(!isset($data['total']) || !isset($data['accountId']) || !isset($data['ledgerData']) || !isset($data['subtotal']))
         {
             throw new ServiceException("Invalid parameters specified in request","invalid.params");
@@ -197,45 +208,45 @@ class InvoiceService extends AbstractService
         {
             throw new ServiceException("Unauthorized to access invoice","invoice.auth.error");
         }
-        // $customerId = $result[0]['customer_id'];
-        // $invoiceId = $result[0]['invoice_id'];
+
         $appId = $result[0]['uuid'];
         $previousCustomerId = $result[0]['customer_id'];
-        // $invoiceUuid = $result[0]['invoice_uuid'];
+
         $data['appId'] = $appId;
         $customerData = $this->createOrGetCustomer($data);
         $customerId = $customerData['customerId'];
 
-        //Add logic for validating data here
-        // Add logic for generating PDF invoice from JSON data here
+
+        $data['appName'] = $customerData['appName'];
+        $data['customerName'] = $customerData['customerName'];
+
         $data['appId'] = $appId;
         $data['invoiceUuid'] = $invoiceUuid;
+        
+        $invoiceAmount = $data['total'];
+        $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
+        $amountDue = $invoiceAmount - $amountPaid;
 
-        $data['total'] = (double) $data['total'];
-        $data['subtotal'] = (double) $data['subtotal'];
-        $data['tax'] = (double) $data['tax'];
 
-        $totalAmount = isset($data['amountPaid'])?$data['total']-(double) $data['amountPaid']:$data['total'];
-        $invoiceDate = isset($data['invoiceDate'])?explode("T",$data['invoiceDate'])[0]:date('d-m-Y');
-        $invoiceDueDate = isset($data['invoiceDueDate'])?explode("T",$data['invoiceDueDate'])[0]:date('d-m-Y');
-
-        $data['invoiceDate'] = $invoiceDate;
-        $data['invoiceDueDate'] = $invoiceDueDate;
+        $data = $this->formatInvoiceData($data);
 
         $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
         
-        $totalAmount = $data['total'];
         $invoiceData = [
+            "amountPaid" => $data['amountPaid'],
             "ledgerData" => $data['ledgerData'],
             "subtotal" => $data['subtotal'],
             "total" => $data['total'],
-            "tax" => $data['tax']
+            "tax" => $data['tax'],
+            "invoiceNumber" =>$data['invoiceNumber'],
+            "invoiceDate" =>$data['invoiceDate'],
+            "invoiceDueDate" =>$data['invoiceDueDate']
         ];
 
         $update = "UPDATE ox_billing_invoice SET `amount`=:totalAmount, `customer_id`=:customerId,`date_created`=:invoiceDate,`data`=:data WHERE customer_id=:previousCustomerId AND uuid=:invoiceUuid";
         $this->executeQueryWithBindParameters($update,[
-            "totalAmount"=> $totalAmount,
-            "invoiceDate" => $invoiceDate,
+            "totalAmount"=> $invoiceAmount,
+            "invoiceDate" => $data['invoiceDate'],
             "data" => json_encode($invoiceData),
             "customerId" => $customerId,
             "previousCustomerId" =>$previousCustomerId,
@@ -377,7 +388,11 @@ class InvoiceService extends AbstractService
 
     public function getCustomerForAccount($appId,$accountId)
     {
-        $select = "SELECT * FROM ox_billing_customer WHERE app_id=:appId AND account_id=:accountId";
+        $select = "SELECT obc.id as customer_id,oa.name as app_name, oac.name as customer_name 
+        FROM ox_billing_customer as obc INNER JOIN ox_app as oa on obc.app_id=oa.id 
+        INNER JOIN ox_account as oac on obc.account_id=oac.id WHERE obc.app_id=:appId 
+        AND obc.account_id=:accountId";
+
         $result = $this->executeQueryWithBindParameters($select,[
             "appId"=>$appId,
             "accountId" => $accountId
@@ -388,7 +403,7 @@ class InvoiceService extends AbstractService
             return null;
         }
 
-        return $result[0]['id'];
+        return $result[0];
     }
 
     public function invoicePayment($data)
@@ -435,6 +450,42 @@ class InvoiceService extends AbstractService
         
         return $data;
     
+    }
+
+    public function formatInvoiceDate($date)
+    {
+        if(strpos($date,"T") !== false)
+        {
+            return explode("T",$date)[0];
+        }
+        return explode(" ",$date)[0];
+    }
+
+    public function formatInvoiceData($data)
+    {
+        $invoiceAmount = $data['total'];
+        $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
+        $amountDue = $invoiceAmount - $amountPaid;
+
+        $data['amountDue'] = $amountDue;
+
+        $data['invoiceDate'] = isset($data['invoiceDate'])?$this->formatInvoiceDate($data['invoiceDate']):date('d-m-Y');
+        $data['invoiceDueDate'] = isset($data['invoiceDueDate'])?$this->formatInvoiceDate($data['invoiceDueDate']):date('d-m-Y');
+        
+        foreach($data['ledgerData'] as $key=> $lineItem)
+        {
+            if(isset($lineItem['transactionEffectiveDate']))
+            {
+                $data['ledgerData'][$key]['transactionEffectiveDate'] = isset($lineItem['transactionEffectiveDate'])?$this->formatInvoiceDate($lineItem['transactionEffectiveDate']):date('d-m-Y');
+            }
+            if(isset($lineItem['transactionDueDate']))
+            {
+                $data['ledgerData'][$key]['transactionDueDate'] = isset($lineItem['transactionDueDate'])?$this->formatInvoiceDate($lineItem['transactionDueDate']):date('d-m-Y');
+            }
+        } 
+
+        
+        return $data;
     }
 
 }

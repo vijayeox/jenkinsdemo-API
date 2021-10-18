@@ -262,6 +262,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
+        enable_generatelink: true
+        enable_print: true
         field:
             -
                 name: name
@@ -310,6 +312,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
+        enable_generatelink: true
+        enable_print: true
         field:
             -
                 name: name
@@ -358,6 +362,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -387,6 +393,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -441,7 +449,6 @@ entity:
                 name: pleaseSelectTheFacility
                 data_type: text
                 index: true
-            
         identifiers:
             -
                 identifier: iCEmail
@@ -456,8 +463,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: true
-        enable_generatelink: false
-        enable_print: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -488,6 +495,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -517,6 +526,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -546,6 +557,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -575,6 +588,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -603,6 +618,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -632,6 +649,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -661,6 +680,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -690,6 +711,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -719,6 +742,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -748,6 +773,8 @@ entity:
         enable_documents: true
         enable_comments: true
         enable_view: false
+        enable_generatelink: true
+        enable_print: true
         pageContent:
             data:
                 content:
@@ -787,10 +814,22 @@ entity:
                 data_type: text
                 index: true
             -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
                 name: companyName
                 data_type: text
                 index: true
-            -   
+            -
+                name: producerName
+                data_type: text
+                index: true
+            -
                 name: policyStatus
                 data_type: text
                 index: true
@@ -799,16 +838,15 @@ entity:
                 identifier: usDot
         participantRole:
             -
-                businessRole: 'Independent Contractor'
-            -
                 businessRole: 'Contract Carrier - Excess Only'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
         enable_documents: true
-        documents_label: "Documents"
         enable_comments: true
         enable_view: true
+        enable_print: false
+        enable_generatelink: false
         pageContent:
             data:
                 content:
@@ -1197,7 +1235,7 @@ pages:
                             title: Driver Types 
                             field: pleaseSelectDriverType
                         -
-                            title: Terminal 
+                            title: Terminal
                             field: pleaseSelectTheFacility
     -
         name: 'Compliance OI'
@@ -1324,14 +1362,26 @@ pages:
                             title: 'Insured Name'
                             field: insuredName
                         -
+                            title: Status
+                            field: policyStatus
+                            filterCell:
+                                type: dropdown
+                                listItems:
+                                    - 'In Progress'
+                                    - Received
+                                placeholder: 'Select Policy Status'
+                        -
                             title: 'Policy Effective Date'
-                            field: desiredPolicyEffectiveDate
-                            cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
+                            field: start_date
+                            cell: '<td>{formatDate(item.start_date)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
                         -
-                            title: Status
-                            field: policyStatus
+                            title: 'Policy End Date'
+                            field: end_date
+                            cell: '<td>{formatDate(item.end_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
     -
         name: 'Manage Policies'
         uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
@@ -1351,9 +1401,10 @@ pages:
             -
                 type: List
                 content:
-                    route: file
+                    route: 'entity/Excess Liability/file'
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "entity_name","operator": "eq","value": "Excess Liability"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "policyStatus","operator": "eq","value": " "},{"field": "policyStatus","operator": "eq","value": "New"},{"field": "policyStatus","operator": "eq","value": "Received"},{"field": "policyStatus","operator": "eq","value": "UW Review"},{"field": "policyStatus","operator": "eq","value": "Quote Approved"},{"field": "policyStatus","operator": "eq","value": "Policy Issued"},{"field": "policyStatus","operator": "eq","value": "Closed"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    mergeDefaultFilters: true
                     resizable: true
                     refreshButton: true
                     pageable:
@@ -1422,9 +1473,20 @@ pages:
                             title: 'Insured Name'
                             field: insuredName
                         -
+                            title: Status
+                            field: policyStatus
+                            filterCell:
+                                type: dropdown
+                                listItems:
+                                    - New
+                                    - Received
+                                    - 'UW Review'
+                                    - 'Policy Issued'
+                                placeholder: 'Select Policy Status'
+                        -
                             title: 'Policy Effective Date'
-                            field: desiredPolicyEffectiveDate
-                            cell: '<td>{formatDate(item.desiredPolicyEffectiveDate)}</td>'
+                            field: start_date
+                            cell: '<td>{formatDate(item.start_date)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
     -
@@ -1518,8 +1580,111 @@ pages:
                             title: Name
                             field: name
                         -
+                            title: 'Policy End Date'
+                            field: end_date
+                            cell: '<td>{formatDate(item.end_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+    -
+        name: 'Manage Policies'
+        uuid: 668be239-c445-4e9f-877c-9064f9737d4f
+        description: 'Shows a list of Excess Liability'
+        content:
+            -
+                type: List
+                content:
+                    route: 'entity/Excess Liability/file'
+                    filterable: true
+                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "policyStatus","operator": "eq","value": " "},{"field": "policyStatus","operator": "eq","value": "In Progress"},{"field": "policyStatus","operator": "eq","value": "Quoted"},{"field": "policyStatus","operator": "eq","value": "Policy Issued"},{"field": "policyStatus","operator": "eq","value": "Closed"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    mergeDefaultFilters: true
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            icon: 'fa fa-pencil'
+                            rule: '''{{policyStatus}}'' == ''In Force'''
+                            details:
+                                -
+                                    type: Form
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                    columnConfig:
+                        -
+                            title: 'Insured Name'
+                            field: insuredName
+                        -
                             title: Status
                             field: policyStatus
+                            filterCell:
+                                type: dropdown
+                                listItems:
+                                    - 'In Progress'
+                                    - 'Policy Issued'
+                                placeholder: 'Select Policy Status'
+                        -
+                            title: 'Policy Effective Date'
+                            field: start_date
+                            cell: '<td>{formatDate(item.start_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+                        -
+                            title: 'Policy End Date'
+                            field: end_date
+                            cell: '<td>{formatDate(item.end_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
 menu:
     -
         name: 'Independent Contractor'
@@ -1551,6 +1716,12 @@ menu:
         page_uuid: 9dcaff22-dafd-11eb-8d19-0242ac130003
         uuid: 9dcafcc0-dafd-11eb-8d19-0242ac130003
         privilege: MANAGE_ACCOUNT_MANAGER_WRITE
+    -
+        name: 'Manage Policies'
+        icon: 'fas fa-folder-open'
+        page_uuid: 668be239-c445-4e9f-877c-9064f9737d4f
+        uuid: b8bef656-2903-4635-be83-e26bba402fea
+        privilege: '{"eq" : "MANAGE_EXCESS_WRITE","neq" : "MANAGE_ACCOUNT_MANAGER_WRITE"}'
     -
         name: 'Approval Requests'
         icon: 'fas fa-clipboard-check'

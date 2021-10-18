@@ -10,6 +10,7 @@ abstract class CommunicationDelegate extends AbstractAppDelegate
     private $messageProducer;
     protected $templateService;
     protected $baseUrl;
+    protected $applicationUrl;
 
     public function __construct()
     {
@@ -35,5 +36,9 @@ abstract class CommunicationDelegate extends AbstractAppDelegate
     {
         $response = $this->messageProducer->sendQueue(json_encode($options), $queue);
         return $response;
+    }
+
+    public function setApplicationUrl($url) {
+    	$this->applicationUrl = $url;
     }
 }
