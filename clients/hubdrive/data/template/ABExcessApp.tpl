@@ -6,7 +6,7 @@
         <title>ABEXCESS</title>
         <style>
             * {
-                line-height: 220%;
+                line-height: 150%;
                 text-align: left;
             }
 
@@ -105,8 +105,7 @@
                 font-style: italic;
                 font-weight: bold;
             }
-        </style>
-        <style>
+
             .bottom-text {
                 height: 100px;
                 display: flex;
@@ -152,25 +151,6 @@
                 width: -moz-calc(100% - 17px);
             }
 
-            /* .tr0 {
-            height: 18px;
-        }
-
-        .td0 {
-            padding: 0px;
-            margin: 0px;
-            width: 80px;
-            vertical-align: bottom;
-            background: #000000;
-        }
-
-        .td1 {
-        padding: 0px;
-        margin: 0px;
-        width: 208px;
-        vertical-align: bottom;
-    } */
-
             .p1 {
                 text-align: left;
                 padding-left: 4px;
@@ -200,11 +180,9 @@
             }
 
             .underline {
-                margin-right: 2%;
-                margin-left: 2%;
-                padding-bottom: 2px;
+                padding: 0 5px 5px 2px;
+                margin: 0 5px 5px 0;
                 border-bottom: 1px solid #242424;
-                width : 50%;
             }
 
             .inline-img {
@@ -230,6 +208,71 @@
                 z-index: 999;
                 float: left;
             }
+
+            .display-inline {
+                display: inline;
+            }
+
+            .row:after {
+                content: "";
+                display: flex;
+                clear: both;
+                width: 100%;
+                font-size: 15px;
+            }
+
+            .col-10 {
+                width: 10%;
+            }
+
+            .col-20 {
+                width: 20%;
+            }
+
+            .col-30 {
+                width: 30%;
+            }
+
+            .col-40 {
+                width: 40%;
+            }
+
+            .col-50 {
+                width: 50%;
+            }
+
+            .col-60 {
+                width: 60%;
+            }
+
+            .col-70 {
+                width: 70%;
+            }
+
+            .col-80 {
+                width: 80%;
+            }
+
+            .col-90 {
+                width: 90%;
+            }
+
+            .col-100 {
+                width: 100%;
+            }
+
+            p {
+                /* display:inline-block; */
+                box-sizing: border-box;
+            }
+
+            .text-right {
+                text-align: right;
+            }
+
+            .text-left {
+                text-align: left;
+            }
         </style>
     </head>
 
@@ -237,7 +280,7 @@
         {* Section 1 *}
         <section class="mb-4">
             <div class="inline-img">
-                <img alt="Avant" width = "250px" height = "200px" src = "{$avantImageSrc}"/>
+                <img alt="Avant" width="250px" height="200px" src="{$avantImageSrc}" />
                 <p class="ft0">Excess Coverage Application</p>
             </div>
             <div class="mb-4">
@@ -245,267 +288,352 @@
             </div>
 
             <div id="sectionContent">
-                <p>
-                    <strong>INSURED NAME:</strong>
-                    {if ((isset($insuredName) && $insuredName != ""))}
-                        <span class="underline">{$insuredName}</span>
+                <div class="row">
+                    <div class="float-left" style="width:15%">
+                        <strong>INSURED NAME:</strong>
+                    </div>
+                    <div class="float-left underline" style="width:52%">
+                        {if ((isset($insuredName) && $insuredName != ""))}
+                            <span>{$insuredName}</span>
+                        {else}
+                            <span>&nbsp;</span>
+                        {/if}
+                    </div>
+                    <div class="float-left" style="width:15%">
+                        <strong>Quote by Date: </strong>
+                    </div>
+                    <div class="float-left underline" style="width:12%">
+                        {if ((isset($quoteByDateFormatted) && $quoteByDateFormatted != ""))}
+                            <span>{$quoteByDateFormatted|date_format:"%m/%d/%Y"}</span>
+                        {else}
+                            <span>&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left" style="width:13%">
+                        <strong>Address: </strong>
+                    </div>
+                    <div class="float-left underline" style="width:44%">
+                        {if ((isset($address) && $address != ""))}
+                            <span>{$address}</span>
+                        {else}
+                            <span>&nbsp;</span>
+                        {/if}
+                    </div>
+                    <div class="float-left" style="width:25%">
+                        <strong>Desired Policy Effective Date: </strong>
+                    </div>
+                    <div class="float-left underline" style="width:12%">
+                        {if ((isset($desiredPolicyEffectiveDate) && $desiredPolicyEffectiveDate != ""))}
+                            <span>{$desiredPolicyEffDateFormatted|date_format:"%m/%d/%Y"}</span>
 
-                    {else}
-                        <span>___________________________</span>
-                    {/if}
+                        {else}
+                            <span>&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left" style="width:13%">
+                        <strong>City/State/Zip: </strong>
+                    </div>
+                    <div class="float-left underline" style="width:83%">
+                        {if ((isset($csz) && $csz != ""))}
+                            <span>{$csz}</span>
+                        {else}
+                            <span>&nbsp;</span>
+                        {/if}
+                        <br>
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-100">
+                        {if $corporation == true || $corporation == "true"}
+                            <input id="Corporation" type="checkbox" name="Corporation" checked readonly />
+                            <label for="Corporation">Corporation</label>
+                        {else}
+                            <input id="Corporation" type="checkbox" name="Corporation" readonly />
+                            <label for="Corporation">Corporation</label>
+                        {/if}
 
-                    <strong>Quote by Date: </strong>
-                    {if ((isset($quoteByDateFormatted) && $quoteByDateFormatted != ""))}
-                        <span class="underline">{$quoteByDateFormatted|date_format:"%m/%d/%Y"}</span>
+                        {if $partnership == true || $partnership == "true"}
+                            <input id="Partnership" type="checkbox" name="Partnership" checked readonly />
+                            <label for="Partnership">Partnership</label>
+                        {else}
+                            <input id="Partnership" type="checkbox" name="Partnership" readonly />
+                            <label for="Partnership">Partnership</label>
+                        {/if}
 
-                    {else}
-                        <span>__________________</span>
-                    {/if}
+                        {if $proprietorship == true || $proprietorship == "true"}
+                            <input id="Proprietorship" type="checkbox" name="Proprietorship" checked readonly />
+                            <label for="Proprietorship">Proprietorship</label>
+                        {else}
+                            <input id="Proprietorship" type="checkbox" name="Proprietorship" readonly />
+                            <label for="Proprietorship">Proprietorship</label>
+                        {/if}
 
-                    <br>
+                        {if $llc == true || $llc == "true"}
+                            <input id="LLC" type="checkbox" name="LLC" checked readonly />
+                            <label for="LLC">LLC</label>
+                        {else}
+                            <input id="LLC" type="checkbox" name="LLC" readonly />
+                            <label for="LLC">LLC</label>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-100">
+                        {if $commonCarrier == true || $commonCarrier == "true"}
+                            <input id="Common Carrier" type="checkbox" name="Common Carrier" checked readonly />
+                            <label for="Common Carrier">Common Carrier</label>
+                        {else}
+                            <input id="Common Carrier" type="checkbox" name="Common Carrier" readonly />
+                            <label for="Common Carrier">Common Carrier</label>
+                        {/if}
 
-                    <strong>Address: </strong>
-                    {if ((isset($address) && $address != ""))}
-                        <span class="underline">{$address}</span>
+                        {if $contractCarrier == true || $contractCarrier == "true"}
+                            <input id="Contract Carrier" type="checkbox" name="Contract Carrier" checked readonly />
+                            <label for="Contract Carrier">Contract Carrier</label>
+                        {else}
+                            <input id="Contract Carrier" type="checkbox" name="Contract Carrier" readonly />
+                            <label for="Contract Carrier">Contract Carrier</label>
+                        {/if}
 
-                    {else}
-                        <span>__________________</span>
-                    {/if}
+                        {if $privateCarrier == true || $privateCarrier == "true"}
+                            <input id="Private Carrier" type="checkbox" name="Private Carrier" checked readonly />
+                            <label for="Private Carrier">Private Carrier</label>
+                        {else}
+                            <input id="Private Carrier" type="checkbox" name="Private Carrier" readonly />
+                            <label for="Private Carrier">Private Carrier</label>
+                        {/if}
 
-                    <strong>Desired Policy Effective Date: </strong>
-                    {if ((isset($desiredPolicyEffectiveDate) && $desiredPolicyEffectiveDate != ""))}
-                        <span class="underline">{$desiredPolicyEffDateFormatted|date_format:"%m/%d/%Y"}</span>
-
-                    {else}
-                        <span>__________________</span>
-                    {/if}
-                    <br>
-
-                    <strong>City/State/Zip: </strong>
-                    {if ((isset($csz) && $csz != ""))}
-                        <span class="underline">{$csz}</span>
-                    {else}
-                        <span>__________________</span>
-                    {/if}
-                    <br>
-
-                <div class="mt-4 mb-4">
-                    {if $corporation == true || $corporation == "true"}
-                        <input id="Corporation" type="checkbox" name="Corporation" checked readonly />
-                        <label for="Corporation">Corporation</label>
-                    {else}
-                        <input id="Corporation" type="checkbox" name="Corporation" readonly />
-                        <label for="Corporation">Corporation</label>
-                    {/if}
-
-                    {if $partnership == true || $partnership == "true"}
-                        <input id="Partnership" type="checkbox" name="Partnership" checked readonly />
-                        <label for="Partnership">Partnership</label>
-                    {else}
-                        <input id="Partnership" type="checkbox" name="Partnership" readonly />
-                        <label for="Partnership">Partnership</label>
-                    {/if}
-
-                    {if $proprietorship == true || $proprietorship == "true"}
-                        <input id="Proprietorship" type="checkbox" name="Proprietorship" checked readonly />
-                        <label for="Proprietorship">Proprietorship</label>
-                    {else}
-                        <input id="Proprietorship" type="checkbox" name="Proprietorship" readonly />
-                        <label for="Proprietorship">Proprietorship</label>
-                    {/if}
-
-                    {if $llc == true || $llc == "true"}
-                        <input id="LLC" type="checkbox" name="LLC" checked readonly />
-                        <label for="LLC">LLC</label>
-                    {else}
-                        <input id="LLC" type="checkbox" name="LLC" readonly />
-                        <label for="LLC">LLC</label>
-                    {/if}
-                    <br>
-
-                    {if $commonCarrier == true || $commonCarrier == "true"}
-                        <input id="Common Carrier" type="checkbox" name="Common Carrier" checked readonly />
-                        <label for="Common Carrier">Common Carrier</label>
-                    {else}
-                        <input id="Common Carrier" type="checkbox" name="Common Carrier" readonly />
-                        <label for="Common Carrier">Common Carrier</label>
-                    {/if}
-
-                    {if $contractCarrier == true || $contractCarrier == "true"}
-                        <input id="Contract Carrier" type="checkbox" name="Contract Carrier" checked readonly />
-                        <label for="Contract Carrier">Contract Carrier</label>
-                    {else}
-                        <input id="Contract Carrier" type="checkbox" name="Contract Carrier" readonly />
-                        <label for="Contract Carrier">Contract Carrier</label>
-                    {/if}
-
-                    {if $privateCarrier == true || $privateCarrier == "true"}
-                        <input id="Private Carrier" type="checkbox" name="Private Carrier" checked readonly />
-                        <label for="Private Carrier">Private Carrier</label>
-                    {else}
-                        <input id="Private Carrier" type="checkbox" name="Private Carrier" readonly />
-                        <label for="Private Carrier">Private Carrier</label>
-                    {/if}
-
-                    {if $freightBroker == true || $freightBroker == "true"}
-                        <input id="Freight Broker" type="checkbox" name="Freight Broker" checked readonly />
-                        <label for="Freight Broker">Freight Broker</label>
-                    {else}
-                        <input id="Freight Broker" type="checkbox" name="Freight Broker" readonly />
-                        <label for="Freight Broker">Freight Broker</label>
-                    {/if}
-                    <br>
+                        {if $freightBroker == true || $freightBroker == "true"}
+                            <input id="Freight Broker" type="checkbox" name="Freight Broker" checked readonly />
+                            <label for="Freight Broker">Freight Broker</label>
+                        {else}
+                            <input id="Freight Broker" type="checkbox" name="Freight Broker" readonly />
+                            <label for="Freight Broker">Freight Broker</label>
+                        {/if}
+                    </div>
                 </div>
 
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-10">
+                        <strong>US DOT#: </strong>
+                    </div>
+                    <div class="float-left col-30 underline">
+                        {if ((isset($usDot) && $usDot != ""))}
+                            <span>{$usDot}</span>
+                        {else}
+                            <span>&nbsp;</span>
+                        {/if}
+                    </div>
+                    <div class="float-left col-10">
+                        <strong>MC Docket: </strong>
+                    </div>
+                    <div class="float-left col-30 underline">
+                        {if ((isset($mcDocket) && $mcDocket != ""))}
+                            <span>{$mcDocket}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left" style="width:15%;">
+                        <strong>ELD Provider: </strong>
+                    </div>
+                    <div class="float-left col-20 underline">
+                        {if ((isset($eldProvider) && $eldProvider != ""))}
+                            <span>{$eldProvider}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                    <div class="float-left col-20">
+                        <strong>ELD Account #: </strong>
+                    </div>
+                    <div class="float-left col-20 underline">
+                        {if ((isset($eldAccountNumber) && $eldAccountNumber != ""))}
+                            <span>{$eldAccountNumber}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <strong>AGENT INFORMATION</strong>
+                    <br><br>
+                    <div class="float-left col-10">
+                        <strong>Hub Office: </strong>
+                    </div>
+                    <div class="float-left col-30 underline">
+                        {if ((isset($producerRegion) && $producerRegion != ""))}
+                            <span>{$producerRegion}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                    <div class="float-left" style="width:16%;">
+                        <strong>Producer’s Name: </strong>
+                    </div>
+                    <div class="float-left col-30 underline">
+                        {if ((isset($producerName) && $producerName != ""))}
+                            <span>{$producerName}</span><br>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left" style="width:20%">
+                        <strong>Hub Office Address: </strong>
+                    </div>
+                    <div class="float-left underline" style="width:75%">
+                        {if ((isset($hubOfficeAddress) && $hubOfficeAddress != ""))}
+                            <span>{$hubOfficeAddress}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-100">
+                        Is this quote in excess of the Primary Limit?
+                        {if $isThisQuoteInExcessOfThePrimaryLimit == "yes"}
+                            <input id="isThisQuoteInExcessOfThePrimaryLimit_Y" type="checkbox"
+                                name="isThisQuoteInExcessOfThePrimaryLimit_Y" checked readonly />
+                            <label for="isThisQuoteInExcessOfThePrimaryLimit_Y">Y</label>
 
-                <strong>US DOT#: </strong>
-                {if ((isset($usDot) && $usDot != ""))}
-                    <span class="underline">{$usDot}</span>
-                {else}
-                    <span>_________</span>
-                {/if}
+                            <input id="isThisQuoteInExcessOfThePrimaryLimit_N" type="checkbox"
+                                name="isThisQuoteInExcessOfThePrimaryLimit_N" readonly />
+                            <label for="isThisQuoteInExcessOfThePrimaryLimit_N">N</label>
+                        {elseif $isThisQuoteInExcessOfThePrimaryLimit == "no"}
+                            <input id="isThisQuoteInExcessOfThePrimaryLimit_Y" type="checkbox"
+                                name="isThisQuoteInExcessOfThePrimaryLimit_Y" readonly />
+                            <label for="isThisQuoteInExcessOfThePrimaryLimit_Y">Y</label>
 
-                <strong>MC Docket: </strong>
-                {if ((isset($mcDocket) && $mcDocket != ""))}
-                    <span class="underline">{$mcDocket}</span>
-                {else}
-                    <span>_________</span>
-                {/if}
+                            <input id="isThisQuoteInExcessOfThePrimaryLimit_N" type="checkbox"
+                                name="isThisQuoteInExcessOfThePrimaryLimit_N" checked readonly />
+                            <label for="isThisQuoteInExcessOfThePrimaryLimit_N">N</label>
+                        {else}
+                            <input id="isThisQuoteInExcessOfThePrimaryLimit_Y" type="checkbox"
+                                name="isThisQuoteInExcessOfThePrimaryLimit_Y" readonly />
+                            <label for="isThisQuoteInExcessOfThePrimaryLimit_Y">Y</label>
 
-                <strong>ELD Provider: </strong>
-                {if ((isset($eldProvider) && $eldProvider != ""))}
-                    <span class="underline">{$eldProvider}</span>
-                {else}
-                    <span>_________</span>
-                {/if}
-
-
-                <strong>ELD Account #: </strong>
-                {if ((isset($eldAccountNumber) && $eldAccountNumber != ""))}
-                    <span class="underline">{$eldAccountNumber}</span>
-                {else}
-                    <span>_________</span>
-                {/if}
-                <br>
-                </p>
-                <p>
-                    <strong>AGENT INFORMATION</strong><br>
-                    <strong>Hub Office: </strong>
-                    {if ((isset($producerRegion) && $producerRegion != ""))}
-                        <span class="underline">{$producerRegion}</span>
-                    {else}
-                        <span>__________________</span>
-                    {/if}
-
-                    <strong>Producer’s Name: </strong>
-                    {if ((isset($producerName) && $producerName != ""))}
-                        <span class="underline">{$producerName}</span><br>
-                    {else}
-                        <span>__________________</span>
-                    {/if}
-
-                    <strong>Hub Office Address: </strong>
-                    {if ((isset($hubOfficeAddress) && $hubOfficeAddress != ""))}
-                        <span class="underline">{$hubOfficeAddress}</span>
-                    {else}
-                        <span>__________________</span>
-                    {/if}
-
-                </p>
-                <p>
-                    Is this quote in excess of the Primary Limit?
-                    {if $isThisQuoteInExcessOfThePrimaryLimit == "yes"}
-                        <input id="isThisQuoteInExcessOfThePrimaryLimit_Y" type="checkbox"
-                            name="isThisQuoteInExcessOfThePrimaryLimit_Y" checked readonly />
-                        <label for="isThisQuoteInExcessOfThePrimaryLimit_Y">Y</label>
-
-                        <input id="isThisQuoteInExcessOfThePrimaryLimit_N" type="checkbox"
-                            name="isThisQuoteInExcessOfThePrimaryLimit_N" readonly />
-                        <label for="isThisQuoteInExcessOfThePrimaryLimit_N">N</label>
-                    {elseif $isThisQuoteInExcessOfThePrimaryLimit == "no"}
-                        <input id="isThisQuoteInExcessOfThePrimaryLimit_Y" type="checkbox"
-                            name="isThisQuoteInExcessOfThePrimaryLimit_Y" readonly />
-                        <label for="isThisQuoteInExcessOfThePrimaryLimit_Y">Y</label>
-
-                        <input id="isThisQuoteInExcessOfThePrimaryLimit_N" type="checkbox"
-                            name="isThisQuoteInExcessOfThePrimaryLimit_N" checked readonly />
-                        <label for="isThisQuoteInExcessOfThePrimaryLimit_N">N</label>
-                    {else}
-                        <input id="isThisQuoteInExcessOfThePrimaryLimit_Y" type="checkbox"
-                            name="isThisQuoteInExcessOfThePrimaryLimit_Y" readonly />
-                        <label for="isThisQuoteInExcessOfThePrimaryLimit_Y">Y</label>
-
-                        <input id="isThisQuoteInExcessOfThePrimaryLimit_N" type="checkbox"
-                            name="isThisQuoteInExcessOfThePrimaryLimit_N" readonly />
-                        <label for="isThisQuoteInExcessOfThePrimaryLimit_N">N</label>
-                    {/if}
-                </p>
-                <p>
-                    If No, advises what limit is this quote excess of:
-                    {if ((isset($ifNoAdviseWhatLimitIsThisQuoteExcessOf) && $ifNoAdviseWhatLimitIsThisQuoteExcessOf != ""))}
-                        <span class="underline">{$ifNoAdviseWhatLimitIsThisQuoteExcessOf}</span>
-                    {else}
-                        <span>__________________</span>
-                    {/if}
-
-                </p>
-                <p>
-                    <strong>Coverage(s) Requested:</strong><br>
-                    <strong>Limits Needed in Excess Layer: </strong>{if $limitsNeededinExcessLayer && $limitsNeededinExcessLayer != ""}<span class="underline">{if $limitsNeededinExcessLayer == '1M'}$1,000,000.00{elseif $limitsNeededinExcessLayer == '2M'}$2,000,000.00{elseif $limitsNeededinExcessLayer == '3M'}$3,000,000.00{elseif $limitsNeededinExcessLayer == '4M'}$4,000,000.00{elseif $limitsNeededinExcessLayer == '5M'}$5,000,000.00{elseif $limitsNeededinExcessLayer == 'all'}ALL{/if}
-                    </span>
-                    {/if}
-                </p>
-                <p class="ml-4 mt-4 mb-4">
-                    {if $excessCgl == true || $excessCgl == "true"}
-                        <input id="Excess CGL Only" type="checkbox" name="Excess CGL Only" checked readonly />
-                        <label for="Excess CGL Only">Excess CGL Only</label>
-                    {else}
-                        <input id="Excess CGL Only" type="checkbox" name="Excess CGL Only" readonly />
-                        <label for="Excess CGL Only">Excess CGL Only</label>
-                    {/if}
-                    <br>
-                    {if $excessAutoLiability == true || $excessAutoLiability == "true"}
-                        <input id="Excess Auto Liability Only" type="checkbox" name="Excess Auto Liability Only" checked
-                            readonly />
-                        <label for="Excess Auto Liability Only">Excess Auto Liability Only</label>
-                    {else}
-                        <input id="Excess Auto Liability Only" type="checkbox" name="Excess Auto Liability Only" readonly />
-                        <label for="Excess Auto Liability Only">Excess Auto Liability Only</label>
-                    {/if}
-                    <br>
-                    {if $excessEmployersLiability == true || $excessEmployersLiability == "true"}
-                        <input id="Excess GL/Auto/WC EL" type="checkbox" name="Excess GL/Auto/WC EL" checked readonly />
-                        <label for="Excess GL/Auto/WC EL">Excess GL/Auto/WC EL</label>
-                    {else}
-                        <input id="Excess GL/Auto/WC EL" type="checkbox" name="Excess GL/Auto/WC EL" readonly />
-                        <label for="Excess GL/Auto/WC EL">Excess GL/Auto/WC EL</label>
-                    {/if}
-                    <br>
-                    {if $excessGlAl == true || $excessGlAl == "true"}
-                        <input id="Excess (GL + AL only)" type="checkbox" name="Excess (GL + AL only)" checked readonly />
-                        <label for="Excess (GL + AL only)">Excess (GL + AL only)</label>
-                    {else}
-                        <input id="Excess (GL + AL only)" type="checkbox" name="Excess (GL + AL only)" readonly />
-                        <label for="Excess (GL + AL only)">Excess (GL + AL only)</label>
-                    {/if}
-                    <br>
-                </p>
-                <p>
-                    <strong>Target Premium: </strong>
-                    {if ((isset($targetPremium) && $targetPremium != ""))}
-                        <span class="underline">${$targetPremium}</span>
-                    {else}
-                        <span>__________________</span>
-                    {/if}
-                    </span>
-                </p>
+                            <input id="isThisQuoteInExcessOfThePrimaryLimit_N" type="checkbox"
+                                name="isThisQuoteInExcessOfThePrimaryLimit_N" readonly />
+                            <label for="isThisQuoteInExcessOfThePrimaryLimit_N">N</label>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left"style="width:35%;">
+                        If No, advise what limit is this quote excess of:
+                    </div>
+                    <div class="float-left underline" style="width:55%;">
+                        {if ((isset($ifNoAdviseWhatLimitIsThisQuoteExcessOf) && $ifNoAdviseWhatLimitIsThisQuoteExcessOf != ""))}
+                            <span>{$ifNoAdviseWhatLimitIsThisQuoteExcessOf}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <strong>Coverage(s) Requested:</strong>
+                    <br><br>
+                    <div class="float-left col-30">
+                        <strong>Limits Needed in Excess Layer:</strong>
+                    </div>
+                    <div class="float-left col-40 underline">
+                        {if $limitsNeededinExcessLayer && $limitsNeededinExcessLayer != ""}
+                            {if $limitsNeededinExcessLayer == '1M'}
+                                <span>$1,000,000.00</span>
+                            {elseif $limitsNeededinExcessLayer == '2M'}
+                                <span>$2,000,000.00</span>
+                            {elseif $limitsNeededinExcessLayer == '3M'}
+                                <span>$3,000,000.00</span>
+                            {elseif $limitsNeededinExcessLayer == '4M'}
+                                <span>$4,000,000.00</span>
+                            {elseif $limitsNeededinExcessLayer == '5M'}
+                                <span>$5,000,000.00</span>
+                            {elseif $limitsNeededinExcessLayer == 'all'}
+                                <span>ALL</span>
+                            {/if}
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="col-100 ml-4">
+                        {if $excessCgl == true || $excessCgl == "true"}
+                            <input id="Excess CGL Only" type="checkbox" name="Excess CGL Only" checked readonly />
+                            <label for="Excess CGL Only">Excess CGL Only</label>
+                        {else}
+                            <input id="Excess CGL Only" type="checkbox" name="Excess CGL Only" readonly />
+                            <label for="Excess CGL Only">Excess CGL Only</label>
+                        {/if}
+                        <br>
+                        {if $excessAutoLiability == true || $excessAutoLiability == "true"}
+                            <input id="Excess Auto Liability Only" type="checkbox" name="Excess Auto Liability Only" checked
+                                readonly />
+                            <label for="Excess Auto Liability Only">Excess Auto Liability Only</label>
+                        {else}
+                            <input id="Excess Auto Liability Only" type="checkbox" name="Excess Auto Liability Only"
+                                readonly />
+                            <label for="Excess Auto Liability Only">Excess Auto Liability Only</label>
+                        {/if}
+                        <br>
+                        {if $excessEmployersLiability == true || $excessEmployersLiability == "true"}
+                            <input id="Excess GL/Auto/WC EL" type="checkbox" name="Excess GL/Auto/WC EL" checked readonly />
+                            <label for="Excess GL/Auto/WC EL">Excess GL/Auto/WC EL</label>
+                        {else}
+                            <input id="Excess GL/Auto/WC EL" type="checkbox" name="Excess GL/Auto/WC EL" readonly />
+                            <label for="Excess GL/Auto/WC EL">Excess GL/Auto/WC EL</label>
+                        {/if}
+                        <br>
+                        {if $excessGlAl == true || $excessGlAl == "true"}
+                            <input id="Excess (GL + AL only)" type="checkbox" name="Excess (GL + AL only)" checked
+                                readonly />
+                            <label for="Excess (GL + AL only)">Excess (GL + AL only)</label>
+                        {else}
+                            <input id="Excess (GL + AL only)" type="checkbox" name="Excess (GL + AL only)" readonly />
+                            <label for="Excess (GL + AL only)">Excess (GL + AL only)</label>
+                        {/if}
+                        <br>
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-20">
+                        <strong>Target Premium: </strong></div>
+                    <div class="float-left col-40 underline">
+                        {if ((isset($targetPremium) && $targetPremium != ""))}
+                            <span>${$targetPremium}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
                 <table>
                     <tr>
                         <th><strong>Prior Excess Coverage(s)<strong> (Check all that apply):</th>
                         <th><strong>Carrier</strong></th>
                         <th><strong>Expiring Premium</strong></th>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $excessCovCgl == true || $excessCovCgl == "true"}
                                 <input id="Excess CGL" type="checkbox" name="Excess CGL" checked readonly />
@@ -515,22 +643,22 @@
                                 <label for="Excess CGL">Excess CGL</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($excessCovCglCarrier) && $excessCovCglCarrier != ""))}
-                                <span class="underline">{$excessCovCglCarrier}</span>
+                                <span>{$excessCovCglCarrier}</span>
                             {else}
-                                <span>__________________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($excessCovCglPremium) && $excessCovCglPremium != ""))}
-                                <span class="underline">${$excessCovCglPremium}</span>
+                                <span>${$excessCovCglPremium}</span>
                             {else}
-                                <span>$__________________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $commercialAutoLiability == true || $commercialAutoLiability == "true"}
                                 <input id="Excess Auto Liability" type="checkbox" name="Excess Auto Liability" checked
@@ -541,22 +669,22 @@
                                 <label for="Excess Auto Liability">Excess Auto Liability</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($commercialAutoLiabilityCarrier) && $commercialAutoLiabilityCarrier != ""))}
-                                <span class="underline">{$commercialAutoLiabilityCarrier}</span>
+                                <span>{$commercialAutoLiabilityCarrier}</span>
                             {else}
-                                <span>__________________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($commercialAutoLiabilityPremium) && $commercialAutoLiabilityPremium != ""))}
-                                <span class="underline">${$commercialAutoLiabilityPremium}</span>
+                                <span>${$commercialAutoLiabilityPremium}</span>
                             {else}
-                                <span>$__________________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $employersLiability == true || $employersLiability == "true"}
                                 <input id="Excess GL/Auto/WC EL" type="checkbox" name="Excess GL/Auto/WC EL" checked
@@ -567,22 +695,22 @@
                                 <label for="Excess GL/Auto/WC EL">Excess GL/Auto/WC EL</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($employersLiabilityCarrier) && $employersLiabilityCarrier != ""))}
-                                <span class="underline">{$employersLiabilityCarrier}</span>
+                                <span>{$employersLiabilityCarrier}</span>
                             {else}
-                                <span>__________________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($employersLiabilityPremium) && $employersLiabilityPremium != ""))}
-                                <span class="underline">${$employersLiabilityPremium}</span>
+                                <span>${$employersLiabilityPremium}</span>
                             {else}
-                                <span>$__________________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $excessCovGlAl == true || $excessCovGlAl == "true"}
                                 <input id="Excess (GL + AL only)" type="checkbox" name="Excess (GL + AL only)" checked
@@ -593,22 +721,23 @@
                                 <label for="Excess (GL + AL only)">Excess (GL + AL only)</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($excessCovGlAlCarrier) && $excessCovGlAlCarrier != ""))}
-                                <span class="underline">{$excessCovGlAlCarrier}</span>
+                                <span>{$excessCovGlAlCarrier}</span>
                             {else}
-                                <span>__________________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($excessCovGlAlPremium) && $excessCovGlAlPremium != ""))}
-                                <span class="underline">${$excessCovGlAlPremium}</span>
+                                <span>${$excessCovGlAlPremium}</span>
                             {else}
-                                <span>$__________________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                 </table>
+                <br><br>
                 <table>
                     <tr>
                         <th><strong>Summary of Underlying Coverage(s):</strong></th>
@@ -617,7 +746,7 @@
                         <th><strong>Premium</strong></th>
                         <th><strong>Limit</strong></th>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $autoLiability == true || $autoLiability == "true"}
                                 <input id="Auto Liability" type="checkbox" name="Auto Liability" checked readonly />
@@ -627,78 +756,80 @@
                                 <label for="Auto Liability">Auto Liability</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($autoLiabilityDeduct) && $autoLiabilityDeduct != ""))}
-                                <span class="underline">${$autoLiabilityDeduct}</span>
+                                <span>${$autoLiabilityDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($autoLiabilityCarrier) && $autoLiabilityCarrier != ""))}
-                                <span class="underline">{$autoLiabilityCarrier}</span>
+                                <span>{$autoLiabilityCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($autoLiabilityPremium) && $autoLiabilityPremium != ""))}
-                                <span class="underline">${$autoLiabilityPremium}</span>
+                                <span>${$autoLiabilityPremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
 
                             {if ((isset($autoLiabilityLimit) && $autoLiabilityLimit != ""))}
-                                <span class="underline">${$autoLiabilityLimit}</span>
+                                <span>${$autoLiabilityLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $personalInjuryProtectionPip == true || $personalInjuryProtectionPip == "true"}
                                 <input id="Personal Injury Protection (PIP)" type="checkbox"
                                     name="Personal Injury Protection (PIP)" checked readonly />
-                                <label for="Personal Injury Protection (PIP)">Personal Injury Protection (PIP)</label>
+                                <label for="Personal Injury Protection (PIP)">Personal Injury Protection
+                                    (PIP)</label>
                             {else}
                                 <input id="Personal Injury Protection (PIP)" type="checkbox"
                                     name="Personal Injury Protection (PIP)" readonly />
-                                <label for="Personal Injury Protection (PIP)">Personal Injury Protection (PIP)</label>
+                                <label for="Personal Injury Protection (PIP)">Personal Injury Protection
+                                    (PIP)</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($personalInjuryProtectionPipDeduct) && $personalInjuryProtectionPipDeduct != ""))}
-                                <span class="underline">${$personalInjuryProtectionPipDeduct}</span>
+                                <span>${$personalInjuryProtectionPipDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($personalInjuryProtectionPipCarrier) && $personalInjuryProtectionPipCarrier != ""))}
-                                <span class="underline">{$personalInjuryProtectionPipCarrier}</span>
+                                <span>{$personalInjuryProtectionPipCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($personalInjuryProtectionPipPremium) && $personalInjuryProtectionPipPremium != ""))}
-                                <span class="underline">${$personalInjuryProtectionPipPremium}</span>
+                                <span>${$personalInjuryProtectionPipPremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($personalInjuryProtectionPipLimit) && $personalInjuryProtectionPipLimit != ""))}
-                                <span class="underline">${$personalInjuryProtectionPipLimit}</span>
+                                <span>${$personalInjuryProtectionPipLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $umUim == true || $umUim == "true"}
                                 <input id="UM/UIM" type="checkbox" name="UM/UIM" checked readonly />
@@ -708,36 +839,36 @@
                                 <label for="UM/UIM">UM/UIM</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umUimDeduct) && $umUimDeduct != ""))}
-                                <span class="underline">${$umUimDeduct}</span>
+                                <span>${$umUimDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umUimCarrier) && $umUimCarrier != ""))}
-                                <span class="underline">{$umUimCarrier}</span>
+                                <span>{$umUimCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umUimPremium) && $umUimPremium != ""))}
-                                <span class="underline">${$umUimPremium}</span>
+                                <span>${$umUimPremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umUimLimit) && $umUimLimit != ""))}
-                                <span class="underline">${$umUimLimit}</span>
+                                <span>${$umUimLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $companyPhysicalDamage == true || $companyPhysicalDamage == "true"}
                                 <input id="Company Physical Damage" type="checkbox" name="Company Physical Damage" checked
@@ -749,36 +880,36 @@
                                 <label for="Company Physical Damage">Company Physical Damage</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($companyPhysicalDamageDeduct) && $companyPhysicalDamageDeduct != ""))}
-                                <span class="underline">${$companyPhysicalDamageDeduct}</span>
+                                <span>${$companyPhysicalDamageDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($companyPhysicalDamageCarrier) && $companyPhysicalDamageCarrier != ""))}
-                                <span class="underline">{$companyPhysicalDamageCarrier}</span>
+                                <span>{$companyPhysicalDamageCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($companyPhysicalDamagePremium) && $companyPhysicalDamagePremium != ""))}
-                                <span class="underline">${$companyPhysicalDamagePremium}</span>
+                                <span>${$companyPhysicalDamagePremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($companyPhysicalDamageLimit) && $companyPhysicalDamageLimit != ""))}
-                                <span class="underline">${$companyPhysicalDamageLimit}</span>
+                                <span>${$companyPhysicalDamageLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $hiredAuto == true || $hiredAuto == "true"}
                                 <input id="Hired Auto" type="checkbox" name="Hired Auto" checked readonly />
@@ -788,35 +919,35 @@
                                 <label for="Hired Auto">Hired Auto</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($hiredAutoDeduct) && $hiredAutoDeduct != ""))}
-                                <span class="underline">${$hiredAutoDeduct}</span>
+                                <span>${$hiredAutoDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($hiredAutoCarrier) && $hiredAutoCarrier != ""))}
-                                <span class="underline">{$hiredAutoCarrier}</span>
+                                <span>{$hiredAutoCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($hiredAutoPremium) && $hiredAutoPremium != ""))}
-                                <span class="underline">${$hiredAutoPremium}</span>
+                                <span>${$hiredAutoPremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($hiredAutoLimit) && $hiredAutoLimit != ""))}
-                                <span class="underline">${$hiredAutoLimit}</span>
+                                <span>${$hiredAutoLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $trailerInterchange == true || $trailerInterchange == "true"}
                                 <input id="Trailer Interchange" type="checkbox" name="Trailer Interchange" checked
@@ -827,36 +958,36 @@
                                 <label for="Trailer Interchange">Trailer Interchange</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($trailerInterchangeDeduct) && $trailerInterchangeDeduct != ""))}
-                                <span class="underline">${$trailerInterchangeDeduct}</span>
+                                <span>${$trailerInterchangeDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($trailerInterchangeCarrier) && $trailerInterchangeCarrier != ""))}
-                                <span class="underline">{$trailerInterchangeCarrier}</span>
+                                <span>{$trailerInterchangeCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($trailerInterchangePremium) && $trailerInterchangePremium != ""))}
-                                <span class="underline">${$trailerInterchangePremium}</span>
+                                <span>${$trailerInterchangePremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($trailerInterchangeLimit) && $trailerInterchangeLimit != ""))}
-                                <span class="underline">${$trailerInterchangeLimit}</span>
+                                <span>${$trailerInterchangeLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $generalLiability == true || $generalLiability == "true"}
                                 <input id="General Liability" type="checkbox" name="General Liability" checked readonly />
@@ -866,36 +997,36 @@
                                 <label for="General Liability">General Liability</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($generalLiabilityDeduct) && $generalLiabilityDeduct != ""))}
-                                <span class="underline">${$generalLiabilityDeduct}</span>
+                                <span>${$generalLiabilityDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($generalLiabilityCarrier) && $generalLiabilityCarrier != ""))}
-                                <span class="underline">{$generalLiabilityCarrier}</span>
+                                <span>{$generalLiabilityCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($generalLiabilityPremium) && $generalLiabilityPremium != ""))}
-                                <span class="underline">${$generalLiabilityPremium}</span>
+                                <span>${$generalLiabilityPremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($generalLiabilityLimit) && $generalLiabilityLimit != ""))}
-                                <span class="underline">${$generalLiabilityLimit}</span>
+                                <span>${$generalLiabilityLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $umbrella == true || $umbrella == "true"}
                                 <input id="Umbrella" type="checkbox" name="Umbrella" checked readonly />
@@ -905,36 +1036,36 @@
                                 <label for="Umbrella">Umbrella</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umbrellaDeduct) && $umbrellaDeduct != ""))}
-                                <span class="underline">${$umbrellaDeduct}</span>
+                                <span>${$umbrellaDeduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umbrellaCarrier) && $umbrellaCarrier != ""))}
-                                <span class="underline">{$umbrellaCarrier}</span>
+                                <span>{$umbrellaCarrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umbrellaPremium) && $umbrellaPremium != ""))}
-                                <span class="underline">${$umbrellaPremium}</span>
+                                <span>${$umbrellaPremium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($umbrellaLimit) && $umbrellaLimit != ""))}
-                                <span class="underline">${$umbrellaLimit}</span>
+                                <span>${$umbrellaLimit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $employersLiability1 == true || $employersLiability1 == "true"}
                                 <input id="Employee Liability" type="checkbox" name="Employee Liability" checked readonly />
@@ -944,36 +1075,36 @@
                                 <label for="Employee Liability">Employee Liability</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($employersLiability1Deduct) && $employersLiability1Deduct != ""))}
-                                <span class="underline">${$employersLiability1Deduct}</span>
+                                <span>${$employersLiability1Deduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($employersLiability1Carrier) && $employersLiability1Carrier != ""))}
-                                <span class="underline">{$employersLiability1Carrier}</span>
+                                <span>{$employersLiability1Carrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($employersLiability1Premium) && $employersLiability1Premium != ""))}
-                                <span class="underline">${$employersLiability1Premium}</span>
+                                <span>${$employersLiability1Premium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($employersLiability1Limit) && $employersLiability1Limit != ""))}
-                                <span class="underline">${$employersLiability1Limit}</span>
+                                <span>${$employersLiability1Limit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="ml-4">
                         <td>
                             {if $garageLiability1 == true || $garageLiability1 == "true"}
                                 <input id="Garage Liability" type="checkbox" name="Garage Liability" checked readonly />
@@ -983,56 +1114,70 @@
                                 <label for="Garage Liability">Garage Liability</label>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($garageLiability1Deduct) && $garageLiability1Deduct != ""))}
-                                <span class="underline">${$garageLiability1Deduct}</span>
+                                <span>${$garageLiability1Deduct}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($garageLiability1Carrier) && $garageLiability1Carrier != ""))}
-                                <span class="underline">${$garageLiability1Carrier}</span>
+                                <span>${$garageLiability1Carrier}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($garageLiability1Premium) && $garageLiability1Premium != ""))}
-                                <span class="underline">${$garageLiability1Premium}</span>
+                                <span>${$garageLiability1Premium}</span>
                             {else}
-                                <span>$_______________</span>
+                                <span>$&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($garageLiability1Limit) && $garageLiability1Limit != ""))}
-                                <span class="underline">${$garageLiability1Limit}</span>
+                                <span>${$garageLiability1Limit}</span>
                             {else}
-                                <span>_______________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                 </table>
-                <div class="ml-4 mt-4 mb-4">
-                    <strong>Total Units</strong>
-                    {if ((isset($totalUnits) && $totalUnits != ""))}
-                        <span class="underline">{$totalUnits}</span><br>
-                    {else}
-                        __________________<br>
-                    {/if}
-                    <strong>Garage Liability Revenue</strong>
-                    {if ((isset($garageLiabilityRevenue) && $garageLiabilityRevenue != ""))}
-                        <span class="underline">{$garageLiabilityRevenue}</span><br>
-                    {else}
-                        __________________ <br>
-                    {/if}
+                <br><br>
+                <div class="ml-4 pl-4 row">
+                    <div class="float-left col-10">
+                        <strong>Total Units</strong>
+                    </div>
+                    <div class="float-left col-30 underline">
+                        {if ((isset($totalUnits) && $totalUnits != ""))}
+                            <span>{$totalUnits}</span><br>
+                        {else}
+                            &nbsp;&nbsp;&nbsp;<br>
+                        {/if}
+                    </div>
                 </div>
+                <br><br>
+                <div class="ml-4 pl-4 row">
+                    <div class="float-left" style="width: 25%;">
+                    <strong>Garage Liability Revenue</strong>
+                    </div>
+                    <div class="float-left col-30 underline">
+                        {if ((isset($garageLiabilityRevenue) && $garageLiabilityRevenue != ""))}
+                            <span>{$garageLiabilityRevenue}</span><br>
+                        {else}
+                            &nbsp;&nbsp;&nbsp; <br>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
                 <p class="continued">SECTION 1: GENERAL INFORMATION, continued</p>
                 <p>
-                    <strong>Provide brief description of Operations and Ownership/Management experience:
-                    {if isset($descriptionOfOperations) && $descriptionOfOperations != ""}
-                    </strong><br>{$descriptionOfOperations}<br>
+                    <strong>Provide brief description of Operations and Ownership/Management experience: </strong>
+                        {if isset($descriptionOfOperations) && $descriptionOfOperations != ""}
+                        <br>{$descriptionOfOperations}<br>
                     {/if}
+                    <br><br>
                 </p>
                 <strong>Garage Locations:</strong><br>
                 <table>
@@ -1045,25 +1190,25 @@
                         <tr>
                             <td>#{$key+1}.</td>
 
-                            <td>
+                            <td class="underline pr-4">
                                 {if ((isset($item.garageLocAddress) && $item.garageLocAddress != "")) && ((isset($item.garageLocCity) && $item.garageLocCity != "")) && ((isset($item.garageLocState.name) && $item.garageLocState.name != "")) && ((isset($item.garageLocZipCode) && $item.garageLocZipCode != ""))}
-                                    <span
-                                        class="underline">{$item.garageLocAddress},{$item.garageLocCity},{$item.garageLocState.name},{$item.garageLocZipCode}</span><br>
+                                    <span>{$item.garageLocAddress},{$item.garageLocCity},{$item.garageLocState.name},{$item.garageLocZipCode}</span><br>
                                 {else}
-                                    __________________<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
                                 {/if}
                             </td>
 
-                            <td>
+                            <td class="underline pr-4">
                                 {if ((isset($item.garageLocUnitsEachLocation) && $item.garageLocUnitsEachLocation != ""))}
-                                    <span class="underline">{$item.garageLocUnitsEachLocation}</span><br>
+                                    <span>{$item.garageLocUnitsEachLocation}</span><br>
                                 {else}
-                                    __________________<br>
+                                    &nbsp;&nbsp;&nbsp;<br>
                                 {/if}
                             </td>
                         </tr>
                     {/foreach}
                 </table>
+                <br><br>
                 <table>
                     <tr>
                         <th><strong>Type of Operation</strong></th>
@@ -1074,171 +1219,226 @@
                     <tr>
                         <td>
                             Flatbed
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($flatbed) && $flatbed != ""))}
-                                <span class="underline">{$flatbed}</span>%
+                                <span>{$flatbed}</span>%
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td>
                             0-50 Local
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($Local) && $Local != ""))}
-                                <span class="underline">{$Local}</span>%
+                                <span>{$Local}</span>%
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td>Private Passenger</td>
                         <td>
-                            {if ((isset($noOfPrivatePassengers) && $noOfPrivatePassengers != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($noOfPrivatePassengers) && $noOfPrivatePassengers != ""))}
                                 {$noOfPrivatePassengers}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Intermodal
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($intermodal) && $intermodal != ""))}
-                                <span class="underline">{$intermodal}</span>%
+                                <span>{$intermodal}</span>%
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td>
                             51-200 Intermediate
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($Intermediate) && $Intermediate != ""))}
-                                <span class="underline">{$Intermediate}</span>%
+                                <span>{$Intermediate}</span>%
 
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td>Light Truck</td>
                         <td>
-                            {if ((isset($noOfLightTruck) && $noOfLightTruck != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($noOfLightTruck) && $noOfLightTruck != ""))}
                                 {$noOfLightTruck}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Dry van
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($dryVan) && $dryVan != ""))}
-                                <span class="underline">{$dryVan}</span>%
+                                <span>{$dryVan}</span>%
 
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td>
                             201-Over Long Haul
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($flatbed) && $flatbed != ""))}
-                                <span class="underline">{$Local}</span>%
+                                <span>{$Local}</span>%
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td>Medium Truck</td>
                         <td>
-                            {if ((isset($noOfMediumTruck) && $noOfMediumTruck != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($noOfMediumTruck) && $noOfMediumTruck != ""))}
                                 {$noOfMediumTruck}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Tanker
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($tanker) && $tanker != ""))}
-                                <span class="underline">{$tanker}</span>%
+                                <span>{$tanker}</span>%
 
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td></td>
                         <td>Heavy Truck</td>
                         <td>
-                            {if ((isset($noOfHeavyTruck) && $noOfHeavyTruck != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($noOfHeavyTruck) && $noOfHeavyTruck != ""))}
                                 {$noOfHeavyTruck}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Refrigerated
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($refrigerated) && $refrigerated != ""))}
-                                <span class="underline">{$refrigerated}</span>%
+                                <span>{$refrigerated}</span>%
 
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td></td>
                         <td>Extra Heavy</td>
                         <td>
-                            {if ((isset($noOfExtraHeavy) && $noOfExtraHeavy != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($noOfExtraHeavy) && $noOfExtraHeavy != ""))}
                                 {$noOfExtraHeavy}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Dump
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($dump) && $dump != ""))}
-                                <span class="underline">{$dump}</span>%
+                                <span>{$dump}</span>%
 
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td></td>
                         <td>Cargo Van / Sprinter</td>
                         <td>
-                            {if ((isset($noOfCargoVan) && $noOfCargoVan != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($noOfCargoVan) && $noOfCargoVan != ""))}
                                 {$noOfCargoVan}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                     <tr>
                         <td>Other</td>
                         <td>
-                            {if ((isset($otherContent) && $otherContent != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($otherContent) && $otherContent != ""))}
                                 {$otherContent}
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Total</strong>
+                            <span></span>
+                            
+                            <span class="underline float-right" style="padding-right:15px; width:15%">
                             {if ((isset($total) && $total != ""))}
-                                <span class="underline">{$total}</span>%
+                                <span>{$total}</span>%
 
                             {else}
-                                <span>_________</span>%
+                                <span>&nbsp;&nbsp;&nbsp;</span>%
                             {/if}
+                            <span>
                         </td>
                         <td></td>
                         <td><strong>Total</strong></td>
                         <td>
-                            {if ((isset($finalTotal) && $finalTotal != ""))}
+                            
+                        <span class="underline float-right" style="padding-right:15px; width:15%">
+                        {if ((isset($finalTotal) && $finalTotal != ""))}
                                 {$finalTotal}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                        <span>
                         </td>
                     </tr>
                 </table>
@@ -1255,271 +1455,271 @@
                     </tr>
                     <tr>
                         <td>Projection (next 12 mos.)</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($truckingRevenue1)}
-                                $<span class="underline">{$truckingRevenue1}</span>
+                                $<span>{$truckingRevenue1}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($brokerageRevenue1)}
-                                $<span class="underline">{$brokerageRevenue1}</span>
+                                $<span>{$brokerageRevenue1}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($totalMiles1)}
-                                <span class="underline">{$totalMiles1}</span>
+                                <span>{$totalMiles1}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($companyOwnedPowerUnits1)}
-                                <span class="underline">{$companyOwnedPowerUnits1}</span>
+                                <span>{$companyOwnedPowerUnits1}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($ownerOperatorUnits1)}
-                                <span class="underline">{$ownerOperatorUnits1}</span>
+                                <span>{$ownerOperatorUnits1}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($subhaulers1)}
-                                <span class="underline">{$subhaulers1}</span>
+                                <span>{$subhaulers1}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>Current Policy Year</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($truckingRevenue2)}
-                                $<span class="underline">{$truckingRevenue2}</span>
+                                $<span>{$truckingRevenue2}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($brokerageRevenue2)}
-                                $<span class="underline">{$brokerageRevenue2}</span>
+                                $<span>{$brokerageRevenue2}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($totalMiles2)}
-                                <span class="underline">{$totalMiles2}</span>
+                                <span>{$totalMiles2}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($companyOwnedPowerUnits2)}
-                                <span class="underline">{$companyOwnedPowerUnits2}</span>
+                                <span>{$companyOwnedPowerUnits2}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($ownerOperatorUnits2)}
-                                <span class="underline">{$ownerOperatorUnits2}</span>
+                                <span>{$ownerOperatorUnits2}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($subhaulers2)}
-                                <span class="underline">{$subhaulers2}</span>
+                                <span>{$subhaulers2}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>1st Prior Year</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($truckingRevenue3)}
-                                $<span class="underline">{$truckingRevenue3}</span>
+                                $<span>{$truckingRevenue3}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($brokerageRevenue3)}
-                                $<span class="underline">{$brokerageRevenue3}</span>
+                                $<span>{$brokerageRevenue3}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($totalMiles3)}
-                                <span class="underline">{$totalMiles3}</span>
+                                <span>{$totalMiles3}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($companyOwnedPowerUnits3)}
-                                <span class="underline">{$companyOwnedPowerUnits3}</span>
+                                <span>{$companyOwnedPowerUnits3}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($ownerOperatorUnits3)}
-                                <span class="underline">{$ownerOperatorUnits3}</span>
+                                <span>{$ownerOperatorUnits3}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($subhaulers3)}
-                                <span class="underline">{$subhaulers3}</span>
+                                <span>{$subhaulers3}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>2nd Prior Year</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($truckingRevenue4)}
-                                $<span class="underline">{$truckingRevenue4}</span>
+                                $<span>{$truckingRevenue4}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($brokerageRevenue4)}
-                                $<span class="underline">{$brokerageRevenue4}</span>
+                                $<span>{$brokerageRevenue4}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($totalMiles4)}
-                                <span class="underline">{$totalMiles4}</span>
+                                <span>{$totalMiles4}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($companyOwnedPowerUnits4)}
-                                <span class="underline">{$companyOwnedPowerUnits4}</span>
+                                <span>{$companyOwnedPowerUnits4}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($ownerOperatorUnits4)}
-                                <span class="underline">{$ownerOperatorUnits4}</span>
+                                <span>{$ownerOperatorUnits4}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($subhaulers4)}
-                                <span class="underline">{$subhaulers4}</span>
+                                <span>{$subhaulers4}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>3rd Prior Year</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($truckingRevenue5)}
-                                $<span class="underline">{$truckingRevenue5}</span>
+                                $<span>{$truckingRevenue5}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($brokerageRevenue5)}
-                                $<span class="underline">{$brokerageRevenue5}</span>
+                                $<span>{$brokerageRevenue5}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($totalMiles5)}
-                                <span class="underline">{$totalMiles5}</span>
+                                <span>{$totalMiles5}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($companyOwnedPowerUnits5)}
-                                <span class="underline">{$companyOwnedPowerUnits5}</span>
+                                <span>{$companyOwnedPowerUnits5}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($ownerOperatorUnits5)}
-                                <span class="underline">{$ownerOperatorUnits5}</span>
+                                <span>{$ownerOperatorUnits5}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($subhaulers5)}
-                                <span class="underline">{$subhaulers5}</span>
+                                <span>{$subhaulers5}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>4th Prior Year</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($truckingRevenue6)}
-                                $<span class="underline">{$truckingRevenue6}</span>
+                                $<span>{$truckingRevenue6}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($brokerageRevenue6)}
-                                $<span class="underline">{$brokerageRevenue6}</span>
+                                $<span>{$brokerageRevenue6}</span>
                             {else}
-                                <span>$_________</span>
+                                <span>$&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($totalMiles6)}
-                                <span class="underline">{$totalMiles6}</span>
+                                <span>{$totalMiles6}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($companyOwnedPowerUnits6)}
-                                <span class="underline">{$companyOwnedPowerUnits6}</span>
+                                <span>{$companyOwnedPowerUnits6}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($ownerOperatorUnits6)}
-                                <span class="underline">{$ownerOperatorUnits6}</span>
+                                <span>{$ownerOperatorUnits6}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($subhaulers6)}
-                                <span class="underline">{$subhaulers6}</span>
+                                <span>{$subhaulers6}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
@@ -1753,20 +1953,22 @@
                         <td></td>
                         <td>
                             If yes, please provide name and DOT # (if applicable)
-
-                            {if isset($pleaseProvideName)}
-                                <span class="underline">{$pleaseProvideName}</span>
-                            {else}
-                                <span>_________,</span>
-                            {/if}
-                            {if isset($dot)}
-                                <span class="underline">{$dot}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
-
+                            <span class="float-left underline" style="width: 15%;">
+                                {if isset($pleaseProvideName)}
+                                    <span>{$pleaseProvideName}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </span>
+                            ,
+                            <span class="float-left underline" style="width: 15%;">
+                                {if isset($dot)}
+                                    <span>{$dot}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </span>
                         </td>
-
                     </tr>
                     <tr>
                         <td>7.</td>
@@ -1906,7 +2108,7 @@
                             {if isset($ofOperations)}
                                 <span class="underline">{$ofOperations}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             </td>
                         {/if}
 
@@ -2045,113 +2247,115 @@
             <div id="sectionContent">
                 <table width="100%" id="driverInfo">
                     <tr>
-                        <td width="33%">
+                        <td width="30%">
                             <table width="100%">
-                                <tr>
+                                <tr class="underline">
                                     <th><strong>Driver Types</strong></th>
                                     <th><strong>How Many #</strong></th>
                                 </tr>
                                 <tr>
                                     <td>Employees</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($employees1)}
                                             {$employees1}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Owner Operators</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($ownerOperators1)}
                                             {$ownerOperators1}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Subhaulers</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($subhaulers8)}
                                             {$subhaulers8}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Total</strong></td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($total3)}
                                             {$total3}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        <td width="33%">
+                        <td width="35%">
                             <table>
-                                <tr>
-                                    <th><strong>In the past year, how many drivers:</strong></th>
+                                <tr class="underline">
+                                    <th style="overflow: hidden; white-space: nowrap;"><strong>In the past year, how
+                                            many drivers:</strong></th>
                                 </tr>
-                                <tr>
+                                <tr style="margin-right:15px">
                                     <td>Hired</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($hired1)}
                                             {$hired1}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="margin-right:15px">
                                     <td>Terminated</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($terminated1)}
                                             {$terminated1}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        <td width="34%">
+                        <td width="35%">
                             <table>
-                                <tr>
-                                    <th><strong>What amount of experience is required:</strong></th>
+                                <tr class="underline">
+                                    <th style="overflow: hidden; white-space: nowrap;"><strong>What amount of experience
+                                            is required:</strong></th>
                                 </tr>
                                 <tr>
                                     <td>Miles driven</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($milesDriven1)}
                                             {$milesDriven1}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Years of driving</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($yearsOfDriving1)}
                                             {$yearsOfDriving1}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Minimum Age</td>
-                                    <td>
+                                    <td class="underline pr-4">
                                         {if isset($minimumAge1)}
                                             {$minimumAge1}
                                         {else}
-                                            <span>_________</span>
+                                            <span>&nbsp;&nbsp;&nbsp;</span>
                                         {/if}
                                     </td>
                                 </tr>
@@ -2162,16 +2366,12 @@
                 <br>
                 <strong>Driver selection procedures include</strong>
                 <table>
-                    <tr>
-                        <th>the use of:
-                            <hr>
-                        </th>
-                        <th>Wages base on:
-                            <hr>
-                        </th>
+                    <tr class="underline">
+                        <th>the use of:</th>
+                        <th>Wages base on:</th>
                     </tr>
                     <tr>
-                        {if $writtenApplication == true || $writtenApplication == "true"}  
+                        {if $writtenApplication == true || $writtenApplication == "true"}
                             <td>
                                 <input id="writtenApplication" type="checkbox" name="writtenApplication" checked readonly />
                                 <label for="writtenApplication">Written Application</label>
@@ -2179,10 +2379,10 @@
                         {else}
                             <td>
                                 <input id="writtenApplication" type="checkbox" name="writtenApplication" readonly />
-                                <label for="writtenApplication">Written Application</label> 
+                                <label for="writtenApplication">Written Application</label>
                             </td>
                         {/if}
-                        {if $hours == true || $hours == "true"}  
+                        {if $hours == true || $hours == "true"}
                             <td>
                                 <input id="hours" type="checkbox" name="hours" checked readonly />
                                 <label for="hours">Hours</label>
@@ -2195,7 +2395,7 @@
                         {/if}
                     </tr>
                     <tr>
-                        {if $drivingTests == true || $drivingTests == "true"}  
+                        {if $drivingTests == true || $drivingTests == "true"}
                             <td>
                                 <input id="drivingTests" type="checkbox" name="drivingTests" checked readonly />
                                 <label for="drivingTests">Driving Tests</label>
@@ -2280,11 +2480,13 @@
                         {/if}
                         <td>
                             <strong>Average annual driver pay: $</strong>
-                            {if isset($averageAnnualDriverPay)}
-                                <span class="underline">{$averageAnnualDriverPay}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                            <span class="underline">
+                                {if isset($averageAnnualDriverPay)}
+                                    <span>{$averageAnnualDriverPay}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </span>
                         </td>
                     </tr>
                     <tr>
@@ -2315,15 +2517,17 @@
                         {/if}
                         <td>
                             <strong>How often are drivers home?</strong>
-                            {if ((isset($howOftenAreDriversHome) && $howOftenAreDriversHome != ""))}
-                                <span class="underline">{$howOftenAreDriversHome}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                            <span class="underline">
+                                {if ((isset($howOftenAreDriversHome) && $howOftenAreDriversHome != ""))}
+                                    <span>{$howOftenAreDriversHome}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </span>
                         </td>
                     </tr>
                 </table>
-                <p class="continued">SECTION 2: DRIVER INFROMATION, continued</p>
+                <p class="continued">SECTION 2: DRIVER INFORMATION, continued</p>
                 <strong>If Owner/Operators are used:</strong><br>
                 <table>
                     <tr>
@@ -2887,7 +3091,7 @@
                             {if ((isset($whatActionIsTakenWhenDriversDevelopUnacceptableRecords) && $whatActionIsTakenWhenDriversDevelopUnacceptableRecords != ""))}
                                 <span class="underline">{$whatActionIsTakenWhenDriversDevelopUnacceptableRecords}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
@@ -2905,8 +3109,7 @@
             <div id="sectionContent">
                 <table>
                     <tr>
-                        <td>1.</td>
-                        <td>Is there a written maintenance program?</td>
+                        <td>1. Is there a written maintenance program?</td>
                         {if isset($survey4['isThereAWrittenMaintenanceProgram'])}
                             <td>
                                 {if $survey4.isThereAWrittenMaintenanceProgram == "yes"}
@@ -2942,142 +3145,146 @@
                         {/if}
                     </tr>
                     <tr>
-                        <td>2.</td>
-                        <td>
-                            Name of Maintenance Manager:
+                        <td>2. Name of Maintenance Manager:</td>
+                        <td class="underline pr-4">
                             {if ((isset($nameOfMaintenanceManager) && $nameOfMaintenanceManager != ""))}
                                 {$nameOfMaintenanceManager}
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
                         </td>
                     </tr>
                     <tr>
-                        <td>3.</td>
-                        <td>
-                            Years with company:
-                            {if ((isset($yearsWithCompany) && $yearsWithCompany != ""))}
-                                {$yearsWithCompany}
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                        <td>3.Years with company:</td>
+                        <td class="underline pr-4">
+                            
+                                {if ((isset($yearsWithCompany) && $yearsWithCompany != ""))}
+                                    {$yearsWithCompany}
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
                         </td>
                     </tr>
                     <tr>
-                        <td>4.</td>
-                        <td>
-                            Years in maintenance:
+                        <td>4. Years in maintenance:</td>
+                        <td class="underline pr-4">
+                            
+                            <span>
                             {if ((isset($yearsInMaintenance) && $yearsInMaintenance != ""))}
                                 {$yearsInMaintenance}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                            </span>
                         </td>
                     </tr>
                     <tr>
-                        <td>5.</td>
                         <td>
-                            # of full-time maintenance personnel:
+                            5. # of full-time maintenance personnel:
+                            <span class="underline">
                             {if ((isset($ofFullTimeMaintenancePersonnel) && $ofFullTimeMaintenancePersonnel != ""))}
                                 {$ofFullTimeMaintenancePersonnel}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
+                            </span>
                         </td>
                     </tr>
                     <tr>
-                        <td>6.</td>
                         <td>
-                            Maintenance program is provided for: (Check all that apply)<br>
-                            {if isset($companyVehicles) && $companyVehicles == true}
-                                <input id="companyVehicles" type="checkbox" name="companyVehicles" checked readonly />
-                                <label for="companyVehicles">Company Vehicles</label><br>
-                            {else}
-                                <input id="companyVehicles" type="checkbox" name="companyVehicles" readonly />
-                                <label for="companyVehicles">Company Vehicles</label><br>
-                            {/if}
-                            {if isset($ownerOperators2) && $ownerOperators2 == true}
-                                <input id="ownerOperators2" type="checkbox" name="ownerOperators2" checked readonly />
-                                <label for="ownerOperators2">Owner/Operators</label><br>
-                            {else}
-                                <input id="ownerOperators2" type="checkbox" name="ownerOperators2" readonly />
-                                <label for="ownerOperators2">Owner/Operators</label><br>
-                            {/if}
-                            {if isset($openToThePublic) && $openToThePublic == true}
-                                <input id="openToThePublic" type="checkbox" name="openToThePublic" checked readonly />
-                                <label for="openToThePublic">Open to the public</label>
-                            {else}
-                                <input id="openToThePublic" type="checkbox" name="openToThePublic" readonly />
-                                <label for="openToThePublic">Open to the public</label>
-                            {/if}
+                            6. Maintenance program is provided for: (Check all that apply)<br>
+                            <div class="pl-4">
+                                {if isset($companyVehicles) && $companyVehicles == true}
+                                    <input id="companyVehicles" type="checkbox" name="companyVehicles" checked readonly />
+                                    <label for="companyVehicles">Company Vehicles</label><br>
+                                {else}
+                                    <input id="companyVehicles" type="checkbox" name="companyVehicles" readonly />
+                                    <label for="companyVehicles">Company Vehicles</label><br>
+                                {/if}
+                                {if isset($ownerOperators2) && $ownerOperators2 == true}
+                                    <input id="ownerOperators2" type="checkbox" name="ownerOperators2" checked readonly />
+                                    <label for="ownerOperators2">Owner/Operators</label><br>
+                                {else}
+                                    <input id="ownerOperators2" type="checkbox" name="ownerOperators2" readonly />
+                                    <label for="ownerOperators2">Owner/Operators</label><br>
+                                {/if}
+                                {if isset($openToThePublic) && $openToThePublic == true}
+                                    <input id="openToThePublic" type="checkbox" name="openToThePublic" checked readonly />
+                                    <label for="openToThePublic">Open to the public</label>
+                                {else}
+                                    <input id="openToThePublic" type="checkbox" name="openToThePublic" readonly />
+                                    <label for="openToThePublic">Open to the public</label>
+                                {/if}
+                            </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>7.</td>
                         <td>
-                            Vehicle Maintenance is: (Check all that apply)<br>
-                            {if isset($internal) && $internal == true}
-                                <input id="internal" type="checkbox" name="internal" checked readonly />
-                                <label for="internal">Internal</label><br>
-                            {else}
-                                <input id="internal" type="checkbox" name="internal" readonly />
-                                <label for="internal">Internal</label><br>
-                            {/if}
-                            {if isset($externalBody) && $externalBody == true}
-                                <input id="externalBody" type="checkbox" name="externalBody" checked readonly />
-                                <label for="externalBody">External (Body)</label><br>
-                            {else}
-                                <input id="externalBody" type="checkbox" name="externalBody" readonly />
-                                <label for="externalBody">External (Body)</label><br>
-                            {/if}
-                            {if isset($both) && $both == true}
-                                <input id="both" type="checkbox" name="both" checked readonly />
-                                <label for="both">Both</label>
-                            {else}
-                                <input id="both" type="checkbox" name="both" readonly />
-                                <label for="both">Both</label>
-                            {/if}
+                            7. Vehicle Maintenance is: (Check all that apply)<br>
+                            <div class="pl-4">
+                                {if isset($internal) && $internal == true}
+                                    <input id="internal" type="checkbox" name="internal" checked readonly />
+                                    <label for="internal">Internal</label><br>
+                                {else}
+                                    <input id="internal" type="checkbox" name="internal" readonly />
+                                    <label for="internal">Internal</label><br>
+                                {/if}
+                                {if isset($externalBody) && $externalBody == true}
+                                    <input id="externalBody" type="checkbox" name="externalBody" checked readonly />
+                                    <label for="externalBody">External (Body)</label><br>
+                                {else}
+                                    <input id="externalBody" type="checkbox" name="externalBody" readonly />
+                                    <label for="externalBody">External (Body)</label><br>
+                                {/if}
+                                {if isset($both) && $both == true}
+                                    <input id="both" type="checkbox" name="both" checked readonly />
+                                    <label for="both">Both</label>
+                                {else}
+                                    <input id="both" type="checkbox" name="both" readonly />
+                                    <label for="both">Both</label>
+                                {/if}
+                            </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>8.</td>
                         <td>
-                            Indicate which of the following you have: (Check all that apply)<br>
-                            {if isset($partsDepartment) && $partsDepartment == true}
-                                <input id="partsDepartment" type="checkbox" name="partsDepartment" checked readonly />
-                                <label for="partsDepartment">Parts department</label><br>
-                            {else}
-                                <input id="partsDepartment" type="checkbox" name="partsDepartment" readonly />
-                                <label for="partsDepartment">Parts department</label><br>
-                            {/if}
-                            {if isset($bodyShop) && $bodyShop == true}
-                                <input id="bodyShop" type="checkbox" name="bodyShop" checked readonly />
-                                <label for="bodyShop">Body shop</label><br>
-                            {else}
-                                <input id="bodyShop" type="checkbox" name="bodyShop" readonly />
-                                <label for="bodyShop">Body shop</label><br>
-                            {/if}
-                            {if isset($serviceBays) && $serviceBays == true}
-                                <input id="serviceBays" type="checkbox" name="serviceBays" checked readonly />
-                                <label for="serviceBays">Service bays</label><br>
-                            {else}
-                                <input id="serviceBays" type="checkbox" name="serviceBays" readonly />
-                                <label for="serviceBays">Service bays</label><br>
-                            {/if}
-                            {if isset($controlledInspectionReports) && $controlledInspectionReports == true}
-                                <input id="controlledInspectionReports" type="checkbox" name="controlledInspectionReports"
-                                    checked readonly />
-                                <label for="controlledInspectionReports">Controlled inspection reports</label>
-                            {else}
-                                <input id="controlledInspectionReports" type="checkbox" name="controlledInspectionReports"
-                                    readonly />
-                                <label for="controlledInspectionReports">Controlled inspection reports</label>
-                            {/if}
+                            8. Indicate which of the following you have: (Check all that apply)<br>
+                            <div class="pl-4">
+                                {if isset($partsDepartment) && $partsDepartment == true}
+                                    <input id="partsDepartment" type="checkbox" name="partsDepartment" checked readonly />
+                                    <label for="partsDepartment">Parts department</label><br>
+                                {else}
+                                    <input id="partsDepartment" type="checkbox" name="partsDepartment" readonly />
+                                    <label for="partsDepartment">Parts department</label><br>
+                                {/if}
+                                {if isset($bodyShop) && $bodyShop == true}
+                                    <input id="bodyShop" type="checkbox" name="bodyShop" checked readonly />
+                                    <label for="bodyShop">Body shop</label><br>
+                                {else}
+                                    <input id="bodyShop" type="checkbox" name="bodyShop" readonly />
+                                    <label for="bodyShop">Body shop</label><br>
+                                {/if}
+                                {if isset($serviceBays) && $serviceBays == true}
+                                    <input id="serviceBays" type="checkbox" name="serviceBays" checked readonly />
+                                    <label for="serviceBays">Service bays</label><br>
+                                {else}
+                                    <input id="serviceBays" type="checkbox" name="serviceBays" readonly />
+                                    <label for="serviceBays">Service bays</label><br>
+                                {/if}
+                                {if isset($controlledInspectionReports) && $controlledInspectionReports == true}
+                                    <input id="controlledInspectionReports" type="checkbox"
+                                        name="controlledInspectionReports" checked readonly />
+                                    <label for="controlledInspectionReports">Controlled inspection reports</label>
+                                {else}
+                                    <input id="controlledInspectionReports" type="checkbox"
+                                        name="controlledInspectionReports" readonly />
+                                    <label for="controlledInspectionReports">Controlled inspection reports</label>
+                                {/if}
+                            </div>
                         </td>
                     </tr>
                     <tr>
-                        <td>9.</td>
-                        <td>Are pre/post trip inspections made regularly?</td>
+                        <td>9. Are pre/post trip inspections made regularly?</td>
                         {if isset($survey4['arePrePostTripInspectionsMadeRegularly'])}
                             <td>
                                 {if $survey4.arePrePostTripInspectionsMadeRegularly == "yes"}
@@ -3113,8 +3320,7 @@
                         {/if}
                     </tr>
                     <tr>
-                        <td>10.</td>
-                        <td>Are all maintenance records on file?</td>
+                        <td>10. Are all maintenance records on file?</td>
                         {if isset($survey4['areAllMaintenanceRecordsOnFile'])}
                             <td>
                                 {if $survey4.areAllMaintenanceRecordsOnFile == "yes"}
@@ -3150,8 +3356,7 @@
                         {/if}
                     </tr>
                     <tr>
-                        <td>11.</td>
-                        <td>Are re-treads used?</td>
+                        <td>11. Are re-treads used?</td>
                         {if isset($survey4['areReTreadsUsed'])}
                             <td>
                                 {if $survey4.areReTreadsUsed == "yes"}
@@ -3196,117 +3401,139 @@
                 <strong>Attach copy of safety program</strong><br>
                 <table>
                     <tr>
-                        <td>1.</td>
                         <td>
-                            Name of Safety Director:
-                            {if ((isset($nameOfSafetyDirector) && $nameOfSafetyDirector != ""))}
-                                <span class="underline">{$nameOfSafetyDirector}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                            <div class="float-left col-40">
+                                1. Name of Safety Director:
+                            </div>
+                            <div class="float-left col-50 underline">
+                                {if ((isset($nameOfSafetyDirector) && $nameOfSafetyDirector != ""))}
+                                    <span>{$nameOfSafetyDirector}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </div>
                         </td>
 
                     </tr>
                     <tr>
-                        <td>2.</td>
                         <td>
-                            Years with company:
-                            {if isset($yearsWithCompany1)}
-                                <span class="underline">{$yearsWithCompany1}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                            <div class="float-left col-40">
+                                2. Years with company:
+                            </div>
+                            <div class="float-left col-50 underline">
+                                {if isset($yearsWithCompany1)}
+                                    <span>{$yearsWithCompany1}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </div>
                         </td>
 
                     </tr>
                     <tr>
-                        <td>3.</td>
                         <td>
-                            Years in safety field:
-                            {if isset($yearsInSafetyField)}
-                                <span class="underline">{$yearsInSafetyField}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                            <div class="float-left col-40">
+                                3. Years in safety field:
+                            </div>
+                            <div class="float-left col-50 underline">
+                                {if isset($yearsInSafetyField)}
+                                    <span>{$yearsInSafetyField}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </div>
+
                         </td>
 
                     </tr>
                     <tr>
-                        <td>4.</td>
+
                         <td>
-                            Safety director reports to:
-                            {if ((isset($safetyDirectorReportsTo) && $safetyDirectorReportsTo != ""))}
-                                <span class="underline">{$safetyDirectorReportsTo}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                            <div class="float-left col-40">
+                                4. Safety director reports to:
+                            </div>
+                            <div class="float-left col-50 underline">
+                                {if ((isset($safetyDirectorReportsTo) && $safetyDirectorReportsTo != ""))}
+                                    <span>{$safetyDirectorReportsTo}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </div>
                         </td>
 
                     </tr>
                     <tr>
-                        <td>5.</td>
+
                         <td>
-                            % of time spent on Safety:
-                            {if isset($ofTimeSpentOnSafety)}
-                                <span class="underline">{$ofTimeSpentOnSafety}</span>%
-                            {else}
-                                <span>_________%</span>
-                            {/if}
+                            <div class="float-left col-40">
+                                5. % of time spent on Safety:
+                            </div>
+                            <div class="float-left col-50 underline">
+                                {if isset($ofTimeSpentOnSafety)}
+                                    <span>{$ofTimeSpentOnSafety}</span>%
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>%
+                                {/if}
+                            </div>
                         </td>
 
                     </tr>
                     <tr>
-                        <td>6.</td>
-                        <td>Do you have a safety award program?</td>
+                        <td>
+                            6. Do you have a safety award program?
+                        </td>
                         {if isset($survey5['doYouHaveASafetyAwardProgram'])}
                             <td>
                                 {if $survey5.doYouHaveASafetyAwardProgram == "yes"}
-                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
-                                        name="doYouHaveASafetyAwardProgram" checked readonly />
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox" name="doYouHaveASafetyAwardProgram"
+                                        checked readonly />
                                     <label for="doYouHaveASafetyAwardProgram">Y</label>
                                 {else}
-                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
-                                        name="doYouHaveASafetyAwardProgram" readonly />
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox" name="doYouHaveASafetyAwardProgram"
+                                        readonly />
                                     <label for="doYouHaveASafetyAwardProgram">Y</label>
                                 {/if}
                             </td>
                             <td>
                                 {if $survey5.doYouHaveASafetyAwardProgram == "no"}
-                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
-                                        name="doYouHaveASafetyAwardProgram" checked readonly />
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox" name="doYouHaveASafetyAwardProgram"
+                                        checked readonly />
                                     <label for="doYouHaveASafetyAwardProgram">N</label>
                                 {else}
-                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox"
-                                        name="doYouHaveASafetyAwardProgram" readonly />
+                                    <input id="doYouHaveASafetyAwardProgram" type="checkbox" name="doYouHaveASafetyAwardProgram"
+                                        readonly />
                                     <label for="doYouHaveASafetyAwardProgram">N</label>
                                 {/if}
                             </td>
                         {else}
                             <td>
-                                <input id="doYouHaveASafetyAwardProgram" type="checkbox"
-                                    name="doYouHaveASafetyAwardProgram" readonly />
+                                <input id="doYouHaveASafetyAwardProgram" type="checkbox" name="doYouHaveASafetyAwardProgram"
+                                    readonly />
                                 <label for="doYouHaveASafetyAwardProgram">Y</label>
-                                <input id="doYouHaveASafetyAwardProgram" type="checkbox"
-                                    name="doYouHaveASafetyAwardProgram" readonly />
+                                <input id="doYouHaveASafetyAwardProgram" type="checkbox" name="doYouHaveASafetyAwardProgram"
+                                    readonly />
                                 <label for="doYouHaveASafetyAwardProgram">N</label>
                             </td>
                         {/if}
                     </tr>
                     <tr>
-                        <td>7.</td>
                         <td>
-                            How often are safety meetings held?
-                            {if ((isset($howOftenAreSafetyMeetingsHeld) && $howOftenAreSafetyMeetingsHeld != ""))}
-                                <span class="underline">{$howOftenAreSafetyMeetingsHeld}</span>
-                            {else}
-                                <span>_________</span>
-                            {/if}
+                            <div class="float-left col-40">
+                                7. How often are safety meetings held?
+                            </div>
+                            <div class="float-left col-50 underline">
+                                {if ((isset($howOftenAreSafetyMeetingsHeld) && $howOftenAreSafetyMeetingsHeld != ""))}
+                                    <span>{$howOftenAreSafetyMeetingsHeld}</span>
+                                {else}
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                {/if}
+                            </div>
+
                         </td>
 
                     </tr>
                     <tr>
-                        <td>8.</td>
-                        <td>Are safety meetings mandatory?</td>
+                        <td>8. Are safety meetings mandatory?</td>
                         {if isset($survey5['areSafetyMeetingsMandatory'])}
                             <td>
                                 {if $survey5.areSafetyMeetingsMandatory == "yes"}
@@ -3342,8 +3569,7 @@
                         {/if}
                     </tr>
                     <tr>
-                        <td>9.</td>
-                        <td>Is remedial training required for drivers with accidents/speeding?</td>
+                        <td>9. Is remedial training required for drivers with accidents/speeding?</td>
                         {if isset($survey5['isRemedialTrainingRequiredForDriversWithAccidentsSpeeding'])}
                             <td>
                                 {if $survey5.isRemedialTrainingRequiredForDriversWithAccidentsSpeeding == "yes"}
@@ -3379,8 +3605,7 @@
                         {/if}
                     </tr>
                     <tr>
-                        <td>10.</td>
-                        <td>Do you maintain an accident register & conduct periodic accident analysis?</td>
+                        <td>10. Do you maintain an accident register & conduct periodic accident analysis?</td>
                         {if isset($survey5['doYouMaintainAnAccidentRegisterConductPeriodicAccidentAnalysis'])}
                             <td>
                                 {if $survey5.doYouMaintainAnAccidentRegisterConductPeriodicAccidentAnalysis == "yes"}
@@ -3428,137 +3653,137 @@
                     </tr>
                     <tr>
                         <td>Accident Event Recorder - self managed:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($accidentEventRecorderSelfManagedFleet)}
-                                <span class="underline">{$accidentEventRecorderSelfManagedFleet}</span>%
+                                <span>{$accidentEventRecorderSelfManagedFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($accidentEventRecorderSelfmanagedDate) && $accidentEventRecorderSelfmanagedDate != ""))}
-                                <span class="underline">{$accidentEventRecorderSelfmanagedDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$accidentEventRecorderSelfmanagedDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>Accident Event Recorder - third party reporting:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($accidentEventRecThirdPartyReportingFleet)}
-                                <span class="underline">{$accidentEventRecThirdPartyReportingFleet}</span>%
+                                <span>{$accidentEventRecThirdPartyReportingFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($accidentEventRecThirdPartyReportingDate) && $accidentEventRecThirdPartyReportingDate != ""))}
-                                <span class="underline">{$accidentEventRecThirdPartyReportingDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$accidentEventRecThirdPartyReportingDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>Electronic Logging Device:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($electronicLoggingDeviceFleet)}
-                                <span class="underline">{$electronicLoggingDeviceFleet}</span>%
+                                <span>{$electronicLoggingDeviceFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($electronicLoggingDeviceDate) && $electronicLoggingDeviceDate != ""))}
-                                <span class="underline">{$electronicLoggingDeviceDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$electronicLoggingDeviceDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>Collision Avoidance:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($collisionAvoidanceFleet)}
-                                <span class="underline">{$collisionAvoidanceFleet}</span>%
+                                <span>{$collisionAvoidanceFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($collisionAvoidanceDate) && $collisionAvoidanceDate != ""))}
-                                <span class="underline">{$collisionAvoidanceDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$collisionAvoidanceDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>In Vehicle Camera:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($inVehicleCameraFleet)}
-                                <span class="underline">{$inVehicleCameraFleet}</span>%
+                                <span>{$inVehicleCameraFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($inVehicleCameraDate) && $inVehicleCameraDate != ""))}
-                                <span class="underline">{$inVehicleCameraDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$inVehicleCameraDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>Anti-Rollover Device:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($antiRolloverDeviceFleet)}
-                                <span class="underline">{$antiRolloverDeviceFleet}</span>%
+                                <span>{$antiRolloverDeviceFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($antiRolloverDeviceDate) && $antiRolloverDeviceDate != ""))}
-                                <span class="underline">{$antiRolloverDeviceDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$antiRolloverDeviceDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>Telematics:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($telematicsFleet)}
-                                <span class="underline">{$telematicsFleet}</span>%
+                                <span>{$telematicsFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($telematicsDate) && $telematicsDate != ""))}
-                                <span class="underline">{$telematicsDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$telematicsDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>Other:</td>
-                        <td>
+                        <td class="underline pr-4">
                             {if isset($otherFleet)}
-                                <span class="underline">{$otherFleet}</span>%
+                                <span>{$otherFleet}</span>%
                             {else}
-                                <span>_________%</span>
+                                <span>&nbsp;&nbsp;%</span>
                             {/if}
                         </td>
-                        <td>
+                        <td class="underline pr-4">
                             {if ((isset($otherFleetDate) && $otherFleetDate != ""))}
-                                <span class="underline">{$otherFleetDate|date_format:"%m/%d/%Y"}</span>
+                                <span>{$otherFleetDate|date_format:"%m/%d/%Y"}</span>
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
@@ -3591,20 +3816,20 @@
                     {foreach from=$generalLiabilityList item=item key=key}
                         <tr>
                             <td>
-                                {$key+1}.
+                                #{$key+1}.
                             </td>
                             <td>
                                 {if isset($item['generalLiabilityAddress'])}
                                     {$item.generalLiabilityAddress}
                                 {else}
-                                    <span>_________</span>
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
                                 {/if}
                             </td>
                             <td>
                                 {if isset($item['generalLiabilityFunction'])}
                                     {$item['generalLiabilityFunction']}
                                 {else}
-                                    <span>_________</span>
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
                                 {/if}
                             </td>
                             <td class="rotated-data">
@@ -3639,20 +3864,21 @@
                                 {if isset($item['gLNoOfEmployees'])}
                                     {$item.gLNoOfEmployees}
                                 {else}
-                                    <span>_________</span>
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
                                 {/if}
                             </td>
                             <td>
                                 {if isset($item['generalLiabilityOwnedLeased'])}
                                     {$item.generalLiabilityOwnedLeased}
                                 {else}
-                                    <span>_________</span>
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
                                 {/if}
                             </td>
                         </tr>
                     {/foreach}
                 </table>
-                <table>
+                <br><br>
+                <table class="ml-4">
                     <tr>
                         <td>1.</td>
                         <td>Is Insured involved in any business activity other than trucking?</td>
@@ -3881,62 +4107,92 @@
                             {if isset($ifYesToAnyOfTheAbovePleaseExplain1)}
                                 {$ifYesToAnyOfTheAbovePleaseExplain1}
                             {else}
-                                <span>_________</span>
+                                <span>&nbsp;&nbsp;&nbsp;</span>
                             {/if}
                         </td>
                     </tr>
                 </table>
                 <p class="continued">SECTION 6: GENERAL LIABILITY, continued</p>
-                <p>
-                    <strong>Limits of coverage:</strong><br>
-                    General Aggregate Limit (other than products-completed operations):
-                    {if isset($generalAggregateLimitOtherThanProductsCompletedOperations)}
-                        <span class="underline">{$generalAggregateLimitOtherThanProductsCompletedOperations}</span>
-                    {else}
-                        <span>_________</span>
-                    {/if}
-                    <br>
-
-                    Product-completed Operations Aggregate Limit:
-                    {if isset($productCompletedOperationsAggregateLimit)}
-                        <span class="underline">{$productCompletedOperationsAggregateLimit}</span>
-                    {else}
-                        <span>_________</span>
-                    {/if}
-                    <br>
-
-                    Personal & Advertising Injury Limit:
-                    {if isset($personalAdvertisingInjuryLimit)}
-                        <span class="underline">{$personalAdvertisingInjuryLimit}</span>
-                    {else}
-                        <span>_________</span>
-                    {/if}
-                    <br>
-
-                    Each Occurrence Limit:
-                    {if isset($eachOccurrenceLimit)}
-                        <span class="underline">{$eachOccurrenceLimit}</span>
-                    {else}
-                        <span>_________</span>
-                    {/if}
-                    <br>
-
-                    Fire Damage Limit:
-                    {if isset($fireDamageLimit)}
-                        <span class="underline">{$fireDamageLimit}</span>
-                    {else}
-                        <span>_________</span>
-                    {/if}
-                    <br>
-
-                    Medical Expense Limit:
-                    {if isset($medicalExpenseLimit)}
-                        <span class="underline">{$medicalExpenseLimit}</span>
-                    {else}
-                        <span>_________</span>
-                    {/if}
-                    <br>
-                </p>
+                <strong>Limits of coverage:</strong><br>
+                
+                <div class="row">
+                    <div class="float-left col-60">
+                        General Aggregate Limit (other than products-completed operations):
+                    </div>
+                    <div class="float-left underline" style="width:32%">
+                        {if isset($generalAggregateLimitOtherThanProductsCompletedOperations)}
+                            <span>{$generalAggregateLimitOtherThanProductsCompletedOperations}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-60">
+                        Product-completed Operations Aggregate Limit:
+                    </div>
+                    <div class="float-left underline" style="width:32%">
+                        {if isset($productCompletedOperationsAggregateLimit)}
+                            <span>{$productCompletedOperationsAggregateLimit}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-50">
+                        Personal & Advertising Injury Limit:
+                    </div>
+                    <div class="float-left underline" style="width:42%">
+                        {if isset($personalAdvertisingInjuryLimit)}
+                            <span>{$personalAdvertisingInjuryLimit}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-50">
+                        Each Occurrence Limit:
+                    </div>
+                    <div class="float-left underline" style="width:42%">
+                        {if isset($eachOccurrenceLimit)}
+                            <span>{$eachOccurrenceLimit}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-50">
+                        Fire Damage Limit:
+                    </div>
+                    <div class="float-left underline" style="width:42%">
+                        {if isset($fireDamageLimit)}
+                            <span>{$fireDamageLimit}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="float-left col-50">
+                        Medical Expense Limit:
+                    </div>
+                    <div class="float-left underline" style="width:42%">
+                        {if isset($medicalExpenseLimit)}
+                            <span>{$medicalExpenseLimit}</span>
+                        {else}
+                            <span>&nbsp;&nbsp;&nbsp;</span>
+                        {/if}
+                    </div>
+                </div>
+                <br><br>
             </div>
         </section>
         {* Section 6 *}
