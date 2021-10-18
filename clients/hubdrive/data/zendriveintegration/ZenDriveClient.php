@@ -18,8 +18,9 @@ class ApiCall
         $this->restClient = new RestClient($this->config['zendriveServerUrl']);
     }
 
-    public function getApiResponse($endpoint, $params)
+    public function getApiResponse($endpoint, $params, $requesttype)
     {
+        if($requesttype == 'POST'){
         try{
             $headers = array('Authorization' => 'Api-Key '.$this->config['authToken']);
             $response = $this->restClient->postWithHeader($endpoint, $params, $headers);
@@ -27,6 +28,17 @@ class ApiCall
             throw new Exception("Zendrive Integration Failed.", 0, $e);
         }
         return json_encode($response);
+    }
+    if($requesttype == 'DEL'){
+        try{
+            $headers = array('Authorization' => 'Api-Key '.$this->config['authToken']);
+            $response = $this->restClient->deleteWithHeader($endpoint, $params, $headers);
+        }catch (Exception $e) {
+            throw new Exception("Zendrive Integration Failed.", 0, $e);
+        }
+        return json_encode($response);
+    }
+        
         
     }
 }
