@@ -1199,7 +1199,7 @@ pages:
                             filter: date
                             filterFormat: YYYY-MM-DD
                         -
-                            title: 'Driver Types'
+                            title: Driver Types 
                             field: pleaseSelectDriverType
                         -
                             title: Terminal
