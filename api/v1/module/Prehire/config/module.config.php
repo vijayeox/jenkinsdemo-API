@@ -27,6 +27,17 @@ return [
                     ],
                 ],
             ],
+            'foleyEndpoint' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/foley/endpoint/:type',
+                    'defaults' => [
+                        'controller' => Controller\FoleyController::class,
+                        'method' => 'POST',
+                        'action' => 'foleyEndpoint',
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

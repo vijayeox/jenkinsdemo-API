@@ -76,6 +76,7 @@ org:
                 entity:
                     - 'Independent Contractor Onboarding'
                     - 'PartTime Independent Contractor Onboarding'
+                    - Foley
         preferences: '{}'
 businessRole:
     -
@@ -273,6 +274,9 @@ entity:
                 name: contractDate
                 data_type: datetime
                 index: true
+            -   
+                name: ICUserId
+                index: true
         identifiers:
             -
                 identifier: email
@@ -322,6 +326,9 @@ entity:
             -
                 name: contractDate
                 data_type: datetime
+                index: true
+            -   
+                name: ICUserId
                 index: true
         identifiers:
             -
@@ -864,6 +871,38 @@ entity:
                         useRowData: false
             metadata: {  }
         page_uuid: 29f8c79a-d89c-11eb-b8bc-0242ac130003
+    -
+        name: 'Foley'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        participantRole:
+            -
+                businessRole: 'Manage Independent Contractor'
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
 pages:
     -
         uuid: 7074d8e0-a3a2-4d4c-8215-779ac4709f75
@@ -1456,6 +1495,96 @@ pages:
                             cell: '<td>{formatDate(item.start_date)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+    -
+        name: 'Foley Applicant Shell'
+        uuid: 7e742804-1ab5-11ec-9621-0242ac130002
+        description: 'Shows a list of Drivers opted for Foley Service'
+        content:
+            -
+                type: List
+                content:
+                    route: ''
+                    filterable: true
+                    defaultFilters: ''
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: ''
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: ''
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Edit
+                            rule: 'false'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: 76736158-1ab8-11ec-9621-0242ac130002
+                                    fileId: '{{uuid}}'
+                            icon: 'far fa-pencil-alt'
+                    operations:
+                        title: 'Foley'
+                        actions:
+                            -
+                                name: 'Create Applicant Shell'
+                                icon: 'fa fa-plus'
+                                rule: 'true'
+                                details:
+                                    -
+                                        type: Form
+                                        form_id: 76736158-1ab8-11ec-9621-0242ac130002
+                    columnConfig:
+                        -
+                            title: Name
+                            field: name
                         -
                             title: 'Policy End Date'
                             field: end_date
@@ -1696,9 +1825,21 @@ form:
         description: 'How To Survive A Dot Audit'
         template_file: howToSurviveADotAudit.json
         entity: 'How To Survive A Dot Audit'
-workflow:
     -
-        name: 'Excess New Application Submission'
-        uuid: ab854546-9e1b-43b3-ae7d-e6cf93683f61
-        bpmn_file: ExcessWorkflow/NewExcessApplicationSubmission.bpmn
-        entity: 'Excess Liability'
+        name: 'Create Applicant Shell'
+        uuid: 76736158-1ab8-11ec-9621-0242ac130002
+        description: 'Foley Applicant Shell'
+        template_file: foleyApplicantShellForm.json
+        entity: 'Foley'
+    -
+        name: 'Create Order MVR'
+        uuid: df120582-1f56-11ec-9621-0242ac130002
+        description: 'Order MVR'
+        template_file: foleyOrderMVRForm.json
+        entity: 'Foley'
+    -
+        name: 'Create CH Query'
+        uuid: 08d697cc-202c-11ec-9621-0242ac130002
+        description: 'Clear House Query'
+        template_file: foleyChQueryForm.json
+        entity: 'Foley'
