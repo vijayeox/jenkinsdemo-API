@@ -5,7 +5,7 @@
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="abExcessLiability" />
-          <camunda:property name="fields" value="insuredName,policyStatus,documents,SubmissionNumber,avantPolicyStatus,avantSubmissionApproval,genreApproval,quoteApproved,HubAMmailId,workflowId" />
+          <camunda:property name="fields" value="insuredName,policyStatus,documents,SubmissionNumber,avantPolicyStatus,avantSubmissionApproval,genreApproval,quoteApproved,HubAMmailId,workflowId,requestOrRejectBind" />
         </camunda:properties>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1hm9lab</bpmn:outgoing>
