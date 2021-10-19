@@ -11968,7 +11968,7 @@
 			"modalEdit": false,
 			"values": [{
 				"label": "Generate Policy Number and Request for Binder",
-				"value": "generatePolicyNumberAndRequestForBinder",
+				"value": "requestForBinder",
 				"shortcut": ""
 			}, {
 				"label": "Reject Application",
@@ -12034,7 +12034,7 @@
 			"allowMultipleMasks": false,
 			"inputType": "radio",
 			"fieldSet": false,
-			"id": "ew9zpos",
+			"id": "erocs2",
 			"defaultValue": ""
 		}, {
 			"label": "AvantName",
@@ -12975,7 +12975,7 @@
 		"id": "ey7kq7a"
 	}],
 	"revisions": "current",
-	"_vid": 243,
+	"_vid": 244,
 	"title": "AB Excess Liability",
 	"display": "wizard",
 	"access": [{
@@ -12992,6 +12992,6 @@
 	"path": "abexcessliability",
 	"project": "5dc1489e4f668513e9535090",
 	"created": "2021-06-22T08:23:13.475Z",
-	"modified": "2021-10-14T09:04:34.263Z",
+	"modified": "2021-10-19T07:05:03.422Z",
 	"machineName": "eoxproductsupport:abExcessLiability"
 }
