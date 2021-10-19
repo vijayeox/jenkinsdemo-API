@@ -367,6 +367,17 @@ class Module
                         $container->get(AdapterInterface::class)
                     );
                 },
+
+
+                Service\FoleyService::class => function ($container) {
+                    $foleyService = $container->get(\Prehire\Service\FoleyService::class);
+                    return new \Prehire\Service\FoleyService(
+                        $foleyService,
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+
                 Model\AddressTable::class => function ($container) {
                     return new Model\AddressTable(
                         $container->get(Model\AddressTableGateway::class)
@@ -563,7 +574,8 @@ class Module
                         $container->get(Service\BusinessParticipantService::class),
                         $container->get(\Analytics\Service\QueryService::class),
                         $container->get(Insurance\InsuranceService::class),
-                        $container->get(Service\ApiCallService::class)
+                        $container->get(Service\ApiCallService::class),
+                        $container->get(\Prehire\Service\FoleyService::class)
                 );
                 },
                 Document\DocumentBuilder::class => function ($container) {

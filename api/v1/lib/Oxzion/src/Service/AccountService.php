@@ -172,6 +172,7 @@ class AccountService extends AbstractService
             $this->setupBusinessRole($data, $data['accountId'], $this->getUuidFromId('ox_app', $appId));
             $this->roleService->createRolesByBusinessRole($data['accountId'], $appId);
             $user = $this->getContactUserForAccount($data['accountId']);
+            $data['accountUserId'] = $user['userId'];
             $this->userService->addAppRolesToUser($user['accountUserId'], $appId);
             $this->addIdentifierForAccount($appId, $params);
             $this->commit();
