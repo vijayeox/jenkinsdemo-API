@@ -277,7 +277,6 @@ entity:
             -   
                 name: ICUserId
                 index: true
-                data_type: text
         identifiers:
             -
                 identifier: email
@@ -331,7 +330,6 @@ entity:
             -   
                 name: ICUserId
                 index: true
-                data_type: text
         identifiers:
             -
                 identifier: email
@@ -1833,26 +1831,9 @@ form:
         description: 'How To Survive A Dot Audit'
         template_file: howToSurviveADotAudit.json
         entity: 'How To Survive A Dot Audit'
-    -
-        name: 'Create Applicant Shell'
-        uuid: 76736158-1ab8-11ec-9621-0242ac130002
-        description: 'Foley Applicant Shell'
-        template_file: foleyApplicantShellForm.json
-        entity: 'Foley'
-    -
-        name: 'Create Order MVR'
-        uuid: df120582-1f56-11ec-9621-0242ac130002
-        description: 'Order MVR'
-        template_file: foleyOrderMVRForm.json
-        entity: 'Foley'
-    -
-        name: 'Create CH Query'
-        uuid: 08d697cc-202c-11ec-9621-0242ac130002
-        description: 'Clear House Query'
-        template_file: foleyChQueryForm.json
-        entity: 'Foley'
 workflow:
     -
         name: 'Excess New Application Submission'
         uuid: ab854546-9e1b-43b3-ae7d-e6cf93683f61
         bpmn_file: ExcessWorkflow/NewExcessApplicationSubmission.bpmn
+        entity: 'Excess Liability'
