@@ -391,8 +391,8 @@
                             </p>
                             <p>
                             Effective Date: 
-                            {if isset($desiredPolicyEffectiveDateFormatted)}
-                                {$desiredPolicyEffectiveDateFormatted}
+                            {if isset($desiredPolicyEffDateFormatted)}
+                                {$desiredPolicyEffDateFormatted|date_format:"%m/%d/%Y"}
                             {/if}
                             </p>
                             <p>
