@@ -14,6 +14,7 @@ use Oxzion\Service\EmailService;
 use Oxzion\Model\EmailTable;
 use Oxzion\Service\TemplateService;
 use Oxzion\Service\AddressService;
+use Oxzion\Service\FileService;
 use Oxzion\Messaging\MessageProducer;
 use Prehire\Service\PrehireService;
 
@@ -77,7 +78,7 @@ class Module implements ConfigProviderInterface
                     );
                 },
                 Service\PrehireCallbackService::class => function ($container) {
-                    return new Service\PrehireCallbackService($container->get('config'),$container->get(PrehireService::class));
+                    return new Service\PrehireCallbackService($container->get('config'),$container->get(PrehireService::class),$container->get(FileService::class));
                 },
             ],
         ];
