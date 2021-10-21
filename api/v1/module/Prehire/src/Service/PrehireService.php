@@ -92,5 +92,4 @@ class PrehireService extends AbstractService
             throw $e;
         }
     }
-
 }

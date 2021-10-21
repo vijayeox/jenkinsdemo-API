@@ -58,7 +58,10 @@ class PrehireImpl implements PrehireInterface
         $dataToSave['implementation'] = $data['implementation'];
         $dataToSave['request_type'] = $requestType;
         $dataToSave['referenceId'] = $applicantId;
-        //$this->prehireService->createRequest($dataToSave);
+        $dataToSave['report_id'] = $data['request']['driver_applicant']['report_id'];
+        $dataToSave['testStatus'] = $data['request']['Query']['QueryStatus'];
+        $this->prehireService->createRequest($dataToSave);
+        return $dataToSave;
     }
 
     private function getMVRUpdate($data)
@@ -152,7 +155,7 @@ class PrehireImpl implements PrehireInterface
                     if(isset($data['Query']['QueryResult'])) {
                         if($data['Query']['QueryResult'] != 'Driver Not prohibited' && 
                         $data['Query']['QueryResult'] != 'Driver prohibited') {
-                            throw new InvalidParameterException('Query Status specified is not a known value');
+                            throw new InvalidParameterException('Query Result has not been specified');
                         } 
                     }
                     else {
