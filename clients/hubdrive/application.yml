@@ -276,6 +276,7 @@ entity:
                 index: true
             -   
                 name: ICUserId
+                data_type: text
                 index: true
         identifiers:
             -
@@ -329,6 +330,7 @@ entity:
                 index: true
             -   
                 name: ICUserId
+                data_type: text
                 index: true
         identifiers:
             -
