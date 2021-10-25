@@ -60,6 +60,7 @@ class PrehireImpl implements PrehireInterface
         $dataToSave['referenceId'] = $applicantId;
         $dataToSave['report_id'] = $data['request']['driver_applicant']['report_id'];
         $dataToSave['testStatus'] = $data['request']['Query']['QueryStatus'];
+        $dataToSave['testResult'] = $data['request']['Query']['QueryResult'];
         $this->prehireService->createRequest($dataToSave);
         return $dataToSave;
     }

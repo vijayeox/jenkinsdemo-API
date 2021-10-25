@@ -44,8 +44,10 @@ class PrehireCallbackService extends AbstractService
                 if($response['report_id']){
                     $fileId = $response['report_id'];
                     $type = $response['request_type'].'Status';
+                    $result = $response['request_type'].'Result';
                     $fileData = array();
                     $fileData[$type] = $response['testStatus'];
+                    $fileData[$result] = $response['testResult'];
                     $this->fileService->updateFile($fileData,$fileId);
                 }
             }
