@@ -9,33 +9,47 @@ use Oxzion\InvalidParameterException;
 use Oxzion\Prehire\Foley\PrehireImpl;
 use Oxzion\Encryption\TwoWayEncryption;
 use Prehire\Service\PrehireService;
+use Oxzion\Service\FileService;
 
 class PrehireCallbackService extends AbstractService
 {
     protected $config;
     protected $prehireService;
+    protected $fileService;
 
-    public function __construct($config,PrehireService $prehireService)
+    public function __construct($config,PrehireService $prehireService,FileService $fileService)
     {
         parent::__construct($config, null);
         $this->config = $config;
         $this->prehireService = $prehireService;
+        $this->fileService = $fileService;
     }
 
     public function invokeImplementation($data)
     {
         $this->validateUser($this->config);
+        $response = array();
         try {
             $implementationType = $data['implementation'];
             switch($implementationType) {
                 case 'foley':
                     $implementation = new PrehireImpl($this->prehireService);
-                    $implementation->executeProcess($data);
+                    $response = $implementation->executeProcess($data);
                     break;
                 default:
                     $this->logger->error("Prehire implementation provided is incorrect - " . $implementationType);
                     throw (new InvalidParameterException("Prehire Service provided is incorrect"));
             }
+            if(sizeof($response) > 0 && $implementationType == "foley"){
+                if($response['report_id']){
+                    $fileId = $response['report_id'];
+                    $type = $response['request_type'].'Status';
+                    $fileData = array();
+                    $fileData[$type] = $response['testStatus'];
+                    $this->fileService->updateFile($fileData,$fileId);
+                }
+            }
+            return $data;
         } catch (Exception $e) {
             throw $e;    
         }
