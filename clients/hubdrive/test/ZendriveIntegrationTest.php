@@ -11,8 +11,11 @@ class ZenDriveFleetIntegrationTest extends DelegateTest
     
 	public function setUp() : void
     {
+        print_r("inside zenddrive test");
         $this->loadConfig();
+        print_r("inside zenddrive test after loadconfig");
         $config = $this->getApplicationConfig();
+        print_r("inside zenddrive test after config");
         $this->data = array(
             "appName" => 'HubDrive',
             'UUID' => 'a4b1f073-fc20-477f-a804-1aa206938c42',
@@ -21,13 +24,14 @@ class ZenDriveFleetIntegrationTest extends DelegateTest
             'accountId' =>'1836',
             'buyerAccountId'=>'90913287801',
         );
-        $migrationFolder = __DIR__  . "/../data/migrations/";
-        $this->doMigration($this->data,$migrationFolder);
-        $path = __DIR__.'/../../../api/data/delegate/'.$this->data['UUID'];
-        if (!is_link($path)) {
-            symlink(__DIR__.'/../data/delegate/',$path);
-        }
+        // $migrationFolder = __DIR__  . "/../data/migrations/";
+        // $this->doMigration($this->data,$migrationFolder);
+        // $path = __DIR__.'/../../../api/data/delegate/'.$this->data['UUID'];
+        // if (!is_link($path)) {
+        //     symlink(__DIR__.'/../data/delegate/',$path);
+        // }
         parent::setUp();
+        print_r("inside zenddrive test after setup");
     }
 
     public function getDataSet()
@@ -69,11 +73,10 @@ class ZenDriveFleetIntegrationTest extends DelegateTest
         'zenDriveIntegration' => 'yes'  
     );
     
-
+    print_r("inside testcase".AppDelegateService::class);exit;
     $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
     $delegateService->setPersistence($appId, $this->persistence);
     $content = $delegateService->execute($appId, 'ZenDriveFleetIntegration', $testdata);
-    //print_r($content);exit;
     
 
     $select = "SELECT * FROM `ic_info` WHERE ox_app_account_id=:accountId AND uuid=:buyerAccountId ";
@@ -141,8 +144,30 @@ public function  testDriverAddition(){
 
     
 }
+public function  testDriverDeletion(){
+    $accountId=AuthContext::put(AuthConstants::ACCOUNT_ID, $this->data['accountId']);
+    $accountUuid = AuthContext::put(AuthConstants::ACCOUNT_UUID,$this->data['accountUuid']);
+    
+    $data = array();
+    $config = $this->getApplicationConfig();
+    $appId = $this->data['UUID'];
+    $testdata = Array
+    (
+        'buyerAccountId'=>$this->data['buyerAccountId']+1,
+        "driveruuid" => "6ed45560-26df-41d5-b8e3-ebd9cf6a7e15"
+    );
 
+    $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+    $delegateService->setPersistence($appId, $this->persistence);
+    $content = $delegateService->execute($appId, 'ZenDriveFleetIntegration', $testdata);
 
+    $driver_info = $testdata['driveruuid'];
+            $selectQuery = "SELECT * FROM `driver` WHERE uuid = :uuid";
+            $resultArr = $this->persistence->selectQuery($selectQuery,[
+                "uuid"=>$driver_info
+            ],true);
+    $this->assertEquals($resultArr[0]['first_name'],"Walker11");
+}
 
 
 

@@ -43,10 +43,10 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
             $fleet_id = $data['buyerAccountId'];
             $fleet_phonenumber = $data['phone'];
             $endpoint = 'fleet/';
-
+            $requesttype = 'POST';
             $params = array('name' => $fleet_name, 'fleet_id' => $fleet_id , 'phonenumber' => $fleet_phonenumber);
             $this->logger->info("in zendrive delegate params- " . json_encode($params, JSON_UNESCAPED_SLASHES));
-            $response = $this->apicall->getApiResponse($endpoint,$params);
+            $response = $this->apicall->getApiResponse($endpoint,$params,$requesttype);
             $this->logger->info("in zendrive delegate api response- " . $response);
             $parsedResponse = json_decode($response,true);
             $finalresponse = json_decode($parsedResponse['body'],true);
@@ -105,9 +105,9 @@ class ZenDriveFleetIntegration extends AbstractAppDelegate
               //  continue;
 
             $driveruuid = $driver['driveruuid'];
-            
+            $requesttype = 'POST';
             $params = array('first_name'=>$driver['driverFirstName'] , 'last_name'=>$driver['driverLastName'], 'email'=>$email);
-            $result = $this->apicall->getApiResponse($endpoint,$params);
+            $result = $this->apicall->getApiResponse($endpoint,$params,$requesttype);
             $this->logger->info("in zendrive delegate driver api response- " . $result);
             $parsedResponse = json_decode($result,true);
             $finalresponse = json_decode($parsedResponse['body'],true);
