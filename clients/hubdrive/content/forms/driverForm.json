@@ -1,0 +1,142 @@
+{
+    "_id": "615ea97fbdb7db04287cc5ae",
+    "type": "form",
+    "tags": [],
+    "owner": "615543ef2f4d5d7a42983820",
+    "components": [{
+        "label": "icusername",
+        "calculateValue": "value = data.userprofile;\n",
+        "key": "icusername",
+        "type": "hidden",
+        "input": true,
+        "tableView": false
+    }, {
+        "label": "Upload",
+        "tableView": false,
+        "storage": "url",
+        "webcam": false,
+        "fileTypes": [{
+            "label": "",
+            "value": ""
+        }],
+        "validate": {
+            "required": true
+        },
+        "key": "driverDataFileUpload",
+        "type": "file",
+        "url": "/file/attachment",
+        "input": true
+    }, {
+        "label": "HTML",
+        "attrs": [{
+            "attr": "",
+            "value": ""
+        }],
+        "content": "<!DOCTYPE html>\n<html>\n<head>\n<style>\n.button \n{\n \tcolor: white;\n    border:none;\n  \tpadding:0.8rem;\n  \ttext-align: center;\n  \tdisplay: inline-block;\n  \tfont-size: 14px;\n  \tmargin: 0.5rem;\n  \tfont-weight:bold;\n  \theight:50px;\n  \twidth:270px;\n    background-color: #0071BC; \n    border-radius: 6px;\n    transition-duration: 0.4s;\n}\n\n.button span\n{\n  cursor: pointer;\n  display: inline-block;\n  position: relative;\n  transition: 0.5s;\n}\n\n.button span:after {\n  content: '\\00bb';\n  position: absolute;\n  opacity: 0;\n  top: 0;\n  right: -20px;\n  transition: 0.5s;\n}\n\n.button:hover span {\n  padding-right: 25px;\n}\n\n.button:hover span:after {\n  opacity: 1;\n  right: 0;\n}\n\n.button:hover {\n  \n  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);\n}\n</style>\n</head>\n<body>\n\n<div style=\"width: 95%;margin: 5px;\"> \n\n<br>\n<p><span style=\"font-family: Helvetica Neue; font-size: 20px; font-style: normal; font-weight:bold;\"><u>Please use the following excel format to upload the document.</u></span>\n<br>\n<span style=\"font-family: Helvetica Neue; font-size: 16px; font-style: italic; font-weight:bold;\">(click to view and scroll to end of page)</span>\n</p>\n<br>\n\n</div>\n<a onclick=\"window.open(this.href,'_blank');return false;\" href=\"https://www.eoxvantage.com/docs/LIST_A_or_BandC.pdf\"  target=\"_blank\">\n<span>\n<button class=\"button\" style=\"vertical-align:middle\"><span>Click here to download sample excel sheet</span></button></span>\n </a>\n\n</body>\n</html>\n",
+        "refreshOnChange": false,
+        "key": "html",
+        "type": "htmlelement",
+        "input": false,
+        "tableView": false
+    }, {
+        "label": "Cancel",
+        "action": "event",
+        "showValidations": false,
+        "tableView": false,
+        "key": "cancel",
+        "type": "button",
+        "input": true,
+        "event": "cancelSubmission"
+    }, {
+        "type": "button",
+        "label": "Submit",
+        "key": "submit",
+        "disableOnInvalid": true,
+        "input": true,
+        "tableView": false
+    }],
+    "revisions": "",
+    "_vid": 0,
+    "title": "driverForm",
+    "display": "form",
+    "access": [{
+        "roles": [],
+        "type": "create_own"
+    }, {
+        "roles": [],
+        "type": "create_all"
+    }, {
+        "roles": [],
+        "type": "read_own"
+    }, {
+        "roles": ["5dd3b1795ecd1efceaa1ac2c", "5dd3b1795ecd1e1b5fa1ac2d", "5dd3b1795ecd1e43eaa1ac2e"],
+        "type": "read_all"
+    }, {
+        "roles": [],
+        "type": "update_own"
+    }, {
+        "roles": [],
+        "type": "update_all"
+    }, {
+        "roles": [],
+        "type": "delete_own"
+    }, {
+        "roles": [],
+        "type": "delete_all"
+    }, {
+        "roles": [],
+        "type": "team_read"
+    }, {
+        "roles": [],
+        "type": "team_write"
+    }, {
+        "roles": [],
+        "type": "team_admin"
+    }],
+    "submissionAccess": [{
+        "roles": [],
+        "type": "create_own"
+    }, {
+        "roles": [],
+        "type": "create_all"
+    }, {
+        "roles": [],
+        "type": "read_own"
+    }, {
+        "roles": [],
+        "type": "read_all"
+    }, {
+        "roles": [],
+        "type": "update_own"
+    }, {
+        "roles": [],
+        "type": "update_all"
+    }, {
+        "roles": [],
+        "type": "delete_own"
+    }, {
+        "roles": [],
+        "type": "delete_all"
+    }, {
+        "roles": [],
+        "type": "team_read"
+    }, {
+        "roles": [],
+        "type": "team_write"
+    }, {
+        "roles": [],
+        "type": "team_admin"
+    }],
+    "controller": "",
+    "properties": {
+        "showCancel": "true",
+        "submission_commands": "[{\"command\" : \"delegate\", \"delegate\":\"InsertDriver\"}]"
+    },
+    "settings": {},
+    "name": "driverForm",
+    "path": "driverform",
+    "project": "5dd3b1795ecd1e1c6da1ac2b",
+    "created": "2021-10-07T08:02:07.265Z",
+    "modified": "2021-10-27T05:36:49.383Z",
+    "machineName": "insuranceprocurement-eoxvantage:reemaTesting"
+}
