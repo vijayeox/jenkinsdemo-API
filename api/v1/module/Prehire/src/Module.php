@@ -10,6 +10,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Prehire\Service\PrehireService;
+use Prehire\Service\FoleyService;
 
 class Module implements ConfigProviderInterface
 {
@@ -35,6 +36,10 @@ class Module implements ConfigProviderInterface
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new PrehireService($container->get('config'), $dbAdapter, $container->get(Model\PrehireTable::class));
                 },
+                FoleyService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new FoleyService($container->get('config'), $dbAdapter, $container->get(Model\PrehireTable::class));
+                },
                 Model\PrehireTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PrehireTableGateway::class);
                     return new Model\PrehireTable($tableGateway);
@@ -57,6 +62,13 @@ class Module implements ConfigProviderInterface
                     return new Controller\PrehireController(
                         $container->get(Model\PrehireTable::class),
                         $container->get(PrehireService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\FoleyController::class => function ($container) {
+                    return new Controller\FoleyController(
+                        $container->get(Model\PrehireTable::class),
+                        $container->get(FoleyService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

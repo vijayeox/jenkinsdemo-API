@@ -17,6 +17,9 @@ class SendMail extends MailDelegate
         $this->logger->info("Executing Excess Mail with data- " . print_r($data, true));
         $fileData = $this->getFile($data['fileId'],false,$data['accountId']);
         $file = array_merge($data,$fileData['data']);
+        $fileData['data']['hubNote'] = "";
+        $fileData['data']['avantNote'] = "";
+        $this->saveFile($fileData['data'], $data['fileId']);
         // Add logs for created by id and producer name who triggered submission
         $mailOptions = [];
         $fileData = array();
@@ -25,12 +28,13 @@ class SendMail extends MailDelegate
         }else{
             $mailOptions['to'] = $this->getMailToAddress($data['mailAddress'],$persistenceService);
         }
-        $mailOptions['subject'] = $this->getSubjectLine($data['mailType'],$data);
+        
         $mailOptions['attachments'] = $this->getMailDocuments($file,$data['documentType'],$data['mailAttachments']);
         $template = $data['mailTemplate'];
         
         $temp = $file;
         $this->processData($temp);
+        $mailOptions['subject'] = $this->getSubjectLine($data['mailType'],$temp);
         $temp['avantImageUrl'] = $this->applicationUrl . '/public/img/avant.png';
         if($file['mailType'] == "ExcessMail"){
             if(isset($file['desiredPolicyEffectiveDate'])) {
@@ -61,6 +65,9 @@ class SendMail extends MailDelegate
                 $temp['ExcessCvrg'] = 'GL & AL';
             }
         } 
+        if($data['mailType'] == "PolicyMailtoHub"){
+            $mailOptions['cc'] = $this->getMailToAddress('excessLiabilityMail',$persistenceService);
+        }
         $response = $this->sendMail($temp, $template, $mailOptions);
         $this->logger->info("Mail Response" . $response);
         return $data;
@@ -102,15 +109,15 @@ class SendMail extends MailDelegate
         }else if($mailType == "QuoteMailtoHub"){
             $subjectLine = 'Quote Document';
         }else if($mailType == "RequestForBind"){
-            $subjectLine = "RequestForBind";
+            $subjectLine = "Request to Bind Policy - ".$data['policyNumber'];
         }else if($mailType == "SubmissionMailToGenre"){
             $subjectLine = "Gen Re Quote -".$data['insuredName'];
         }else if($mailType == "PolicyMailtoHub"){
-            $subjectLine = "PolicyMailtoHub";
+            $subjectLine = "Policy Document - ".$data['policyNumber'];
         }else if($mailType == "RequestForMoreInfoMail"){
-            $subjectLine = "RequestForMoreInfoMail";
+            $subjectLine = "Request For More Information - ".$data['insuredName'];
         }else if($mailType == "HubRejectedQuote"){
-            $subjectLine = "HubRejectedQuote";
+            $subjectLine = "Quote Rejected";
         }
         return $subjectLine;
     }

@@ -1899,4 +1899,11 @@ form:
         uuid: 48b5f9f6-495e-44bd-aeb6-a44437bff0ac
         description: 'Driver form upload option '
         template_file: driverForm.json
-        entity: 'How To Survive A Dot Audit' 
+        entity: 'How To Survive A Dot Audit'
+workflow:
+    -
+        name: 'Excess New Application Submission'
+        uuid: ab854546-9e1b-43b3-ae7d-e6cf93683f61
+        bpmn_file: ExcessWorkflow/NewExcessApplicationSubmission.bpmn
+        entity: 'Excess Liability'
+
