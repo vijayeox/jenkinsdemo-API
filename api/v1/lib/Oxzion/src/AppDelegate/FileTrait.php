@@ -43,6 +43,12 @@ trait FileTrait
         return $this->fileService->updateFile($params, $fileId);
     }
 
+    protected function createFile(&$data, $ensureDir = false)
+    {
+        $this->logger->info("CREATING FILE");
+        return $this->fileService->createFile($data, $ensureDir);
+    }
+
     protected function getWorkflowInstanceByFileId($fileId)
     {
         $this->logger->info("GET FILE BY WORKFLOW INSTANCE ID");
