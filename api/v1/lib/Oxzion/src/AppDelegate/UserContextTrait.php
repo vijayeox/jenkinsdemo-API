@@ -1,4 +1,5 @@
 <?php
+
 namespace Oxzion\AppDelegate;
 
 use Oxzion\Db\Persistence\Persistence;
@@ -49,15 +50,18 @@ trait UserContextTrait
         return $this->userService->getUserDetailsByIdentifier($identifier, $identifierName);
     }
 
-    public function getUserDataByIdentifier($appId, $identifier, $identifierField){
+    public function getUserDataByIdentifier($appId, $identifier, $identifierField)
+    {
         return $this->userService->getUserDataByIdentifier($appId, $identifier, $identifierField);
     }
 
-    public function createUser($params, $userData){
+    public function createUser($params, $userData)
+    {
         return $this->userService->createUser($params, $userData);
     }
 
-    public function getUserByUsername($account_id, $username){
-        return $this->userService->getUserByUsername($account_id,$username);
+    public function getUserByUsername($username)
+    {
+        return $this->userService->getUserByUsername($username);
     }
 }
