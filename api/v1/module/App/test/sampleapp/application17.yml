@@ -1,0 +1,907 @@
+app:
+    name: HubDrive
+    uuid: a4b1f073-fc20-477f-a804-1aa206938c42
+    description: HubDriveOnline
+    category: EXAMPLE_CATEGORY
+    type: 2
+    autostart: true
+    status: 4
+    isdefault: false
+    logo: default_app.png
+    start_options: null
+    title: HubDriveOnline
+    app_properties: '{"chat_notification":"","appIdentifiers":""}'
+org:
+    -
+        name: HUB
+        uuid: 5060e4d5-006a-4054-85c0-bbf78579412d
+        email: admin@hub.com
+        address1: '6 bCenterpoint'
+        address2: Dr.
+        city: 'La Palma'
+        state: CA
+        zip: 90623
+        country: 'United States of America'
+        start_options: '{"title": {"en_EN": "Hub Drive Excess Liability Shield"}}'
+        contact:
+            username: HubAdmin
+            firstname: Admin
+            lastname: User
+            email: admin@hub.com
+        businessOffering:
+            -
+                businessRole: 'Insurance Carrier'
+                entity:
+                    - 'Excess Liability'
+        preferences: '{}'
+    -
+        name: OnTrac
+        uuid: 6b88905a-fa7b-47a4-af18-a5eed6ade5c5
+        email: admin@OnTrac.com
+        address1: Addr1
+        address2: Addr2
+        city: City
+        state: CA
+        zip: 90623
+        country: 'United States of America'
+        contact:
+            username: OnTracAdmin
+            firstname: Admin
+            lastname: User
+            email: admin@OnTrac.com
+        businessOffering:
+            -
+                businessRole: 'Contract Carrier - Compliance only'
+                entity:
+                    - Compliance
+        preferences: '{}'
+    -
+        name: IGGI
+        uuid: 48037656-b78e-11eb-8529-0242ac130003
+        email: admin@Iggi.com
+        address1: 'IGGI Addr1'
+        address2: 'IGGI Addr2'
+        city: 'IGGI City'
+        state: CA
+        zip: 90623
+        country: 'United States of America'
+        contact:
+            username: IggiAdmin
+            firstname: Admin
+            lastname: User
+            email: admin@Iggi.com
+        businessOffering:
+            -
+                businessRole: 'Contract Carrier'
+                entity:
+                    - 'Independent Contractor Onboarding'
+                    - 'PartTime Independent Contractor Onboarding'
+                    - Foley
+        preferences: '{}'
+businessRole:
+    -
+        name: 'Insurance Carrier'
+        uuid: 19d8f4c3-e79d-425b-9e23-e1fc3808cfdd
+    -
+        name: 'Contract Carrier'
+        uuid: f55f36c4-00d8-48f3-851d-793274658b37
+    -
+        name: 'Independent Contractor'
+        uuid: f915fe2a-790e-4940-a576-5b1001febdd3
+    -
+        name: Driver
+        uuid: eee9f35d-acef-4b38-81b5-f48be17acc7a
+    -
+        name: 'Contract Carrier - Compliance only'
+        uuid: b01e2f50-0d65-4940-9070-62ed710dd2ca
+    -
+        name: 'Contract Carrier - Excess Only'
+        uuid: e17b90f9-ca10-49c9-beb9-546c74da8549
+privilege:
+    -
+        name: MANAGE_COMPLIANCE
+        permission: 3
+    -
+        name: MANAGE_UNDERWRITING
+        permission: 3
+    -
+        name: MANAGE_ACCOUNT_MANAGER
+        permission: 3
+    -
+        name: MANAGE_AGENCY
+        permission: 3
+    -
+        name: MANAGE_VERIFIERS
+        permission: 3
+    -
+        name: MANAGE_EXECUTIVE
+        permission: 3
+    -
+        name: MANAGE_IC
+        permission: 3
+    -
+        name: MANAGE_EMPLOYEE
+        permission: 3
+    -
+        name: MANAGE_EXCESS
+        permission: 3
+role:
+    -
+        name: 'Manage Executive'
+        privileges:
+            -
+                privilege_name: MANAGE_EXECUTIVE
+                permission: 3
+        uuid: caddaf9f-64eb-4e57-8176-3647a59ecbc4
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Safety Director'
+        privileges:
+            -
+                privilege_name: MANAGE_COMPLIANCE
+                permission: 3
+        uuid: 18ed4d29-7188-482e-b544-67797c319935
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Manage Underwriting'
+        privileges:
+            -
+                privilege_name: MANAGE_UNDERWRITING
+                permission: 3
+        uuid: 8cd179eb-3787-43a3-8446-73aca036284a
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Account Manager'
+        privileges:
+            -
+                privilege_name: MANAGE_ACCOUNT_MANAGER
+                permission: 3
+            -
+                privilege_name: MANAGE_EXCESS
+                permission: 3
+        uuid: 99eaa419-0622-438b-b1b5-e21186394681
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Compliance Manager'
+        privileges:
+            -
+                privilege_name: MANAGE_COMPLIANCE
+                permission: 3
+        uuid: 2d0ef663-af0e-4f1c-a107-6f39605309b3
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Manage Verifiers'
+        privileges:
+            -
+                privilege_name: MANAGE_VERIFIERS
+                permission: 3
+        uuid: b3dd84d1-ff31-403d-9e97-cdc02272df97
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Manage Executives'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_EXECUTIVE
+                permission: 3
+        uuid: efcbf9d6-b867-4810-a88d-8c5d01c11067
+        businessRole:
+            name: 'Contract Carrier'
+    -
+        name: 'Compliance Manager'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_COMPLIANCE
+                permission: 3
+        uuid: 7d73ada4-8e1c-436d-8c27-17503ac7e254
+        businessRole:
+            name: 'Contract Carrier - Compliance only'
+    -
+        name: 'Safety Director'
+        privileges:
+            -
+                privilege_name: MANAGE_COMPLIANCE
+                permission: 3
+        uuid: 907cbcb3-51e8-4c36-8699-72821b3bab5f
+        businessRole:
+            name: 'Contract Carrier'
+    -
+        name: 'Manage Independent Contractor'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_IC
+                permission: 3
+        uuid: 6880de61-40bd-4439-89a9-849a08b24696
+        businessRole:
+            name: 'Contract Carrier'
+    -
+        name: 'Manage Employee'
+        privileges:
+            -
+                privilege_name: MANAGE_EMPLOYEE
+                permission: 3
+        uuid: 14936671-5cba-4994-97cc-2c86c49a4a1e
+        businessRole:
+            name: 'Contract Carrier'
+    -
+        name: 'Manage Drivers'
+        privileges:
+            -
+                privilege_name: MANAGE_EMPLOYEE
+                permission: 3
+        uuid: d3ef9902-3bf8-4d70-8c79-129e6bc4e45c
+        businessRole:
+            name: 'Independent Contractor'
+    -
+        name: ABAccountManager
+        privileges:
+            -
+                privilege_name: MANAGE_EXCESS
+                permission: 3
+        uuid: 840ae886-c375-4ddd-81d6-f521f572d231
+        businessRole:
+            name: 'Insurance Carrier'
+entity:
+    -
+        name: 'PartTime Independent Contractor Onboarding'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: true
+        enable_generatelink: true
+        enable_print: true
+        field:
+            -
+                name: name
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: contractDate
+                data_type: datetime
+                index: true
+            -
+                name: ICUserId
+                index: true
+                data_type: text
+        identifiers:
+            -
+                identifier: email
+        participantRole:
+            -
+                businessRole: 'Independent Contractor'
+            -
+                businessRole: 'Insurance Carrier'
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        useRowData: false
+            metadata: {  }
+        page_uuid: dc9a67e9-1611-41e9-adbe-a5d21940e556
+    -
+        name: 'Independent Contractor Onboarding'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: true
+        enable_generatelink: true
+        enable_print: true
+        field:
+            -
+                name: name
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: contractDate
+                data_type: datetime
+                index: true
+            -
+                name: ICUserId
+                index: true
+                data_type: text
+        identifiers:
+            -
+                identifier: email
+        participantRole:
+            -
+                businessRole: 'Independent Contractor'
+            -
+                businessRole: 'Insurance Carrier'
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: '<table style="width:100%"><tr><th>Name</th><th>Status</th></tr><tr><td>{data.name}</td><td>{data.status}</td></tr></table>'
+                        useRowData: false
+            metadata: {  }
+        page_uuid: 788ee1ca-f850-4e2c-ae68-e20a85c0cdf0
+    -
+        name: 'Driver Application'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'HUB Incident Response Guide'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: Compliance
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        field:
+            -
+                name: attachments
+                text: Attachment
+                data_type: document
+            -
+                name: name
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: iCEmail
+                text: Email
+                data_type: text
+                index: true
+            -
+                name: effectiveDate
+                data_type: datetime
+                index: true
+            -
+                name: companyName
+                data_type: text
+                index: true
+            -
+                name: pleaseSelectDriverType
+                data_type: text
+                index: true
+            -
+                name: pleaseSelectTheFacility
+                data_type: text
+                index: true
+        identifiers:
+            -
+                identifier: iCEmail
+        participantRole:
+            -
+                businessRole: 'Independent Contractor'
+            -
+                businessRole: 'Insurance Carrier'
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: true
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: '<div style="width:100%">   <style>{"td,th {padding: 10px;border: 1px solid black;border-collapse: collapse;}"}</style>   <table style="width:100%;margin-bottom:1rem">      <tr>         <th>Name</th>         <th>Status</th>      </tr>      <tr>         <td>{data.name}</td>         <td>{data.status}</td>      </tr>   </table>   <table style="width:100%">      <tr>         <th>Insurance Requirement</th>         <th>Status</th>      </tr>      <tr>         <td>Auto</td>         <td>{data.auto==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Motor Truck Cargo</td>         <td>{data.motorTruckCargo==true?"Compliant":"Non Compliant"}</td>      </tr>      { (data.trailerInterchange) ?      (<tr>         <td>Trailer Interchange</td>         <td>{data.trailerInterchange==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty1)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty1==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.generalCommercial) ?      (<tr>         <td>General Commercial</td>         <td>{data.generalCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHCombinedSingleLimit) ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.FLHCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.FLHaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.FLHanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHownedAuto) ?      (<tr>         <td>Owned Auto</td>         <td>{data.FLHownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>Motor Truck Cargo - $250,000 Per Occurrence</td>         <td>{data.FLHMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.FLHscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHDishonestyCoveragenoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.FLHDishonestyCoveragenoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.FLHGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHnoLessThan)  ?      (<tr>         <td>Trailer Interchange - Minimum Limit for all states should be no less than $30,000</td>         <td>{data.FLHnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDgeneralCommercial)  ?      (<tr>         <td>General Commercial Liability</td>         <td>{data.PDgeneralCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.PDCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.PDaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.PDanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.PDownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.PDscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$100,000 Per Occurrence</td>         <td>{data.PDMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDnoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.PDnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.PDGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.PDGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.RSPCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.RSPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.RSPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPscheduledOrOwnedAuto)  ?      (<tr>         <td>Scheduled Or Owned Auto</td>         <td>{data.RSPscheduledOrOwnedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$25,000 Per Occurrence</td>         <td>{data.RSPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.ASPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.ASPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.ASPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.ASPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.ASPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.ASPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.SPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.SPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.SPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.SPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.SPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.SPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      <tr>         <td>OnTrac Logistics Inc DBA OnTrac 2501 s Price Rd STE 201. Chandler, AZ, 85286</td>         <td>{data.onTracLogistics==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Signed COI</td>         <td>{data.signedCoi==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>ACORD 25 Version</td>         <td>{data.acord25Version==true?"Compliant":"Non Compliant"}</td>      </tr>    { (data.policiesAreNotEffective) ? (<tr><td>Policies are Not Effective</td><td>{data.policiesAreNotEffective==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.certificateIssueDateMustBeRecentCurrent) ? (<tr><td>Certificate Issue Date Must Be Recent Current</td><td>{data.certificateIssueDateMustBeRecentCurrent==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.policiesAreEffective) ?(<tr>         <td>Policies are Effective</td>         <td>{data.policiesAreEffective==true?"Compliant":"Non Compliant"}</td>      </tr>)   : null}    <tr>         <td>Insured Name Listed</td>         <td>{data.insuredNameListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Address Completed</td>         <td>{data.insuredAddressCompleted==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policy Number Listed</td>         <td>{data.policyNumberListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Letter described as per the Insurance Company from Insurer affording coverages</td>         <td>{data.letterDescribed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Specified Number of Days listed for Notice of Cancellation </td>         <td>{data.specifiedNumber==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Broad Form Cargo Was Evidenced Therefore The Exclusions Must Be Listed In The Compliance Area</td>         <td>{data.broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Inland Marine Must Specify That It Includes Cargo In Transit</td>         <td>{data.inlandMarineMustSpecifyThatItIncludesCargoInTransit==true?"Compliant":"Non Compliant"}</td>      </tr>   </table></div>'
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: '<div style="width:100%">   <style>{"td,th {padding: 10px;border: 1px solid black;border-collapse: collapse;}"}</style>   <table style="width:100%;margin-bottom:1rem">      <tr>         <th>Name</th>         <th>Status</th>      </tr>      <tr>         <td>{data.name}</td>         <td>{data.status}</td>      </tr>   </table>   <table style="width:100%">      <tr>         <th>Insurance Requirement</th>         <th>Status</th>      </tr>      <tr>         <td>Auto</td>         <td>{data.auto==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Motor Truck Cargo</td>         <td>{data.motorTruckCargo==true?"Compliant":"Non Compliant"}</td>      </tr>      { (data.trailerInterchange) ?      (<tr>         <td>Trailer Interchange</td>         <td>{data.trailerInterchange==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty1)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty1==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.crimeFidelityEmployeeDishonesty)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty</td>         <td>{data.crimeFidelityEmployeeDishonesty==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.generalCommercial) ?      (<tr>         <td>General Commercial</td>         <td>{data.generalCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHCombinedSingleLimit) ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.FLHCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.FLHaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.FLHanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHownedAuto) ?      (<tr>         <td>Owned Auto</td>         <td>{data.FLHownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>Motor Truck Cargo - $250,000 Per Occurrence</td>         <td>{data.FLHMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.FLHscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHDishonestyCoveragenoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.FLHDishonestyCoveragenoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.FLHGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.FLHGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.FLHnoLessThan)  ?      (<tr>         <td>Trailer Interchange - Minimum Limit for all states should be no less than $30,000</td>         <td>{data.FLHnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDgeneralCommercial)  ?      (<tr>         <td>General Commercial Liability</td>         <td>{data.PDgeneralCommercial==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.PDCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.PDaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.PDanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.PDownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.PDscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$100,000 Per Occurrence</td>         <td>{data.PDMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDnoLessThan)  ?      (<tr>         <td>Crime/Fidelity/Employee Dishonesty Coverage - No less than $100,000</td>         <td>{data.PDnoLessThan==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialCombinedSingleLimit)  ?      (<tr>         <td>General Commercial - $1,000,000 Combined Single Limit</td>         <td>{data.PDGeneralCommercialCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.PDGeneralCommercialaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>General Commercial - Addl. Ins. box checked on COI</td>         <td>{data.PDGeneralCommercialaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPCombinedSingleLimit)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.RSPCombinedSingleLimit==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.RSPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.RSPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPscheduledOrOwnedAuto)  ?      (<tr>         <td>Scheduled Or Owned Auto</td>         <td>{data.RSPscheduledOrOwnedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.RSPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$25,000 Per Occurrence</td>         <td>{data.RSPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.ASPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.ASPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.ASPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.ASPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.ASPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.ASPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.ASPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPSplitLimitOrCombinedSingleLimitCa)  ?      (<tr>         <td>$1,000,000 Combined Single Limit</td>         <td>{data.SPSplitLimitOrCombinedSingleLimitCa==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPaddlInsBoxCheckedOnCoi)  ?      (<tr>         <td>Addl. Ins. box checked on COI</td>         <td>{data.SPaddlInsBoxCheckedOnCoi==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPanyAuto)  ?      (<tr>         <td>Any Auto</td>         <td>{data.SPanyAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPownedAuto)  ?      (<tr>         <td>Owned Auto</td>         <td>{data.SPownedAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPscheduledAuto)  ?      (<tr>         <td>Scheduled Auto</td>         <td>{data.SPscheduledAuto==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      { (data.SPMotorTRuckCargoPerOccurrence)  ?      (<tr>         <td>$10,000 Per Occurrence</td>         <td>{data.SPMotorTRuckCargoPerOccurrence==true?"Compliant":"Non Compliant"}</td>      </tr>) : null      }      <tr>         <td>OnTrac Logistics Inc DBA OnTrac 2501 s Price Rd STE 201. Chandler, AZ, 85286</td>         <td>{data.onTracLogistics==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Signed COI</td>         <td>{data.signedCoi==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>ACORD 25 Version</td>         <td>{data.acord25Version==true?"Compliant":"Non Compliant"}</td>      </tr>    { (data.policiesAreNotEffective) ? (<tr><td>Policies are Not Effective</td><td>{data.policiesAreNotEffective==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.certificateIssueDateMustBeRecentCurrent) ? (<tr><td>Certificate Issue Date Must Be Recent Current</td><td>{data.certificateIssueDateMustBeRecentCurrent==true?"Compliant":"Non Compliant"}</td></tr>) : null } { (data.policiesAreEffective) ?(<tr>         <td>Policies are Effective</td>         <td>{data.policiesAreEffective==true?"Compliant":"Non Compliant"}</td>      </tr>)   : null}    <tr>         <td>Insured Name Listed</td>         <td>{data.insuredNameListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Insured Address Completed</td>         <td>{data.insuredAddressCompleted==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Policy Number Listed</td>         <td>{data.policyNumberListed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Letter described as per the Insurance Company from Insurer affording coverages</td>         <td>{data.letterDescribed==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Specified Number of Days listed for Notice of Cancellation </td>         <td>{data.specifiedNumber==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Broad Form Cargo Was Evidenced Therefore The Exclusions Must Be Listed In The Compliance Area</td>         <td>{data.broadFormCargoWasEvidencedThereforeTheExclusionsMustBeListedInTheComplianceArea==true?"Compliant":"Non Compliant"}</td>      </tr>      <tr>         <td>Inland Marine Must Specify That It Includes Cargo In Transit</td>         <td>{data.inlandMarineMustSpecifyThatItIncludesCargoInTransit==true?"Compliant":"Non Compliant"}</td>      </tr>   </table></div>'
+                        useRowData: false
+            metadata: {  }
+        page_uuid: 5a466ac9-e137-48ac-b999-c7e8a42be57e
+    -
+        name: 'Certificate Of Violations'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Hired Non Owned'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Common Violations'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Telematics Policy And Procedure'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'FMCSR Commercial Vehicle'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'CDL Drug And Alcohol Clearinghouse Checklist'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'FMCSA Drug And Alcohol Clearing hous'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'DOT Drug And Alcohol Clearing house'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'clearing House Facts'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'How To Survive A Dot Audit'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        enable_generatelink: true
+        enable_print: true
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }
+    -
+        name: 'Excess Liability'
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: policyStatus
+        subscriber_field: observers
+        field:
+            -
+                name: documents
+                text: Documents
+                data_type: document
+            -
+                name: insuredName
+                text: Name
+                index: true
+                data_type: text
+            -
+                name: email
+                text: Email
+                data_type: text
+                index: true
+            -
+                name: start_date
+                data_type: date
+                index: true
+            -
+                name: end_date
+                data_type: date
+                index: true
+            -
+                name: companyName
+                data_type: text
+                index: true
+            -
+                name: producerName
+                data_type: text
+                index: true
+            -
+                name: policyStatus
+                data_type: text
+                index: true
+        identifiers:
+            -
+                identifier: usDot
+        participantRole:
+            -
+                businessRole: 'Insurance Carrier'
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: true
+        enable_print: false
+        enable_generatelink: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                        useRowData: false
+            metadata: {  }
+        page_uuid: 29f8c79a-d89c-11eb-b8bc-0242ac130003
+    -
+        name: Foley
+        start_date_field: start_date
+        end_date_field: end_date
+        status_field: status
+        subscriber_field: observers
+        participantRole:
+            -
+                businessRole: 'Manage Independent Contractor'
+        ryg_rule: ''
+        statusField: ''
+        title: '${entity_name} ${name}'
+        enable_documents: true
+        enable_comments: true
+        enable_view: false
+        pageContent:
+            data:
+                content:
+                    -
+                        type: HTMLViewer
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: ''
+                        url: ''
+                        content: ''
+                        useRowData: false
+            metadata: {  }

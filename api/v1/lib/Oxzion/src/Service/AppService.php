@@ -1151,7 +1151,19 @@ class AppService extends AbstractService
                     $roleData['uuid'] = $role['uuid'];
                 } else {
                     unset($role['uuid']);
-                    $result = $this->roleService->saveRole($params, $role);
+                    $saveRole = false;
+                    if(isset($role['business_role_id'])) {
+                        $select  = "Select * from ox_account_business_role as abr inner join ox_account as ac on ac.id = abr.account_id where ac.uuid = '".$params['accountId']."' and abr.business_role_id = ".$role['business_role_id'];
+                        $result1 = $this->executeQuerywithParams($select)->toArray();
+                        if(count($result1) > 0){
+                            $saveRole = true;
+                        }    
+                    }else{
+                        $saveRole = true;
+                    }
+                    if($saveRole){
+                        $result = $this->roleService->saveRole($params, $role);
+                    }
                 }
             }
         }

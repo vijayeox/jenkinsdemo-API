@@ -1115,7 +1115,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT * from ox_role
                     WHERE business_role_id is not null OR account_id = $accountId ORDER BY name";
         $role = $this->executeQueryTest($query);
-        $this->assertEquals(7, count($role));
+        $this->assertEquals(6, count($role));
         $this->assertEquals($yaml['role'][0]['name'], $role[1]['name']);
         $this->assertEquals(null, $role[1]['account_id']);
         $this->assertEquals($businessRole[0]['id'], $role[1]['business_role_id']);
@@ -1130,7 +1130,7 @@ class AppControllerTest extends ControllerTest
                     inner join ox_role r on r.id = rp.role_id WHERE r.business_role_id is not null order by r.name";
         $rolePrivilege = $this->executeQueryTest($query);
 
-        $this->assertEquals(6, count($rolePrivilege));
+        $this->assertEquals(4, count($rolePrivilege));
         $this->assertEquals($yaml['role'][0]['privileges'][0]['privilege_name'], $rolePrivilege[0]['privilege_name']);
         $this->assertEquals($yaml['role'][0]['privileges'][0]['permission'], $rolePrivilege[0]['permission']);
         $this->assertEquals($role[1]['id'], $rolePrivilege[0]['role_id']);
@@ -1199,6 +1199,94 @@ class AppControllerTest extends ControllerTest
             $this->assertEquals($accountBusinessRole[0]['id'], $value['account_business_role_id']);
         }
 
+        $config = $this->getApplicationConfig();
+        $template = $config['TEMPLATE_FOLDER'] . $acctResult[0]['uuid'];
+        $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
+        $apps = $config['APPS_FOLDER'];
+        if (enableExecUtils != 0) {
+            if (file_exists($apps) && is_dir($apps)) {
+                if (is_link($apps . "/$appName")) {
+                    $dist = "/dist/";
+                    $nodemodules = "/node_modules/";
+                    $this->assertEquals(file_exists($apps . "/$appName" . $dist), true);
+                    $this->assertEquals(file_exists($apps . "/$appName" . $nodemodules), true);
+                }
+            }
+        }
+    }
+
+    public function testDeployAppWithBusinessOfferingMultipleAccount()
+    {
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DummyDive';
+        if (is_dir($directoryName)) {
+            FileUtils::deleteDirectoryContents($directoryName);
+        }
+        $directoryName = __DIR__ . '/../../sampleapp/view/apps/DiveInsuranceSample';
+        if (is_dir($directoryName)) {
+            FileUtils::deleteDirectoryContents($directoryName);
+        }
+        copy(__DIR__ . '/../../sampleapp/application17.yml', __DIR__ . '/../../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        if (enableCamundaForDeployApp == 0) {
+            $mockProcessManager = $this->getMockProcessManager();
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+        }
+        if (enableExecUtils == 0) {
+            $mockRestClient = $this->getMockRestClientForAppService();
+            $mockRestClient->expects('post')->with(($this->config['applicationUrl'] . "/installer"), Mockery::any())->once()->andReturn('{"status":"Success"}');
+        }
+        $data = ['path' => __DIR__ . '/../../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertEquals($content['status'], 'success');
+        $this->setDefaultAsserts();
+        $filename = "application.yml";
+        $path = AppArtifactNamingStrategy::getSourceAppDirectory($this->config, $content['data']['app'])."/";
+        $yaml = Yaml::parse(file_get_contents($path . $filename));
+        $appName = $yaml['app']['name'];
+        $YmlappUuid = $yaml['app']['uuid'];
+        $query = "SELECT * from ox_app where name = '" . $appName . "'";
+        $queryResult = $this->executeQueryTest($query);
+        $this->assertEquals(1, count($queryResult));
+        $this->assertEquals($YmlappUuid, $queryResult[0]['uuid']);
+        $appId = $queryResult[0]['id'];
+        $query = "SELECT name,status,uuid,id from ox_account where name in ('" . $yaml['org'][0]['name'] . "','".$yaml['org'][1]['name']."','".$yaml['org'][2]['name']."')";
+        $acctResult = $this->executeQueryTest($query);
+        $this->assertEquals(3, count($acctResult));
+        $this->assertEquals($yaml['org'][0]['uuid'], $acctResult[0]['uuid']);
+        $this->assertEquals($yaml['org'][1]['uuid'], $acctResult[1]['uuid']);
+        $this->assertEquals($yaml['org'][2]['uuid'], $acctResult[2]['uuid']);
+        $query = "SELECT * from ox_app_registry where app_id = '" . $appId . "'";
+        $appRegistryResult = $this->executeQueryTest($query);
+        $this->assertEquals(3, count($appRegistryResult));
+        $this->assertEquals($acctResult[0]['id'], $appRegistryResult[0]['account_id']);
+        $this->assertEquals($acctResult[1]['id'], $appRegistryResult[1]['account_id']);
+        $this->assertEquals($acctResult[2]['id'], $appRegistryResult[2]['account_id']);
+        $query = "SELECT name, permission_allowed as permission FROM ox_privilege WHERE app_id = '" . $appId . "'";
+        $privilege = $this->executeQueryTest($query);
+        $this->assertEquals(9, count($privilege));
+        $this->assertEquals($yaml['privilege'], $privilege);
+        $query = "select * from ox_business_role where app_id = $appId";
+        $businessRole = $this->executeQueryTest($query);
+        $this->assertEquals(6, count($businessRole));
+        $this->assertEquals($yaml['businessRole'][0]['name'], $businessRole[0]['name']);
+        $this->assertEquals($yaml['businessRole'][1]['name'], $businessRole[1]['name']);
+        $query = "SELECT * from ox_role
+                    WHERE account_id = '".$acctResult[0]['id']."' ORDER BY name";
+        $role1 = $this->executeQueryTest($query);
+        $this->assertEquals(10, count($role1));
+        $query = "SELECT * from ox_role
+                    WHERE account_id = '".$acctResult[1]['id']."' ORDER BY name";
+        $role2 = $this->executeQueryTest($query);
+        $this->assertEquals(4, count($role2));
+        $query = "SELECT * from ox_role
+                    WHERE account_id = '".$acctResult[2]['id']."' ORDER BY name";
+        $role3 = $this->executeQueryTest($query);
+        $this->assertEquals(7, count($role3));
         $config = $this->getApplicationConfig();
         $template = $config['TEMPLATE_FOLDER'] . $acctResult[0]['uuid'];
         $delegate = $config['DELEGATE_FOLDER'] . $YmlappUuid;
