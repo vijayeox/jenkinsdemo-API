@@ -14,7 +14,8 @@ class InsuranceService extends AbstractService
     {
         parent::__construct($config, $dbAdapter);
         $this->services = [
-            "IMS" => new Ims\ImsEngineImpl($config)
+            "IMS" => new Ims\ImsEngineImpl($config),
+            "InsureLearn" => new InsureLearn\InsureLearnEngineImpl($config)
         ];
     }
 
