@@ -31,9 +31,10 @@
 			"attr": "",
 			"value": ""
 		}],
-		"content": "Please find the link <a href={{data.SSOLink}}>here</a>",
+		"content": "Please find the SSO link <a target=\"_blank\" href={{data.SSOLink}}>here</a>",
 		"refreshOnChange": true,
 		"key": "html",
+		"customConditional": "if(data.SSOLink && data.SSOLink != \"\"){\n  show = true;\n}else{\n  show = false;\n}",
 		"type": "htmlelement",
 		"input": false,
 		"tableView": false
@@ -54,6 +55,6 @@
 	"path": "ssointegrationformdemo",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-10-22T11:27:41.918Z",
-	"modified": "2021-10-28T10:35:05.957Z",
+	"modified": "2021-10-28T11:46:35.568Z",
 	"machineName": "insuranceprocurement-eoxvantage:ssoIntegrationFormDemo"
 }

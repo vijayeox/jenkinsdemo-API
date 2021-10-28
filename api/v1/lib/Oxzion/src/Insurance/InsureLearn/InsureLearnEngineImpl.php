@@ -80,9 +80,7 @@ class InsureLearnEngineImpl implements InsuranceEngine
                     'groupName' => $data['groupName'],
                     'detail' => 'extra'
                 ]);
-                if (!empty($groups['groups'])) {
-                    // $this->logger->info("Group INFO".print_r($groups['groups']['group']],true));
-                    // $this->logger->info("Group DATA".print_r($data,true));
+                if (!empty($groups['groups']) && isset($groups['groups']['group'])) {
                     return ['group' => $groups['groups']['group']];
                 }
                 $groups = $this->makeRequest('group', [
