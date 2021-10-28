@@ -77,6 +77,11 @@ return [
         "password" => "CFnEWs0g",
         "callbackUrl" => "qa3.eoxvantage.com"
     ],
+    'insurelearn' => [
+        'olpSystem' => 'https://hubstg.insurelearn.com/',
+        "ILSUSER" => "eox_connector",
+        "ILSPASSWD" => "P9mwT~&/6Qk@y}hk"
+    ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
     'apiUrl' => 'http://'.$host.':8080',

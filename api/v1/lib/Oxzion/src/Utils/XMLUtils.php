@@ -5,9 +5,11 @@ namespace Oxzion\Utils;
 
 class XMLUtils
 {
-    public static function xmlToArray($string)
+    public static function xmlToArray($string, bool $getMainTag = false)
     {
-        return $xmlArray = json_decode(json_encode(simplexml_load_string($string)), true);
+        $xmlObj = simplexml_load_string($string);
+        $response = json_decode(json_encode($xmlObj), true);
+        return ($getMainTag) ? [$xmlObj->getName() => $response] : $response;
     }
 
     public static function domToArray($root)

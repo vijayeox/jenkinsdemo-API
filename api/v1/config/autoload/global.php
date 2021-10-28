@@ -92,6 +92,11 @@ return [
         "userName" => "vantage.agora",
         "tripleDESEncryptedPassword" => "9srGG5hflGT0aDrgsxs3GQ=="
     ],
+    'insurelearn' => [
+        'olpSystem' => 'https://hubstg.insurelearn.com/',
+        "ILSUSER" => "eox_connector",
+        "ILSPASSWD" => "P9mwT~&/6Qk@y}hk"
+    ],
     'zendrive' => [
         'zendriveServerUrl' => 'https://staging-hub.wla.zendrive.com/api/v1/',
         'authToken' => 'ZfudDKB4.Y7Cxcu0gMRut51mVx3HRXOs3KL3tssSz'
