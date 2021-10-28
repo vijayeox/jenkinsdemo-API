@@ -14,10 +14,7 @@
 		"scrollToTop": false,
 		"collapsible": false,
 		"key": "esign",
-		"properties": {
-			"commands": "[{\"command\": \"delegate\", \"entity_name\": \"Independent Contractor Onboarding\",\"delegate\": \"CCPDFGeneration\"}]",
-			"post_delegate_refresh": "documentspreview"
-		},
+		"properties": {},
 		"type": "panel",
 		"label": "Esign",
 		"components": [{
@@ -346,7 +343,7 @@
 		"submission_commands": "[{ \t\"command\": \"delegate\", \t\"entity_name\": \"Independent Contractor Onboarding\", \t\"delegate\": \"ZenDriveFleetIntegration\" }]"
 	},
 	"settings": {},
-	"name": "hubIcRegisration",
+	"name": "partTimeICRegistration",
 	"path": "hubicregisration",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
 	"created": "2021-10-27T14:11:57.300Z",
