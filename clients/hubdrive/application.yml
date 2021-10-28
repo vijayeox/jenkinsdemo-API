@@ -248,7 +248,7 @@ role:
                 permission: 3
         uuid: 840ae886-c375-4ddd-81d6-f521f572d231
         businessRole:
-            name: 'Contract Carrier - Excess Only'
+            name: 'Insurance Carrier'
 entity:
     -
         name: 'PartTime Independent Contractor Onboarding'
@@ -274,7 +274,7 @@ entity:
                 name: contractDate
                 data_type: datetime
                 index: true
-            -   
+            -
                 name: ICUserId
                 index: true
                 data_type: text
@@ -382,7 +382,7 @@ entity:
                 name: contractDate
                 data_type: datetime
                 index: true
-            -   
+            -
                 name: ICUserId
                 index: true
                 data_type: text
@@ -900,7 +900,7 @@ entity:
                 identifier: usDot
         participantRole:
             -
-                businessRole: 'Contract Carrier - Excess Only'
+                businessRole: 'Insurance Carrier'
         ryg_rule: ''
         statusField: ''
         title: '${entity_name} ${name}'
@@ -928,7 +928,7 @@ entity:
             metadata: {  }
         page_uuid: 29f8c79a-d89c-11eb-b8bc-0242ac130003
     -
-        name: 'Foley'
+        name: Foley
         start_date_field: start_date
         end_date_field: end_date
         status_field: status
@@ -1570,6 +1570,14 @@ pages:
                             title: 'Driver Email Address'
                             field: email                
     -
+        name: 'SSO Integration'
+        uuid: 2ff5f37e-a8b3-47fe-bd33-889c2baf1728
+        description: 'Shows a list of Excess Liability'
+        content:
+            -
+                type: Form
+                form_id: 3446b166-37a4-4afd-9390-5fc7e80ce1df
+    -
         name: 'Foley Applicant Shell'
         uuid: 7e742804-1ab5-11ec-9621-0242ac130002
         description: 'Shows a list of Drivers opted for Foley Service'
@@ -1645,7 +1653,7 @@ pages:
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
                     operations:
-                        title: 'Foley'
+                        title: Foley
                         actions:
                             -
                                 name: 'Create Applicant Shell'
@@ -1802,7 +1810,12 @@ menu:
         page_uuid: 9a4708a8-6212-4625-9bb0-c40b423c4204
         uuid: 659feefb-79b9-469d-b39a-9cee5682f0d4
         privilege: MANAGE_APP_WRITE
-
+    -
+        name: 'SSO Integration'
+        icon: 'fa-solid fa-gears'
+        page_uuid: 2ff5f37e-a8b3-47fe-bd33-889c2baf1728
+        uuid: 0e47c25a-d5c7-4b13-9365-a54ae73de40b
+        privilege: MANAGE_COMPLIANCE
 form:
     -
         name: 'Compliance CheckList Form'
@@ -1810,6 +1823,12 @@ form:
         description: Compliance
         template_file: hubComplianceChecklist.json
         entity: Compliance
+    -
+        name: 'SSO Form'
+        uuid: 3446b166-37a4-4afd-9390-5fc7e80ce1df
+        description: SSO
+        template_file: ssoIntegrationFormDemo.json
+        entity: 'Independent Contractor Onboarding'
     -
         name: 'Part Time IC Registration Form'
         uuid: 02510bad-981c-43a9-a83d-c7436c9aba1a
@@ -1906,4 +1925,3 @@ workflow:
         uuid: ab854546-9e1b-43b3-ae7d-e6cf93683f61
         bpmn_file: ExcessWorkflow/NewExcessApplicationSubmission.bpmn
         entity: 'Excess Liability'
-

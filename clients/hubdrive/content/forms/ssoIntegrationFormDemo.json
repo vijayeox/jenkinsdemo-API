@@ -1,0 +1,59 @@
+{
+	"_id": "6172a02d0e3e0a467af3e705",
+	"type": "form",
+	"tags": [],
+	"owner": "5db28b688d7586b574a8f4f6",
+	"components": [{
+		"label": "Email",
+		"tableView": true,
+		"validate": {
+			"required": true
+		},
+		"key": "email",
+		"type": "email",
+		"input": true
+	}, {
+		"label": "Generate Link",
+		"action": "event",
+		"showValidations": false,
+		"disableOnInvalid": true,
+		"tableView": false,
+		"key": "submit",
+		"properties": {
+			"commands": "[{\"command\":\"delegate\",\"delegate\":\"InsureLearnSso\"}]"
+		},
+		"type": "button",
+		"event": "callPipeline",
+		"input": true
+	}, {
+		"label": "HTML",
+		"attrs": [{
+			"attr": "",
+			"value": ""
+		}],
+		"content": "Please find the link <a href={{data.SSOLink}}>here</a>",
+		"refreshOnChange": true,
+		"key": "html",
+		"type": "htmlelement",
+		"input": false,
+		"tableView": false
+	}],
+	"revisions": "",
+	"_vid": 0,
+	"title": "ssoIntegrationFormDemo",
+	"display": "form",
+	"access": [{
+		"roles": ["5dd3b1795ecd1efceaa1ac2c", "5dd3b1795ecd1e1b5fa1ac2d", "5dd3b1795ecd1e43eaa1ac2e"],
+		"type": "read_all"
+	}],
+	"submissionAccess": [],
+	"controller": "",
+	"properties": {},
+	"settings": {},
+	"name": "ssoIntegrationFormDemo",
+	"path": "ssointegrationformdemo",
+	"project": "5dd3b1795ecd1e1c6da1ac2b",
+	"created": "2021-10-22T11:27:41.918Z",
+	"modified": "2021-10-28T10:35:05.957Z",
+	"machineName": "insuranceprocurement-eoxvantage:ssoIntegrationFormDemo"
+}
