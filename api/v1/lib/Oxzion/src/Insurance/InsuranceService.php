@@ -22,7 +22,7 @@ class InsuranceService extends AbstractService
     public function getService(String $client, Array $data)
     {
         if (isset($this->services[$client])) {
-            return $this->setConfig($this->services[$client], $data);
+        return $this->setConfig($this->services[$client], $data);
         }
         throw new ServiceException("Service not avaliable for " . $client, 'service.not.found', OxServiceException::ERR_CODE_NOT_FOUND);
     }
