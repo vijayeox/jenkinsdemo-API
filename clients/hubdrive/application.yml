@@ -1812,7 +1812,7 @@ menu:
         privilege: MANAGE_APP_WRITE
     -
         name: 'SSO Integration'
-        icon: 'fa-solid fa-gears'
+        icon: 'fas fa-key'
         page_uuid: 2ff5f37e-a8b3-47fe-bd33-889c2baf1728
         uuid: 0e47c25a-d5c7-4b13-9365-a54ae73de40b
         privilege: MANAGE_COMPLIANCE
