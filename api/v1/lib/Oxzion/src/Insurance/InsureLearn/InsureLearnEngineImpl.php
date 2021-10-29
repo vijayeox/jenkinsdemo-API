@@ -130,7 +130,7 @@ class InsureLearnEngineImpl implements InsuranceEngine
         $baseUrl = $this->getConfig()['olpSystem'];
         $launchUrl = $baseUrl . "api/session/launch/?" . http_build_query([
             'uuid' => current($response['success'])['uuid'],
-            'launchPoint' => $baseUrl . "employee.jsp"
+            'launchPoint' => $baseUrl . "#/MyCourses/Courses"
         ]);
         return $launchUrl;
     }
