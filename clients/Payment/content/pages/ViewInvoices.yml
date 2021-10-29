@@ -57,7 +57,43 @@ content:
                           listAction: true
                       metadata: {  }
                   defaultAction: true
-                  
+              -
+                  name: Pay
+                  icon: 'fas fa-money-bill'
+                  rule: 'true'
+                  details:
+                      -
+                          type: Payment
+                          page_id: ''
+                          externalDataSource: ''
+                          formSource: ''
+                          form_name: {  }
+                          formUrl: ''
+                          urlPostParams: ''
+                          dashboard_uuid: ''
+                          url: ''
+                          useRowData: true
+                  paramsDuplicate:
+                      -
+                          parameterKey: ''
+                          parameterValue: ''
+                  contentDuplicate:
+                      data:
+                          content:
+                              -
+                                  type: Payment
+                                  page_id: ''
+                                  externalDataSource: ''
+                                  formSource: ''
+                                  form_name: {  }
+                                  formUrl: ''
+                                  urlPostParams: ''
+                                  dashboard_uuid: ''
+                                  url: ''
+                                  useRowData: true
+                          listActionContent: true
+                          listAction: true
+                      metadata: {  }
             columnConfig:
                 -
                     title: Invoice Number
@@ -78,8 +114,8 @@ content:
                 -
                     title: Invoice Amount
                     field: data.total
-                    cell: '<td style={{textAlign:"left"}}> {item.data.total} </td>'
+                    cell: '<td style={{textAlign:"left"}}> {item.data.total.toLocaleString("en-US", {style: "currency", currency: "USD",})} </td>'
                 -
                     title: Amount Paid
                     field: data.amountPaid
-                    cell: '<td style={{textAlign:"left"}}> {item.data.amountPaid} </td>'
+                    cell: '<td style={{textAlign:"left"}}> {item.data.amountPaid.toLocaleString("en-US", {style: "currency", currency: "USD",})} </td>'
