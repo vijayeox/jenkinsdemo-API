@@ -53,9 +53,12 @@ class PaymentCallbackController extends AbstractAPIControllerHelper
     public function ftniCallbackAction()
     {
         $data = $this->extractPostData();
-        $this->log->info("Entered ftni callback with data ".print_r($data,true));
+        
+        $transactionId = $data['Token'];
+        $callbackResult = $this->paymentService->processCallback($transactionId,$data);
         
         $view =  new ViewModel();
+        $view->redirectUrl = $callbackResult['redirectUrl'];
         return $view->setTemplate("/payment-callback/ftni-callback/index.phtml");
     }
 }
