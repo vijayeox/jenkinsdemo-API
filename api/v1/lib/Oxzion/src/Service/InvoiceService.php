@@ -437,18 +437,23 @@ class InvoiceService extends AbstractService
         $invoiceData = $result[0]['data'];
         
         $data['amount'] = $invoiceAmount;
-        $data['invoiceData'] = $invoiceData;
+        $data['invoiceData'] = json_decode($invoiceData,true);
         $data['invoiceId'] = $invoiceId;
         $data['appId'] = $appId;
-
         $this->paymentService->initiatePaymentProcess($data['appId'],$data);
-        $transactionData = array("transactionId" => $data['token'],"data"=>$data['transaction']['data']);
+        $transactionData = array("transactionId" => $data['token'],"data"=>[
+            "amount" => $data['amount'],
+            "invoiceId" => $data['invoiceId'],
+            "invoiceData" => $data['invoiceData'],
+            "config" => $data['config'],
+            "transaction" => $data['transaction']
+        ]);
         $this->paymentService->processPayment($data['appId'],$data['transaction']['id'],$transactionData);
-
+        
         unset($data['transaction']['data']);
         unset($data['transaction']['token']);
         
-        return $data;
+        return $transactionData;
     
     }
 
@@ -488,4 +493,48 @@ class InvoiceService extends AbstractService
         return $data;
     }
 
+    public function getBillingCustomers()
+    {
+        $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
+
+        $select = "SELECT DISTINCT obr.app_id, oa.name as app_name, oa.uuid as app_uuid, 
+        GROUP_CONCAT(oabrb.account_id) as buyer_account_id, GROUP_CONCAT(oac.uuid) as account_uuid,
+        GROUP_CONCAT(oac.name) as account_name
+        FROM ox_account_business_role as oabr 
+        INNER JOIN ox_business_role as obr on oabr.business_role_id=obr.id 
+        INNER JOIN ox_business_relationship as obrs on obrs.seller_account_business_role_id=oabr.id 
+        INNER JOIN ox_account_business_role as oabrb on oabrb.id=obrs.buyer_account_business_role_id 
+        INNER JOIN ox_app as oa on oa.id=obr.app_id
+        INNER JOIN ox_account as oac on oac.id=oabrb.account_id
+        WHERE oabr.account_id=:accountId GROUP BY obr.app_id";
+
+        $result = $this->executeQueryWithBindParameters($select,[
+            "accountId" => $accountId
+        ])->toArray();
+
+        foreach($result as $key=>$item)
+        {
+            $result[$key]['buyer_account_id'] = explode(",",$item['buyer_account_id']);
+            $result[$key]['account_uuid'] = explode(",",$item['account_uuid']);
+            $result[$key]['account_name'] = explode(",",$item['account_name']);
+
+        }
+        return $result;
+    }
+
 }
+
+
+/*
+SELECT DISTINCT obr.app_id, oa.name as app_name, oa.uuid as app_uuid, 
+GROUP_CONCAT(oabrb.account_id) as buyer_account_id, GROUP_CONCAT(oac.uuid) as account_uuid,
+GROUP_CONCAT(oac.name) as account_name
+FROM ox_account_business_role as oabr 
+INNER JOIN ox_business_role as obr on oabr.business_role_id=obr.id 
+INNER JOIN ox_business_relationship as obrs on obrs.seller_account_business_role_id=oabr.id 
+INNER JOIN ox_account_business_role as oabrb on oabrb.id=obrs.buyer_account_business_role_id 
+INNER JOIN ox_app as oa on oa.id=obr.app_id
+INNER JOIN ox_account as oac on oac.id=oabrb.account_id
+WHERE oabr.account_id=1 GROUP BY obr.app_id
+
+*/

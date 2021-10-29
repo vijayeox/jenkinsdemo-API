@@ -89,10 +89,6 @@ content:
                     title: Customer
                     field: customerName
                     cell: '<td style={{textAlign:"left"}}> {item.customerName} </td>'
-                -
-                    title: App
-                    field: appName
-                    cell: '<td style={{textAlign:"left"}}> {item.appName} </td>'
                 -   
                     title: Created On
                     field: invoiceDate
