@@ -173,7 +173,7 @@
 			"id": "eswbrpl"
 		}, {
 			"label": "business Role",
-			"defaultValue": "Independent Contractor",
+			"defaultValue": "",
 			"key": "businessRole",
 			"type": "hidden",
 			"input": true,
@@ -200,7 +200,7 @@
 			"disabled": false,
 			"autofocus": false,
 			"dbIndex": false,
-			"customDefaultValue": "",
+			"customDefaultValue": "if(accountName == 'HUB') { value='Independent Contractor' }else{ value='Independent Contractor' }",
 			"calculateValue": "",
 			"calculateServer": false,
 			"widget": {
@@ -246,7 +246,7 @@
 			"dbIndex": false,
 			"encrypted": false,
 			"redrawOn": "",
-			"customDefaultValue": "if(productName == 'independentContractor') {\n  value = '02510bad-981c-43a9-a83d-c7436c9aba1a';\n} else if(productName == 'contractCarrier') {\n  value = 'cfc8cd3f-58c4-400f-b9f1-e1916506f5e6';\n} else {\n  value = undefined;\n}",
+			"customDefaultValue": "if(productName == 'independentContractor' || productName == 'motorCarrier') {\n  value = '02510bad-981c-43a9-a83d-c7436c9aba1a';\n} else if(productName == 'contractCarrier') {\n  value = 'cfc8cd3f-58c4-400f-b9f1-e1916506f5e6';\n} else {\n  value = undefined;\n}",
 			"calculateValue": "",
 			"calculateServer": false,
 			"key": "formId",
@@ -374,7 +374,7 @@
 			"id": "e34xhgj"
 		}, {
 			"label": "product",
-			"customDefaultValue": "if(productName == 'independentContractor') {\n  value = 'partTimeIC';\n} else if(productName == 'contractCarrier') {\n  value = 'fullTimeIC';\n} else {\n  value = null;\n}",
+			"customDefaultValue": "if(productName == 'independentContractor') {\n  value = 'partTimeIC';\n} else if(productName == 'contractCarrier') {\n  value = 'fullTimeIC';\n} else if(productName == 'motorCarrier') {\n  value = 'fullTimeIC';\n} else {\n  value = null;\n}",
 			"key": "product",
 			"type": "hidden",
 			"input": true,
@@ -575,7 +575,7 @@
 			"id": "eabjqu"
 		}, {
 			"label": "Seller business role",
-			"defaultValue": "Contract Carrier",
+			"defaultValue": "",
 			"key": "sellerBusinessRole",
 			"type": "hidden",
 			"input": true,
@@ -602,7 +602,7 @@
 			"disabled": false,
 			"autofocus": false,
 			"dbIndex": false,
-			"customDefaultValue": "",
+			"customDefaultValue": "if(accountName == 'HUB') { value='Insurance Carrier' }else{ value='Contract Carrier' }",
 			"calculateValue": "",
 			"calculateServer": false,
 			"widget": {
