@@ -39,9 +39,10 @@ class PaymentEngineImpl implements PaymentEngine
     public function handleTransaction(&$data)
     {
 
+        $apiUrl = $this->paymentConfig['appConfig']['apiUrl'];
         $applicationUrl = $this->paymentConfig['appConfig']['applicationUrl'];
 
-        $callbackUrl = (substr($applicationUrl, -1) == "/")?$applicationUrl."user/ftni/callback":$applicationUrl."/user/ftni/callback";
+        $callbackUrl = (substr($apiUrl, -1) == "/")?$apiUrl."user/ftni/callback":$apiUrl."/user/ftni/callback";
    
         $result = array();
         $result['transaction_id'] = isset($data['transactionId'])?$data['transactionId']:null;
