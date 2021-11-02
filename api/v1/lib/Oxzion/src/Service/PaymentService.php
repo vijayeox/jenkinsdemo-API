@@ -293,6 +293,13 @@ class PaymentService extends AbstractService
 
     public function processCallback($transactionId,$data)
     {
+        if(!isset($transactionId))
+        {
+            return [
+                "redirectUrl" => $this->config['applicationUrl']
+            ];
+        }
+
         $select = "SELECT opt.transaction_id,opt.data,op.app_id,op.payment_client,
         op.api_url,op.server_instance_name,op.payment_config,op.account_id
         FROM ox_payment_transaction as opt INNER JOIN ox_payment as op on opt.payment_id=op.id 
