@@ -56,7 +56,14 @@ class PaymentCallbackController extends AbstractAPIControllerHelper
         $data = $this->extractPostData();
         $this->log->info("Entered FTNI callback with data ".print_r($data, true));
 
-        $transactionId = $data['Token'];
+        if(isset($data['Status']) && $data['Status'] == 1)
+        {
+            $transactionId = $data['Token'];
+
+        }else {
+            $transactionId = null;
+        }
+
         $callbackResult = $this->paymentService->processCallback($transactionId,$data);
         
         $view =  new ViewModel();
