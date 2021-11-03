@@ -176,6 +176,7 @@ class PaymentService extends AbstractService
         try {
             $className = "Oxzion\Payment\\" . $paymentInfo['payment_client'] . "\PaymentEngineImpl";
             if (class_exists($className)) {
+                $paymentInfo['appConfig'] = $this->config;
                 return (new $className($paymentInfo));
             } else {
                 throw (new ServiceException("Payment Gateway has not been implement " . $paymentInfo['payment_client'] . " missing!", 1));
@@ -288,5 +289,60 @@ class PaymentService extends AbstractService
         } else {
             return 0;
         }
+    }
+
+    public function processCallback($transactionId,$data)
+    {
+        if(!isset($transactionId))
+        {
+            return [
+                "redirectUrl" => $this->config['applicationUrl']
+            ];
+        }
+
+        $select = "SELECT opt.transaction_id,opt.data,op.app_id,op.payment_client,
+        op.api_url,op.server_instance_name,op.payment_config,op.account_id
+        FROM ox_payment_transaction as opt INNER JOIN ox_payment as op on opt.payment_id=op.id 
+        WHERE opt.transaction_id=:transactionId";
+
+        $result = $this->executeQueryWithBindParameters($select,[
+            "transactionId" => $transactionId
+        ])->toArray();
+
+        if($result == 0)
+        {
+            return [
+                "redirectUrl" => $this->config['applicationUrl']
+            ];
+        }
+
+        $transactionData = json_decode($result[0]['data'],true);
+        $paymentEngine = $this->getPaymentEngine($result[0]);
+        $callbackResult = $paymentEngine->processCallback($transactionId,$transactionData,$data);
+
+        if(isset($transactionData['invoiceId']))
+        {
+            if($callbackResult['transactionStatus'] == "settled")
+            {
+                $update = "UPDATE ox_payment_transaction set transaction_status=:transactionStatus WHERE transaction_id=:transactionId";
+                $this->executeQueryWithBindParameters($update,[
+                    "transactionStatus" => $callbackResult['transactionStatus'],
+                    "transactionId" => $transactionId
+                ]);
+
+                $update = "UPDATE ox_billing_invoice set is_settled=1 WHERE uuid=:invoiceUuid";
+                $this->executeQueryWithBindParameters($update,[
+                    "invoiceUuid" => $transactionData['invoiceId']
+                ]);
+            }
+
+            $callbackResult["redirectUrl"] = $this->config['applicationUrl'];
+            return $callbackResult;
+        }
+        
+        $callbackResult["redirectUrl"] = $this->config['applicationUrl'];
+        return $callbackResult;
+
+
     }
 }
