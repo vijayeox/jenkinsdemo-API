@@ -438,6 +438,9 @@ class InvoiceService extends AbstractService
         
         $data['amount'] = $invoiceAmount;
         $data['invoiceData'] = json_decode($invoiceData,true);
+        
+        $data['amount'] = $data['amount'] - $data['invoiceData']['amountPaid'];
+
         $data['invoiceId'] = $invoiceId;
         $data['appId'] = $appId;
         $this->paymentService->initiatePaymentProcess($data['appId'],$data);
