@@ -100,10 +100,6 @@ content:
                     field: data.invoiceNumber
                     cell: '<td style={{textAlign:"left"}}> {item.data.invoiceNumber} </td>'
                 -
-                    title: Client
-                    field: name
-                    cell: '<td style={{textAlign:"left"}}> {item.name} </td>'
-                -
                     title: Invoice Date
                     field: data.invoiceDate
                     cell: '<td style={{textAlign:"left"}}> {item.data.invoiceDate} </td>'
