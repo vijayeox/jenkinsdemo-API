@@ -1,0 +1,164 @@
+app:
+    uuid: 88cc76db-1c0f-4334-962f-b3dcc63b0c4a
+    oldAppName: ''
+    title: Profile
+    name: Profile
+    description: 'Profile of the user with key KPIs'
+    category: dashboard
+    chat_notification: false
+    app_properties: '{"chat_notification":false,"appIdentifiers":""}'
+    type: 2
+    isdefault: false
+    logo: default_app.png
+    status: 2
+    start_options: null
+    app_icon: {  }
+    app_icon_white: {  }
+    autostart: true
+checkOrg: false
+editIndexScss: false
+entity:
+    -
+        name: ''
+        formFieldsValidationExcel: {  }
+        start_date_field: ''
+        end_date_field: ''
+        status_field: ''
+        subscriber_field: ''
+        title: ''
+        chatAttachmentField: ''
+        ryg_rule: ''
+        enable_documents: false
+        enable_comments: false
+        enable_view: false
+        enable_auditlog: false
+        pageContent: {  }
+        field:
+            -
+                name: ''
+                text: ''
+                data_type: ''
+                index: false
+form:
+    -
+        name: ''
+        entity: {  }
+        template_file: ''
+        uuid: ''
+formDuplicate:
+    -
+        name: ''
+        entity: {  }
+        template: {  }
+        template_file: ''
+        uuid: ''
+formsList:
+    -
+        name: ''
+        uuid: ''
+job:
+    -
+        name: ''
+        url: ''
+        cron: ''
+        uuid: ''
+        data: {  }
+menu:
+    -
+        name: Profile
+        icon: 'fad fa-id-card-alt'
+        page: Profile
+        privilege: MY_PROFILE_DASHBOARD_READ
+        parent: {  }
+        uuid: ''
+org:
+    name: ''
+    email: ''
+    address1: ''
+    city: ''
+    zip: ''
+    country: ''
+    state: {  }
+    contact:
+        firstname: ''
+        lastname: ''
+        username: ''
+        email: ''
+pages:
+    -
+        name: Profile
+        uuid: ''
+        description: Profile
+        pageContent:
+            data:
+                pagesList:
+                    -
+                        name: Profile
+                        uuid: ''
+                formsList:
+                    -
+                        name: ''
+                        uuid: ''
+                content:
+                    -
+                        type: DashboardManager
+                        page_id: ''
+                        htmlContent: ''
+                        externalDataSource: ''
+                        formSource: ''
+                        form_name: {  }
+                        formUrl: ''
+                        urlPostParams: ''
+                        dashboard_uuid: 9c4f76c3-f914-4668-a828-90d7f72846d5
+                        url: ''
+                        content:
+                            uuid: 9c4f76c3-f914-4668-a828-90d7f72846d5
+                        useRowData: false
+                        route: ''
+            metadata: {  }
+        content:
+            -
+                type: DashboardManager
+                page_id: ''
+                htmlContent: ''
+                externalDataSource: ''
+                formSource: ''
+                form_name: {  }
+                formUrl: ''
+                urlPostParams: ''
+                dashboard_uuid: 9c4f76c3-f914-4668-a828-90d7f72846d5
+                url: ''
+                content:
+                    uuid: 9c4f76c3-f914-4668-a828-90d7f72846d5
+                useRowData: false
+                route: ''
+pagesList:
+    -
+        name: Profile
+        uuid: ''
+privilege:
+    -
+        name: MY_PROFILE_DASHBOARD
+        permission: 1
+role:
+    -
+        name: MY_PROFILE_DASHBOARD
+        privilegesDuplicate:
+            -
+                privilege_name:
+                    name: MY_PROFILE_DASHBOARD
+                    permission: 1
+                permission: 1
+        default: false
+        privileges:
+            -
+                privilege_name: MY_PROFILE_DASHBOARD
+                permission: 1
+textFieldValidate: 'Please click on the Create App button before you proceed'
+workflow:
+    -
+        name: ''
+        entity: {  }
+        template: {  }
+        bpmn_file: ''
+        uuid: ''

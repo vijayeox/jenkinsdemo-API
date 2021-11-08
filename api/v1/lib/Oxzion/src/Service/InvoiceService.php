@@ -314,11 +314,11 @@ class InvoiceService extends AbstractService
             }
 
         }
-        $select =  "SELECT obi.uuid,obi.amount,obi.data,obi.date_created,oa.name,obc.uuid as customer_id,oa.uuid as app_id,oac.uuid as account_id FROM ox_billing_invoice as obi ";
+        $select =  "SELECT obi.uuid,obi.amount,obi.data,obi.date_created,oa.name,obc.uuid as customer_id,oa.uuid as app_id,oac.uuid as account_id,obi.is_settled FROM ox_billing_invoice as obi ";
         $innerJoin1 = "INNER JOIN ox_billing_customer as obc on obi.customer_id=obc.id ";
         $innerJoin2 = "INNER JOIN ox_app as oa on obc.app_id=oa.id ";
         $innerJoin3 = "INNER JOIN ox_account as oac on obc.account_id = oac.id ";
-        $where ="WHERE obi.is_settled=0 AND obc.account_id=:accountId LIMIT ".$pageSize." OFFSET ".$offset;
+        $where ="WHERE obc.account_id=:accountId LIMIT ".$pageSize." OFFSET ".$offset;
         $query = $select.$innerJoin1.$innerJoin2.$innerJoin3.$where;
 
 
@@ -332,6 +332,14 @@ class InvoiceService extends AbstractService
         foreach($result as $key => $invoice)
         {
             $result[$key]['data'] = json_decode($result[$key]['data'],true);
+            if($invoice['is_settled'] == 1)
+            {
+                $result[$key]['data']['amountPaid'] = $result[$key]['data']['total'];
+                $result[$key]['paymentStatus'] = "Settled";
+            }
+            else{
+                $result[$key]['paymentStatus'] = "Pending";
+            }
         }
         return array('data' => $result, 'total' => $total);
 
@@ -438,6 +446,9 @@ class InvoiceService extends AbstractService
         
         $data['amount'] = $invoiceAmount;
         $data['invoiceData'] = json_decode($invoiceData,true);
+        
+        $data['amount'] = $data['amount'] - $data['invoiceData']['amountPaid'];
+
         $data['invoiceId'] = $invoiceId;
         $data['appId'] = $appId;
         $this->paymentService->initiatePaymentProcess($data['appId'],$data);
