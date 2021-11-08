@@ -32,7 +32,7 @@ class InsertDriver extends AbstractAppDelegate
             if ($datavalidate === "0") {
                 return array("status" => "Error", "data" => $data);
             }
-            $zendDriveSubscription = "YES";
+            $zendDriveSubscription = " ";
             $icAccountId = $data['icusername']['id'];
             $driverex = array();
 
