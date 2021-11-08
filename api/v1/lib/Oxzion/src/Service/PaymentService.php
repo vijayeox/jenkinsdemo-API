@@ -293,10 +293,14 @@ class PaymentService extends AbstractService
 
     public function processCallback($transactionId,$data)
     {
+        $baseUrl = $this->config['applicationUrl'];
+        $successRedirect = (substr($baseUrl, -1) == "/")?$baseUrl."apps/Payment/success":$baseUrl."/apps/Payment/success";
+        $failureRedirect = (substr($baseUrl, -1) == "/")?$baseUrl."apps/Payment/failure":$baseUrl."/apps/Payment/failure";
+
         if(!isset($transactionId))
         {
             return [
-                "redirectUrl" => $this->config['applicationUrl']
+                "redirectUrl" => $failureRedirect
             ];
         }
 
@@ -312,7 +316,7 @@ class PaymentService extends AbstractService
         if($result == 0)
         {
             return [
-                "redirectUrl" => $this->config['applicationUrl']
+                "redirectUrl" => $failureRedirect
             ];
         }
 
@@ -336,11 +340,11 @@ class PaymentService extends AbstractService
                 ]);
             }
 
-            $callbackResult["redirectUrl"] = $this->config['applicationUrl'];
+            $callbackResult["redirectUrl"] = $successRedirect;
             return $callbackResult;
         }
         
-        $callbackResult["redirectUrl"] = $this->config['applicationUrl'];
+        $callbackResult["redirectUrl"] = $successRedirect;
         return $callbackResult;
 
 

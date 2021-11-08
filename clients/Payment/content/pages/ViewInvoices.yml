@@ -60,7 +60,7 @@ content:
               -
                   name: Pay
                   icon: 'fas fa-money-bill'
-                  rule: 'true'
+                  rule: '{{is_settled}} == "0"'
                   details:
                       -
                           type: Payment
@@ -96,13 +96,13 @@ content:
                       metadata: {  }
             columnConfig:
                 -
+                    title: Payment Status
+                    field: is_settled
+                    cell: '<td style={{textAlign:"left"}}> {item.is_settled == "0"?"Pending":"Settled"} </td>'
+                -
                     title: Invoice Number
                     field: data.invoiceNumber
                     cell: '<td style={{textAlign:"left"}}> {item.data.invoiceNumber} </td>'
-                -
-                    title: Client
-                    field: name
-                    cell: '<td style={{textAlign:"left"}}> {item.name} </td>'
                 -
                     title: Invoice Date
                     field: data.invoiceDate
