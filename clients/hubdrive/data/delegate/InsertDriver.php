@@ -32,21 +32,52 @@ class InsertDriver extends AbstractAppDelegate
             if ($datavalidate === "0") {
                 return array("status" => "Error", "data" => $data);
             }
+            $zendDriveSubscription = " ";
             $icAccountId = $data['icusername']['id'];
             $driverex = array();
 
             $dataForDriver = array();
             $driverex =  $this->uploadCSVDataForDrivers($data);
             $this->logger->info("driver data " . print_r($driverex, true));
-            $selectQuery = "SELECT * FROM `ic_info` WHERE email = '" . $data['icusername']['email'] . "'";
-            $ICrrecord = $persistenceService->selectQuery($selectQuery);
-            $details = array();
-            while ($ICrrecord->next()) {
-                $details[] = $ICrrecord->current();
+            if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
+                $selectQuery = "SELECT * FROM `ic_info` WHERE email = '" . $data['icusername']['email'] . "'";
+                $ICrrecord = $persistenceService->selectQuery($selectQuery);
+                if (count($ICrrecord) >= 1) {
+                    $details = array();
+                    while ($ICrrecord->next()) {
+                        $details[] = $ICrrecord->current();
+                    }
+                    $this->logger->info("ic information " . print_r($details, true));
+                    $ic_id = $details[0]['id'];
+                    $fleet_id = $details[0]['uuid'];
+                }
+                $fleet_name = $data['icusername']['name'];
+                $fleet_email = $data['icusername']['email'];
+                $fleet_id = $data['icusername']['accountId'];
+                $fleet_phonenumber = $data['icusername']['phone'];
+                $endpoint = 'fleet/';
+                $requesttype = 'POST';
+                $params = array('name' => $fleet_name, 'fleet_id' => $fleet_id, 'phone_number' => $fleet_phonenumber);
+                $this->logger->info("in zendrive delegate params- " . json_encode($params, JSON_UNESCAPED_SLASHES));
+                $response = $this->apicall->getApiResponse($endpoint, $params, $requesttype);
+                $this->logger->info("in zendrive delegate api response- " . $response);
+                $parsedResponse = json_decode($response, true);
+                $finalresponse = json_decode($parsedResponse['body'], true);
+                $data['fleet_api_key'] = $fleet_api_key = $finalresponse['data']['fleet_api_key'];
+
+                //create a table called ic_info in hubdrive db and save ic name, email, phone, uuid, fleet_api_key
+                $fleetArr = array('name' => $fleet_name, 'fleet_id' => $fleet_id, 'phone_number' => $fleet_phonenumber, 'fleet_api_key' => $fleet_api_key, 'email' => $fleet_email);
+
+                $columns = "(`ic_name`,`email`,`ph_number`,`uuid`,`zendrive_fleet_api_key`)";
+                $values = "VALUES (:name,:email,:phone_number,:fleet_id,:fleet_api_key)";
+                $insertQuery = "INSERT INTO ic_info " . $columns . $values;
+                $this->logger->info("in zendrive delegate insert query- " . print_r($insertQuery, true));
+                $icInsert = $persistenceService->insertQuery($insertQuery, $fleetArr);
+                $ic_id = $icInsert->getGeneratedValue();
+            } else {
+                $fleet_id = $data['icusername']['accountId'];
+                $this->logger->info("fleet id " . print_r($fleet_id, true));
             }
-            $this->logger->info("ic information " . print_r($details, true));
-            $ic_id = $details[0]['id'];
-            $fleet_id = $details[0]['uuid'];
             $line = array_chunk($driverex, 10);
             foreach ($line as $key => $val) {
                 $data = array();
@@ -70,6 +101,7 @@ class InsertDriver extends AbstractAppDelegate
                             $dataForDriver['app_id'] = self::APPID;
                             $dataForDriver['type'] = 'INDIVIDUAL';
                             $params['accountId'] = $fleet_id;
+                            $this->logger->info("account id in params " . print_r($params['accountId'], true));
                             if (!isset($dataForDriver['uuid'])) {
                                 $dataForDriver['uuid'] = UuidUtil::uuid();
                             }
@@ -86,12 +118,16 @@ class InsertDriver extends AbstractAppDelegate
                             $response1 = $this->createFile($dataForDriver);
                             $this->logger->info("driver registration data " . print_r($response, true));
                             $this->logger->info("driver file creation data " . print_r($response1, true));
-                            $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
-                            $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
+                            if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
+                                $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
+                                $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
+                            }
                         } else {
                             $this->logger->info("driver already exists");
-                            $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
-                            $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
+                            if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
+                                $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
+                                $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
+                            }
                         }
                     } else {
                         $errorData = array();

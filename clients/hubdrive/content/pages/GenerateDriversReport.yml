@@ -1,0 +1,46 @@
+name: 'Drivers Report List'
+description: 'Shows a list of Drivers realated to a workbook'
+content:
+    -
+        type: List
+        content:
+            route: 'file/search/entity/Drivers Export'
+            filterable: true
+            defaultFilters: 
+                sort:
+                    -
+                        field: date_created
+                        dir: desc                 
+            resizable: true
+            pageable:
+                buttonCount: 3
+                pageSizes:
+                    - 10
+                    - 20
+                    - 50
+                info: true
+            sortable: false
+            actions:          
+                -
+                    name: 'Download'
+                    icon: 'fas fa-cloud-download'
+                    rule: '(row.entity_name == "Drivers Export")'
+                    updateOnly: true      
+                    details:
+                        -
+                            type: Update
+                            method: "GET"
+                            params:
+                                url: document/DriversExport.xlsx?docPath={{driversExportDocPath}}
+                                downloadFile: true
+            toolbarTemplate: '<h5>List of Drivers Exports Requested</h5>'
+            columnConfig:
+                -
+                    title: Export Date
+                    field: exportDate
+                    cell: '<td>{formatDate(item.exportDate)}</td>'
+                    filter: date
+                    filterFormat: YYYY-MM-DD
+                -
+                    title: Records Count
+                    field: recordsCount

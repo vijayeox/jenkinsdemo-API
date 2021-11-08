@@ -6,7 +6,7 @@ const Register = require("./public/register/Register");
 
 module.exports = function(core, proc) {
   core.app.get(proc.resource("/register/:productName/:accountName"), (req, res) => {
-    if (req.params.productName == 'independentContractor' || req.params.productName == 'contractCarrier') {
+    if (req.params.productName == 'independentContractor' || req.params.productName == 'contractCarrier' || req.params.productName == 'motorCarrier') {
       var filePath = path.join(
         __dirname + "/public/register/independentContractor.json"
       );

@@ -41,15 +41,23 @@ trait AccountTrait
         return $this->accountService->registerAccount($data);
     }
 
-    protected function checkIfBusinessRelationshipExists($businessRole,$appId,$accountId){
-        return $this->businessParticipantService->checkIfBusinessRelationshipExists($businessRole,$appId,$accountId);
+    protected function checkIfBusinessRelationshipExists($businessRole, $appId, $accountId)
+    {
+        return $this->businessParticipantService->checkIfBusinessRelationshipExists($businessRole, $appId, $accountId);
     }
 
-    protected function getAccountByName($name) {
+    protected function getAccountByName($name)
+    {
         return $this->accountService->getAccountByName($name);
     }
 
-    protected function getVendorApiResponse($endpoint, $params) {
+    protected function getVendorApiResponse($endpoint, $params)
+    {
         return $this->apiCallService->getVendorApiResponse($endpoint, $params);
+    }
+
+    public function setupBusinessOfferings($params, $accountId, $appId)
+    {
+        return $this->accountService->setupBusinessOfferings($params, $accountId, $appId);
     }
 }

@@ -76,7 +76,7 @@ org:
                 entity:
                     - 'Independent Contractor Onboarding'
                     - 'PartTime Independent Contractor Onboarding'
-                    - Foley
+                    -  Foley
         preferences: '{}'
 businessRole:
     -
@@ -337,9 +337,6 @@ entity:
         identifiers:
             -
                 identifier: email
-        participantRole:
-            -
-                businessRole: 'Driver'
         pageContent:
             data:
                 content:
@@ -959,6 +956,27 @@ entity:
                         content: ''
                         useRowData: false
             metadata: {  }
+    -
+        name: 'Drivers Export'
+        override_data: true
+        field:
+            -
+                name: exportDate
+                text: exportDate
+                index: true
+                data_type: date
+            -
+                name: recordsCount
+                text: 'Records Count'
+                index: true
+                data_type: numeric
+            -
+                name: driversExport
+                text: 'Drivers Export'
+                data_type: document
+    -
+        name: 'Motor Carrier'
+        override_data: true
 pages:
     -
         uuid: 7074d8e0-a3a2-4d4c-8215-779ac4709f75
@@ -1471,13 +1489,7 @@ pages:
             -
                 type: RenderButtons
                 content:
-                    buttonList:
-                        -
-                            name: 'Export'
-                            details:
-                                    -
-                                        type: Form
-                                        # form_id: 48b5f9f6-495e-44bd-aeb6-a44437bff0ac      
+                    buttonList:    
                         -
                             name: 'Import'
                             details:
@@ -1555,13 +1567,19 @@ pages:
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
                     operations:
-                        title: 'Upload CSV/EXCEL'
+                        title: 'Export Drivers'
                         actions:
                             -
+                                name: 'Export Drivers'
+                                icon: 'fa fa-cloud-download'
+                                rule: 'true'
+                                updateOnly: true
                                 details:
                                     -
-                                        type: Form
-                                        form_id: 48b5f9f6-495e-44bd-aeb6-a44437bff0ac
+                                        type: Update
+                                        params:
+                                            url: command/delegate/ExportDriversData
+                                        successMessage: 'Report has been genarated, please check drivers Management report menu for downloading the reports.'
                     columnConfig:
                         -
                             title: 'Driver Name'
@@ -1767,6 +1785,9 @@ pages:
                             cell: '<td>{formatDate(item.start_date)}</td>'
                             filter: date
                             filterFormat: YYYY-MM-DD
+    -
+        page_name: GenerateDriversReport.yml
+        uuid: ba632ab9-c87d-4417-852e-fcf609b96926
 menu:
     -
         name: 'Independent Contractor'
@@ -1816,6 +1837,12 @@ menu:
         page_uuid: 2ff5f37e-a8b3-47fe-bd33-889c2baf1728
         uuid: 0e47c25a-d5c7-4b13-9365-a54ae73de40b
         privilege: MANAGE_COMPLIANCE
+    -   
+        name: 'Driver Management Reports'
+        icon: 'fad fa-file-excel'
+        page_uuid: ba632ab9-c87d-4417-852e-fcf609b96926
+        uuid: 659feefb-79b9-469d-b39a-9cee5682f0d5
+        privilege: MANAGE_APP_WRITE
 form:
     -
         name: 'Compliance CheckList Form'

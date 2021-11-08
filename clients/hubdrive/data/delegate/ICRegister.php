@@ -26,12 +26,13 @@ class ICRegister extends AbstractAppDelegate
         $data['businessRole'] = 'Independent Contractor';
         $data['sellerBusinessRole'] = 'Contract Carrier';
         $data['sellerAccountName'] = "IGGI";
-        $data['appId'] = self::APPID; 
+        $data['accountId'] = '1f4d8896-a5da-4b34-8b35-3e8ab079aca2';
+        $data['appId'] = self::APPID;
 
         // Add logs for created by id and producer name who triggered submission
-        $this->logger->info("Check---- " . print_r(!isset($data['user_exists']) || ($data['user_exists'] === false || $data['user_exists'] === 0|| $data['user_exists'] === 'false' || $data['user_exists'] === "0"), true));
+        $this->logger->info("Check---- " . print_r(!isset($data['user_exists']) || ($data['user_exists'] === false || $data['user_exists'] === 0 || $data['user_exists'] === 'false' || $data['user_exists'] === "0"), true));
 
-        if(!isset($data['user_exists']) || $data['user_exists'] === "0"|| ($data['user_exists'] === false || $data['user_exists'] === 0|| $data['user_exists'] === 'false')) {
+        if (!isset($data['user_exists']) || $data['user_exists'] === "0" || ($data['user_exists'] === false || $data['user_exists'] === 0 || $data['user_exists'] === 'false')) {
             $dataForIC = array();
             $dataForIC['businessRole'] = $data['businessRole'];
             $dataForIC['sellerBusinessRole'] = $data['sellerBusinessRole'];
@@ -43,18 +44,14 @@ class ICRegister extends AbstractAppDelegate
             $dataForIC['address1'] = $data['address1'];
             $dataForIC['city'] = $data['city'];
             if (!is_array($data['stateObj'])) {
-                $stateDecoded = json_decode($data['stateObj'],true);
+                $stateDecoded = json_decode($data['stateObj'], true);
                 $this->logger->info("stateDecoded- " . print_r($stateDecoded, true));
             }
-            if(isset($stateDecoded['abbreviation']))
-            {
+            if (isset($stateDecoded['abbreviation'])) {
                 $dataForIC['state'] = $stateDecoded['abbreviation'];
-            }
-            else if(isset($data['stateObj']['abbreviation']))
-            {
+            } else if (isset($data['stateObj']['abbreviation'])) {
                 $dataForIC['state'] = $data['stateObj']['abbreviation'];
-            }
-            else{
+            } else {
                 $dataForIC['state'] = $data['stateObj'];
             }
             $dataForIC['zip'] = $data['zip'];
@@ -71,22 +68,25 @@ class ICRegister extends AbstractAppDelegate
             }
             $dataForIC['type'] = 'BUSINESS';
             $dataForIC['identifier_field'] = $data['identifier_field'];
-            $this->logger->info("Before RegisterAcount---".print_r($dataForIC,true));
+            $this->logger->info("Before RegisterAcount---" . print_r($dataForIC, true));
+            $dataForIC['entity'] = 'Driver';
+            $dataForIC['businessOffering'][0]['businessRole'] = 'Independent Contractor';
+            $dataForIC['businessOffering'][0]['entity'][0] = 'Driver';
             $this->registerAccount($dataForIC);
-            $this->logger->info("After RegisterAcount---".print_r($dataForIC,true));
+            $this->setupBusinessOfferings($dataForIC, $dataForIC['accountId'], 'a4b1f073-fc20-477f-a804-1aa206938c42');
+            $this->logger->info("After RegisterAcount---" . print_r($dataForIC, true));
             $data['buyerAccountId'] = $dataForIC['accountId'];
-            $data['ICUserId'] = $dataForIC['accountUserId'];
-        } else{
-           $response =  $this->getUserDataByIdentifier($data['appId'], $data[$data['identifier_field']], $data['identifier_field']);
-           if (count($response) == 0) {
-                throw new DelegateException("No user record found","no.user.record.exists");
-           }
-           $data['buyerAccountId'] = $response[0]['accountId'];
-           $sellerAccountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
-           $response = $this->checkIfBusinessRelationshipExists($response[0]['entityId'],$response[0]['account_id'],$sellerAccountId);
-           if ($response) {
-               throw new DelegateException("Business Relationship already exists","businessrelationship.exists");
-           }
+        } else {
+            $response =  $this->getUserDataByIdentifier($data['appId'], $data[$data['identifier_field']], $data['identifier_field']);
+            if (count($response) == 0) {
+                throw new DelegateException("No user record found", "no.user.record.exists");
+            }
+            $data['buyerAccountId'] = $response[0]['accountId'];
+            $sellerAccountId = AuthContext::get(AuthConstants::ACCOUNT_UUID);
+            $response = $this->checkIfBusinessRelationshipExists($response[0]['entityId'], $response[0]['account_id'], $sellerAccountId);
+            if ($response) {
+                throw new DelegateException("Business Relationship already exists", "businessrelationship.exists");
+            }
         }
         return $data;
     }
