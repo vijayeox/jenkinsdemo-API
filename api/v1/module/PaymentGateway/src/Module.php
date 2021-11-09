@@ -4,6 +4,7 @@ namespace PaymentGateway;
 
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\PaymentService;
+use Oxzion\AppDelegate\AppDelegateService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -33,7 +34,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 PaymentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class), $container->get(Model\PaymentTransactionTable::class));
+                    return new PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class), $container->get(Model\PaymentTransactionTable::class),$container->get(\Oxzion\AppDelegate\AppDelegateService::class));
                 },
                 Model\PaymentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PaymentTableGateway::class);

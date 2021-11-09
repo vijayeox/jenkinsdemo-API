@@ -6,6 +6,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
+use Oxzion\AppDelegate\AppDelegateService;
 use Oxzion\ValidationException;
 use PaymentGateway\Model\Payment;
 use PaymentGateway\Model\PaymentTable;
@@ -20,12 +21,13 @@ class PaymentService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, PaymentTable $table, PaymentTransactionTable $transactionTable)
+    public function __construct($config, $dbAdapter, PaymentTable $table, PaymentTransactionTable $transactionTable,AppDelegateService $appDelegateService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->transactionTable = $transactionTable;
         $this->paymentGatewayType = $this->config['paymentGatewayType'];
+        $this->appDelegateService = $appDelegateService;
     }
 
     /**
@@ -304,10 +306,13 @@ class PaymentService extends AbstractService
             ];
         }
 
-        $select = "SELECT opt.transaction_id,opt.data,op.app_id,op.payment_client,
-        op.api_url,op.server_instance_name,op.payment_config,op.account_id
-        FROM ox_payment_transaction as opt INNER JOIN ox_payment as op on opt.payment_id=op.id 
-        WHERE opt.transaction_id=:transactionId";
+        $select = "SELECT opt.transaction_id,opt.data,oa.uuid as app_id,op.payment_client,
+        op.api_url,op.server_instance_name,op.payment_config,oac.uuid as account_id
+        FROM ox_payment_transaction as opt 
+        INNER JOIN ox_payment as op on opt.payment_id=op.id 
+        INNER JOIN ox_app as oa on oa.id=op.app_id 
+        INNER JOIN ox_account as oac on oac.id=op.account_id
+        WHERE opt.transaction_id= :transactionId";
 
         $result = $this->executeQueryWithBindParameters($select,[
             "transactionId" => $transactionId
@@ -321,6 +326,9 @@ class PaymentService extends AbstractService
         }
 
         $transactionData = json_decode($result[0]['data'],true);
+        $appId = $result[0]['app_id'];
+        $accountId = $result[0]['account_id'];
+
         $paymentEngine = $this->getPaymentEngine($result[0]);
         $callbackResult = $paymentEngine->processCallback($transactionId,$transactionData,$data);
 
@@ -334,11 +342,46 @@ class PaymentService extends AbstractService
                     "transactionId" => $transactionId
                 ]);
 
-                $update = "UPDATE ox_billing_invoice set is_settled=1 WHERE uuid=:invoiceUuid";
-                $this->executeQueryWithBindParameters($update,[
+                $select = "SELECT data from ox_billing_invoice WHERE uuid=:invoiceUuid";
+                $result = $this->executeQueryWithBindParameters($select,[
                     "invoiceUuid" => $transactionData['invoiceId']
+                ])->toArray();
+                
+                $invoiceData = json_decode($result[0]['data'],true);
+                $invoiceData['amountPaid'] = $invoiceData['total'];
+                
+                $invoiceData['appId'] = $appId;
+                $invoiceData['accountId'] = $accountId;
+                $invoiceData['invoiceUuid'] = $transactionData['invoiceId'];
+
+                $this->appDelegateService->execute($appId,'CreateInvoicePDF',$invoiceData);
+
+                $update = "UPDATE ox_billing_invoice set is_settled=1, data=:invoiceData WHERE uuid=:invoiceUuid";
+                $this->executeQueryWithBindParameters($update,[
+                    "invoiceUuid" => $transactionData['invoiceId'],
+                    "invoiceData" => json_encode($invoiceData)
                 ]);
+
+                if(isset($transactionData['invoiceData']['fileId']))
+                {
+                    $select = "SELECT data FROM ox_file where uuid=:fileId";
+                    $result = $this->executeQueryWithBindParameters($select,[
+                        "fileId" => $transactionData['invoiceData']['fileId']
+                    ])->toArray();
+    
+                    $invoiceFileData = json_decode($result[0]['data'],true);
+                    $invoiceFileData['paymentStatus'] = "settled";
+                    $invoiceFileData['amountPaid'] = $invoiceFileData['total'];
+                    
+                    $update = "UPDATE ox_file set data = :data WHERE uuid =:fileId";
+                    $this->executeQueryWithBindParameters($update,[
+                        "fileId" => $transactionData['invoiceData']['fileId'],
+                        "data" => json_encode($invoiceFileData)
+                    ]);
+                }
             }
+
+
 
             $callbackResult["redirectUrl"] = $successRedirect;
             return $callbackResult;
