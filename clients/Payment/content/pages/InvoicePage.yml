@@ -60,7 +60,7 @@ content:
                     defaultAction: true
                 -
                     name: Edit
-                    rule: 'true'
+                    rule: '"{{paymentStatus}}" != "settled"'
                     details:
                         -
                             type: Form
@@ -81,6 +81,10 @@ content:
                                 type: Form
                                 form_id: 746a1a46-684a-43d5-b69f-a8447d14489a
             columnConfig:
+                -
+                    title: Payment Status
+                    field: paymentStatus 
+                    cell: '<td style={{textAlign:"left"}}> {item.paymentStatus == "settled"?"Settled":"Pending"} </td>'
                 -
                     title: Invoice Number
                     field: invoiceNumber 
