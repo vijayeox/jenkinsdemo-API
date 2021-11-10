@@ -26,7 +26,6 @@ class ICRegister extends AbstractAppDelegate
         $data['businessRole'] = 'Independent Contractor';
         $data['sellerBusinessRole'] = 'Contract Carrier';
         $data['sellerAccountName'] = "IGGI";
-        $data['accountId'] = '1f4d8896-a5da-4b34-8b35-3e8ab079aca2';
         $data['appId'] = self::APPID;
 
         // Add logs for created by id and producer name who triggered submission
@@ -76,6 +75,7 @@ class ICRegister extends AbstractAppDelegate
             $this->setupBusinessOfferings($dataForIC, $dataForIC['accountId'], 'a4b1f073-fc20-477f-a804-1aa206938c42');
             $this->logger->info("After RegisterAcount---" . print_r($dataForIC, true));
             $data['buyerAccountId'] = $dataForIC['accountId'];
+            $data['ICUserId'] = $dataForIC['accountUserId'];
         } else {
             $response =  $this->getUserDataByIdentifier($data['appId'], $data[$data['identifier_field']], $data['identifier_field']);
             if (count($response) == 0) {
