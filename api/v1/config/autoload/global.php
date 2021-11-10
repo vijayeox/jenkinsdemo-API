@@ -93,7 +93,8 @@ return [
         "tripleDESEncryptedPassword" => "9srGG5hflGT0aDrgsxs3GQ=="
     ],
     'insurelearn' => [
-        'olpSystem' => 'https://hubstg.insurelearn.com/',
+        //'olpSystem' => 'https://hubstg.insurelearn.com/',
+        'olpSystem' => 'https://training.hubinternational.com/',
         "ILSUSER" => "eox_connector",
         "ILSPASSWD" => "P9mwT~&/6Qk@y}hk"
     ],
