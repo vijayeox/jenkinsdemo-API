@@ -1588,7 +1588,7 @@ pages:
                             title: 'Driver Email Address'
                             field: email                
     -
-        name: 'SSO Integration'
+        name: 'Drive Safe Subscription'
         uuid: 2ff5f37e-a8b3-47fe-bd33-889c2baf1728
         description: 'Shows a list of Excess Liability'
         content:
@@ -1832,11 +1832,11 @@ menu:
         uuid: 659feefb-79b9-469d-b39a-9cee5682f0d4
         privilege: MANAGE_APP_WRITE
     -
-        name: 'SSO Integration'
-        icon: 'fas fa-key'
+        name: 'Drive Safe Subscription'
+        icon: 'fas fa fa-cars'
         page_uuid: 2ff5f37e-a8b3-47fe-bd33-889c2baf1728
         uuid: 0e47c25a-d5c7-4b13-9365-a54ae73de40b
-        privilege: MANAGE_COMPLIANCE
+        privilege: MANAGE_UNDERWRITING
     -   
         name: 'Driver Management Reports'
         icon: 'fad fa-file-excel'
@@ -1851,10 +1851,10 @@ form:
         template_file: hubComplianceChecklist.json
         entity: Compliance
     -
-        name: 'SSO Form'
+        name: 'Drive Safe Subscription Form'
         uuid: 3446b166-37a4-4afd-9390-5fc7e80ce1df
-        description: SSO
-        template_file: ssoIntegrationFormDemo.json
+        description: Drive Safe
+        template_file: driveSafeSubscriptionForm.json
         entity: 'Independent Contractor Onboarding'
     -
         name: 'Part Time IC Registration Form'
