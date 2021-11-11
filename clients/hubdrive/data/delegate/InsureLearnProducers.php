@@ -67,7 +67,7 @@ class InsureLearnProducers extends AbstractAppDelegate
             $this->insuranceService->create('user', $dataUserData + [
                 'accessLevel' => 1,
                 'accessMode' => 0,
-                'roleName' => 'IC Driver - English',
+                'roleName' => 'Hub Producer',
                 'locationName' => $group['@attributes']['groupName']
             ]);
             $dataUser = $this->insuranceService->search('userData', [
