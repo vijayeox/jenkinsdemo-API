@@ -26,7 +26,6 @@ class ICRegister extends AbstractAppDelegate
         $data['businessRole'] = 'Independent Contractor';
         $data['sellerBusinessRole'] = 'Contract Carrier';
         $data['sellerAccountName'] = "IGGI";
-        $data['accountId'] = '1f4d8896-a5da-4b34-8b35-3e8ab079aca2';
         $data['appId'] = self::APPID;
 
         // Add logs for created by id and producer name who triggered submission
