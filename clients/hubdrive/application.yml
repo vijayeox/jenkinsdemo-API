@@ -873,6 +873,16 @@ entity:
                 data_type: text
                 index: true
             -
+                name: state
+                text: State
+                data_type: text
+                index: true
+            -
+                name: producerState
+                text: Producer State
+                data_type: text
+                index: true
+            -
                 name: start_date
                 data_type: date
                 index: true
@@ -882,10 +892,12 @@ entity:
                 index: true
             -
                 name: companyName
+                text: Company Name
                 data_type: text
                 index: true
             -
                 name: producerName
+                text: Producer Name
                 data_type: text
                 index: true
             -
@@ -894,7 +906,7 @@ entity:
                 index: true
         identifiers:
             -
-                identifier: usDot
+                identifier: epicId
         participantRole:
             -
                 businessRole: 'Insurance Carrier'
@@ -1120,6 +1132,17 @@ pages:
         description: 'Shows a list of Compliances'
         content:
             -
+                type: RenderButtons
+                content:
+                    buttonList:
+                        -
+                            name: 'Create Compliance'
+                            icon: 'fa fa-plus'
+                            details:
+                                -
+                                    type: Form
+                                    form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
+            -
                 type: List
                 content:
                     route: file
@@ -1189,18 +1212,6 @@ pages:
                                     form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
-                    operations:
-                        title: 'Create Compliance'
-                        icon: 'fa fa-plus'
-                        actions:
-                            -
-                                name: 'Create New Compliance'
-                                icon: 'fa fa-plus'
-                                rule: 'true'
-                                details:
-                                    -
-                                        type: Form
-                                        form_id: e26bd719-f47f-455b-9be4-9b26c18a0b78
                     columnConfig:
                         -
                             title: Name

@@ -25,10 +25,11 @@ class SendMail extends MailDelegate
         $fileData = array();
         if($data['mailType'] == "QuoteMailtoHub" || $data['mailType'] == "RequestForMoreInfoMail" || $data['mailType'] == "PolicyMailtoHub"){
             $mailOptions['to'] = $data['mailAddress'];
+        }else if($data['mailAddress'] == "genreMail"){
+            $this->getGenreMailAddress($mailOptions,$file['state'],$persistenceService);
         }else{
             $mailOptions['to'] = $this->getMailToAddress($data['mailAddress'],$persistenceService);
         }
-        
         $mailOptions['attachments'] = $this->getMailDocuments($file,$data['documentType'],$data['mailAttachments']);
         $template = $data['mailTemplate'];
         
@@ -129,5 +130,12 @@ class SendMail extends MailDelegate
                 $temp[$key] = json_encode($value);
             }
         }
+    }
+
+    private function getGenreMailAddress(&$mailAddress,$state,$persistenceService){
+        $selectQuery = "SELECT primary_email,additional_cc from genre_info where hubstate = 'Arkansas'";
+        $mailTo = ($persistenceService->selectQuery($selectQuery))->current();
+        $mailAddress['to'] = $mailTo['primary_email'];
+        $mailAddress['cc'] = !empty($mailTo['additional_cc']) ? $mailTo['additional_cc'] : '';
     }
 }
