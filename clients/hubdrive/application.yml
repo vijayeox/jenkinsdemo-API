@@ -1577,20 +1577,6 @@ pages:
                                     form_id: 48b5f9f6-495e-44bd-aeb6-a44437bff0ac
                                     fileId: '{{uuid}}'
                             icon: 'far fa-pencil-alt'
-                    operations:
-                        title: 'Export Drivers'
-                        actions:
-                            -
-                                name: 'Export Drivers'
-                                icon: 'fa fa-cloud-download'
-                                rule: 'true'
-                                updateOnly: true
-                                details:
-                                    -
-                                        type: Update
-                                        params:
-                                            url: command/delegate/ExportDriversData
-                                        successMessage: 'Report has been genarated, please check drivers Management report menu for downloading the reports.'
                     columnConfig:
                         -
                             title: 'Driver Name'
