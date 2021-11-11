@@ -36,19 +36,20 @@ class InsertDriver extends AbstractAppDelegate
             $filterParams['filter'][0]['take'] = $pageSize;
             $skip =  0;
             $filterParams['filter'][0]['skip'] = $skip;
-            $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'ICUserId','operator'=>'eq','value'=> $icUserId);
-            $fileList = $this->getFileList($data,$filterParams);
-            if(isset($fileList['data']) && sizeof($fileList['data']) > 0){
-                $fileData = json_decode($fileList['data'][0]['data'],true);
+            $filterParams['filter'][0]['filter']['filters'][] = array('field' => 'ICUserId', 'operator' => 'eq', 'value' => $icUserId);
+            $fileList = $this->getFileList($data, $filterParams);
+            if (isset($fileList['data']) && sizeof($fileList['data']) > 0) {
+                $fileData = is_string($fileList['data'][0]['data']) ? json_decode($fileList['data'][0]['data'], true) : $fileList['data'][0]['data'];
                 $fileUuid = $fileList['data'][0]['uuid'];
-            }else{
+            } else {
                 return $data;
             }
-            if($data['formType'] == "driveSafeSubscriptionForm"){
+            if ($data['formType'] == "driveSafeSubscriptionForm") {
                 $fileData['zenDriveIntegration'] = "Yes";
-                $this->saveFile($fileData,$fileUuid);
+                $this->saveFile($fileData, $fileUuid);
             }
-            $zendDriveSubscription = $fileData['zenDriveIntegration'];   
+            $zendDriveSubscription = $fileList['data'][0]['zenDriveIntegration'];
+            $this->logger->info("ic subscription information " . print_r($zendDriveSubscription, true));
             if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
                 $selectQuery = "SELECT * FROM `ic_info` WHERE email = '" . $data['icusername']['email'] . "'";
                 $ICrrecord = $persistenceService->selectQuery($selectQuery);
@@ -60,7 +61,7 @@ class InsertDriver extends AbstractAppDelegate
                     $this->logger->info("ic information " . print_r($details, true));
                     $ic_id = $details[0]['id'];
                     $fleet_id = $details[0]['uuid'];
-                }else{
+                } else {
                     $fleet_name = $data['icusername']['name'];
                     $fleet_email = $data['icusername']['email'];
                     $fleet_id = $data['icusername']['accountId'];
@@ -91,22 +92,22 @@ class InsertDriver extends AbstractAppDelegate
                 //$this->logger->info("fleet id " . print_r($fleet_id, true));
             }
 
-            if($data['formType'] == "driveSafeSubscriptionForm"){
+            if ($data['formType'] == "driveSafeSubscriptionForm") {
                 $filterParams = array();
                 $pageSize = 1000;
                 $filterParams['filter'][0]['take'] = $pageSize;
                 $skip =  0;
                 $filterParams['filter'][0]['skip'] = $skip;
-                $filterParams['filter'][0]['filter']['filters'][] = array('field'=>'entity_name','operator'=>'eq','value'=> 'Driver');
-                $fileList = $this->getFileList($data,$filterParams);
-                if(isset($fileList['data']) && sizeof($fileList['data']) > 0){
-                   foreach($fileList['data'] as $key => $val){                     
-                    $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
-                   }
-                }else{
+                $filterParams['filter'][0]['filter']['filters'][] = array('field' => 'entity_name', 'operator' => 'eq', 'value' => 'Driver');
+                $fileList = $this->getFileList($data, $filterParams);
+                if (isset($fileList['data']) && sizeof($fileList['data']) > 0) {
+                    foreach ($fileList['data'] as $key => $val) {
+                        $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
+                    }
+                } else {
                     return $data;
                 }
-            }else{
+            } else {
                 if (isset($data['formOptions']) && $data['formOptions'] == 'excelUpload') {
                     $datavalidate = $this->checkArrayEmpty($data['driverDataFileUpload']);
                     if ($datavalidate === "0") {
@@ -158,8 +159,7 @@ class InsertDriver extends AbstractAppDelegate
                                         $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
                                         $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
                                     }
-                                } 
-                                else {
+                                } else {
                                     $this->logger->info("driver already exists");
                                     if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
                                         $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
@@ -205,7 +205,7 @@ class InsertDriver extends AbstractAppDelegate
                             $dataForDriver['contact']['email'] = $dataForDriver['email'];
                         }
 
-                        $this->saveDrivers($params, $dataForDriver);                        
+                        $this->saveDrivers($params, $dataForDriver);
                     } else {
                         $this->logger->info("driver already exists");
                         if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
@@ -215,14 +215,14 @@ class InsertDriver extends AbstractAppDelegate
                     }
                 }
             }
-            
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
 
-    public function saveDrivers($params, $dataForDriver) {
+    public function saveDrivers($params, $dataForDriver)
+    {
         $dataForDriver['entity_name'] = 'Driver';
         $response = $this->createUser($params, $dataForDriver);
         $response1 = $this->createFile($dataForDriver);
@@ -231,7 +231,7 @@ class InsertDriver extends AbstractAppDelegate
         if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
             $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
             $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
-        } 
+        }
     }
 
     public function getParentFileId($data)
