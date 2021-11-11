@@ -110,10 +110,16 @@ class InvoiceService extends AbstractService
             {
                 throw new ServiceException("Invalid parameters specified in request","invalid.params");
             }
+
+
             
             $invoiceAmount = $data['total'];
             $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
             $amountDue = $invoiceAmount - $amountPaid;
+
+            if($amountDue <=0) {
+                throw new ServiceException("Amount paid must be lesser than total","invalid.amount");
+            }
 
 
             $data = $this->formatInvoiceData($data);
@@ -128,7 +134,14 @@ class InvoiceService extends AbstractService
             $data['invoiceUuid'] = $invoiceUuid;
             try {
                 $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
-    
+
+                $data['invoicePDFPath'] = $data['accountId']."/invoice/".$data['appId']."/".$invoiceUuid.".pdf";
+                $data['paymentStatus'] = "pending";
+                $filedata = $data;
+                $file = $this->fileService->createFile($filedata);
+                $data['fileId'] = $filedata['uuid'];
+                $data['uuid'] = $filedata['uuid'];
+
                 $invoiceData = [
                     "amountPaid" => $data['amountPaid'],
                     "ledgerData" => $data['ledgerData'],
@@ -137,7 +150,12 @@ class InvoiceService extends AbstractService
                     "tax" => $data['tax'],
                     "invoiceNumber" =>$data['invoiceNumber'],
                     "invoiceDate" =>$data['invoiceDate'],
-                    "invoiceDueDate" =>$data['invoiceDueDate']
+                    "invoiceDueDate" =>$data['invoiceDueDate'],
+                    "appId" => $data['appId'],
+                    "accountId" => $data["accountId"],
+                    "invoiceUuid" => $data['invoiceUuid'],
+                    "accountNumber" => $data['accountNumber'],
+                    "fileId" => $data['fileId']
                 ];
                 $insert = "INSERT INTO ox_billing_invoice (`uuid`,`customer_id`,`amount`,`data`,`date_created`,`created_by`) VALUES (:uuid,:customerId,:amount,:data,:invoiceDate,:createdBy)";
                 $this->executeQuerywithBindParameters($insert,[
@@ -149,11 +167,7 @@ class InvoiceService extends AbstractService
                     "createdBy" => AuthContext::get(AuthConstants::USER_ID)
                 ]);
 
-                $data['invoicePDFPath'] = $data['accountId']."/invoice/".$data['appId']."/".$invoiceUuid.".pdf";
-                $filedata = $data;
-                $file = $this->fileService->createFile($filedata);
-                $data['fileId'] = $filedata['uuid'];
-                $data['uuid'] = $filedata['uuid'];
+
                 return $data;   
             }
             catch (Exception $e) {
@@ -226,12 +240,18 @@ class InvoiceService extends AbstractService
         $invoiceAmount = $data['total'];
         $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
         $amountDue = $invoiceAmount - $amountPaid;
+        if($amountDue <=0) {
+            throw new ServiceException("Amount paid must be lesser than total","invalid.amount");
+        }
+
 
 
         $data = $this->formatInvoiceData($data);
 
         $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
         
+        $fileId = isset($data['fileId']) ? $data['fileId'] : (isset($data['uuid']) ? $data['uuid'] : null);
+
         $invoiceData = [
             "amountPaid" => $data['amountPaid'],
             "ledgerData" => $data['ledgerData'],
@@ -240,7 +260,12 @@ class InvoiceService extends AbstractService
             "tax" => $data['tax'],
             "invoiceNumber" =>$data['invoiceNumber'],
             "invoiceDate" =>$data['invoiceDate'],
-            "invoiceDueDate" =>$data['invoiceDueDate']
+            "invoiceDueDate" =>$data['invoiceDueDate'],
+            "appId" => $data['appId'],
+            "accountId" => $data['accountId'],
+            "invoiceUuid" => $data['invoiceUuid'],
+            "accountNumber" => $data['accountNumber'],
+            "fileId" => $fileId
         ];
 
         $update = "UPDATE ox_billing_invoice SET `amount`=:totalAmount, `customer_id`=:customerId,`date_created`=:invoiceDate,`data`=:data WHERE customer_id=:previousCustomerId AND uuid=:invoiceUuid";
@@ -253,10 +278,10 @@ class InvoiceService extends AbstractService
             "invoiceUuid" => $invoiceUuid
         ]);
 
-        $fileId = isset($data['fileId']) ? $data['fileId'] : (isset($data['uuid']) ? $data['uuid'] : null);
 
         if(isset($fileId))
         {
+            $data['paymentStatus'] = "pending";
             $data['invoicePDFPath'] = $data['accountId']."/invoice/".$data['appId']."/".$invoiceUuid.".pdf";
             $this->fileService->updateFile($data, $fileId);
         }
@@ -291,7 +316,7 @@ class InvoiceService extends AbstractService
     public function getInvoicesForAccounts($filterParams)
     {
         $accountId = AuthContext::get(AuthConstants::ACCOUNT_ID);
-        $countQuery = "SELECT count(obi.id) as count FROM ox_billing_invoice as obi INNER JOIN ox_billing_customer as obc on obi.customer_id=obc.id WHERE  obi.is_settled=0 AND obc.account_id=:accountId";
+        $countQuery = "SELECT count(obi.id) as count FROM ox_billing_invoice as obi INNER JOIN ox_billing_customer as obc on obi.customer_id=obc.id WHERE obc.account_id=:accountId";
         $result = $this->executeQueryWithBindParameters($countQuery,[
             "accountId" => $accountId
         ])->toArray();
@@ -332,14 +357,6 @@ class InvoiceService extends AbstractService
         foreach($result as $key => $invoice)
         {
             $result[$key]['data'] = json_decode($result[$key]['data'],true);
-            if($invoice['is_settled'] == 1)
-            {
-                $result[$key]['data']['amountPaid'] = $result[$key]['data']['total'];
-                $result[$key]['paymentStatus'] = "Settled";
-            }
-            else{
-                $result[$key]['paymentStatus'] = "Pending";
-            }
         }
         return array('data' => $result, 'total' => $total);
 
@@ -442,8 +459,7 @@ class InvoiceService extends AbstractService
         $invoiceAmount = $result[0]['amount'];
         $invoiceId = $result[0]['invoice_id'];
         $appId = $result[0]['app_id'];
-        $invoiceData = $result[0]['data'];
-        
+        $invoiceData = $result[0]['data'];        
         $data['amount'] = $invoiceAmount;
         $data['invoiceData'] = json_decode($invoiceData,true);
         
