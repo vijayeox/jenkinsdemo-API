@@ -3,6 +3,7 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\AccountTrait;
+use Oxzion\AppDelegate\FileTrait;
 use Oxzion\AppDelegate\UserContextTrait;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\DelegateException;
@@ -13,6 +14,7 @@ class ICRegister extends AbstractAppDelegate
 {
     use AccountTrait;
     use UserContextTrait;
+    use FileTrait;
     const APPID = 'a4b1f073-fc20-477f-a804-1aa206938c42';
 
     public function __construct()
@@ -76,6 +78,7 @@ class ICRegister extends AbstractAppDelegate
             $this->logger->info("After RegisterAcount---" . print_r($dataForIC, true));
             $data['buyerAccountId'] = $dataForIC['accountId'];
             $data['ICUserId'] = $dataForIC['accountUserId'];
+            $this->saveFile($data);
         } else {
             $response =  $this->getUserDataByIdentifier($data['appId'], $data[$data['identifier_field']], $data['identifier_field']);
             if (count($response) == 0) {

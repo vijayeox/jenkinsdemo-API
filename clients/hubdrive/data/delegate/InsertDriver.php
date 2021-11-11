@@ -87,9 +87,9 @@ class InsertDriver extends AbstractAppDelegate
                     $ic_id = $icInsert->getGeneratedValue();
                 }
             } else {
-                return $data;
-                //$fleet_id = $data['icusername']['accountId'];
-                //$this->logger->info("fleet id " . print_r($fleet_id, true));
+                // return $data;
+                $fleet_id = $data['icusername']['accountId'];
+                $this->logger->info("fleet id " . print_r($fleet_id, true));
             }
 
             if ($data['formType'] == "driveSafeSubscriptionForm") {
