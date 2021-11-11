@@ -49,6 +49,7 @@ class InsertDriver extends AbstractAppDelegate
                 $this->saveFile($fileData, $fileUuid);
             }
             $zendDriveSubscription = $fileList['data'][0]['zenDriveIntegration'];
+            $this->logger->info("ic subscription information " . print_r($zendDriveSubscription, true));
             if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
                 $selectQuery = "SELECT * FROM `ic_info` WHERE email = '" . $data['icusername']['email'] . "'";
                 $ICrrecord = $persistenceService->selectQuery($selectQuery);
