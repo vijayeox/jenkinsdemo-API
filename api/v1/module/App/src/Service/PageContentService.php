@@ -94,7 +94,10 @@ class PageContentService extends AbstractService
                 }
                 if ($value['type'] == 'DashboardManager') {
                     if (isset($value['dashboard_uuid'])) {
-                        $value['content'] = json_encode(array('uuid'=>$value['dashboard_uuid']));
+                        $content = isset($value['content'])?$value['content']:[];
+                        $value['content'] = json_encode(array('uuid'=>$value['dashboard_uuid'],
+                        'content' => $content
+                        ));
                     } else {
                         $value['content'] = null;
                     }
