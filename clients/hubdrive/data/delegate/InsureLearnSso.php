@@ -12,7 +12,7 @@ class InsureLearnSso
             "client" => "InsureLearn"
         ]);
 
-        return ['SSOLink' => $this->insuranceService->getSsoLink($data['email'], 'Welcome2eox!')];
+        return ['SSOLink' => $this->insuranceService->getSsoLink($data['email'], 'Welcome2Hdol!')];
     }
 
 }
