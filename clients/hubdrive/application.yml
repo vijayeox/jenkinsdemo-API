@@ -22,7 +22,7 @@ org:
         state: CA
         zip: 90623
         country: 'United States of America'
-        start_options: '{"title": {"en_EN": "Hub Drive Excess Liability Shield"}}'
+        start_options: '{"title": {"en_EN": "HUB Drive Online"}}'
         contact:
             username: HubAdmin
             firstname: Admin
@@ -124,6 +124,21 @@ privilege:
         permission: 3
     -
         name: MANAGE_EXCESS
+        permission: 3
+    -
+        name: MANAGE_PRODUCER_PROFILE
+        permission: 3
+    -
+        name: MANAGE_INSURED_PROFILE
+        permission: 3
+    -
+        name: MANAGE_CLAIMS_DASHBOARD
+        permission: 3
+    -
+        name: MANAGE_ELD_DASBOARD
+        permission: 3
+    -
+        name: MANAGE_DRIVE_SAFE_DASHBOARD
         permission: 3
 role:
     -
@@ -247,6 +262,51 @@ role:
                 privilege_name: MANAGE_EXCESS
                 permission: 3
         uuid: 840ae886-c375-4ddd-81d6-f521f572d231
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Producer Profile'
+        privileges:
+            -
+                privilege_name: MANAGE_PRODUCER_PROFILE
+                permission: 3
+        uuid: d9a47310-a3b7-4c53-9f83-f42c318a59f8
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Insured Profile'
+        privileges:
+            -
+                privilege_name: MANAGE_INSURED_PROFILE
+                permission: 3
+        uuid: 430b89ff-7375-4810-aa2c-5acfef5118bf
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Claims Dashboard'
+        privileges:
+            -
+                privilege_name: MANAGE_CLAIMS_DASHBOARD
+                permission: 3
+        uuid: a36dfb71-8fc9-4894-97d2-997fb24ce95b
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'ELD Dashboard'
+        privileges:
+            -
+                privilege_name: MANAGE_ELD_DASBOARD
+                permission: 3
+        uuid: eace1977-9f6b-4a55-b0de-0522aba195d1
+        businessRole:
+            name: 'Insurance Carrier'
+    -
+        name: 'Drive Safe Dashboard'
+        privileges:
+            -
+                privilege_name: MANAGE_DRIVE_SAFE_DASHBOARD
+                permission: 3
+        uuid: e094fca8-cf3b-4caa-9d4f-0b8ed04ecf64
         businessRole:
             name: 'Insurance Carrier'
 entity:
@@ -1354,12 +1414,25 @@ pages:
                             defaultAction: true
                         -
                             name: Review
-                            rule: 'true'
+                            rule: '''{{to_be_claimed}}'' == 0'
                             details:
                                 -
                                     type: Form
                                     url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
-                            icon: 'far fa-pencil-alt'
+                            icon: 'fa fa-check-circle'
+                        -
+                            name: Claim and Review
+                            rule: '''{{to_be_claimed}}'' == 2'
+                            confirmationMessage: "This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded."
+                            details:
+                                -
+                                    type: Update
+                                    params:
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/reclaim'
+                                -
+                                    type: Form
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                            icon: 'fa fa-check-circle'
                     columnConfig:
                         -
                             title: 'Insured Name'
@@ -1785,7 +1858,114 @@ pages:
     -
         page_name: GenerateDriversReport.yml
         uuid: ba632ab9-c87d-4417-852e-fcf609b96926
+    -
+        name: 'Home'
+        uuid: 75fc527c-459e-4799-b63c-7012fdba9f65
+        description: Producer Profile
+        content:
+            -
+                type: DashboardManager
+                dashboard_uuid: 6ada8486-42df-4e57-9bbe-e91a4c09660a
+                content:
+                    uuid: 6ada8486-42df-4e57-9bbe-e91a4c09660a
+                    page_id: ''
+                    htmlContent: ''
+                    externalDataSource: ''
+                    formSource: ''
+                    form_name: {  }
+                    formUrl: ''
+                    urlPostParams: ''
+                    apiUrl: 'app/{{uuid}}/delegate/InsureLearnSso'
+                    apiAction: redirect
+                    apiMethod: post
+                    responseParam: 'SSOLink'
+                    useRowData: false
+                    route: ''
+    -
+        name: 'Claims'
+        uuid: 41a29ebf-439b-4254-97f5-02138dbb5ac2
+        description: Claims
+        content:
+            -
+                type: DashboardManager
+                page_id: ''
+                htmlContent: ''
+                externalDataSource: ''
+                formSource: ''
+                form_name: {  }
+                formUrl: ''
+                urlPostParams: ''
+                dashboard_uuid: 40f5f0d3-bdc5-4738-ae8d-b026b2420b86
+                url: ''
+                content:
+                    uuid: 40f5f0d3-bdc5-4738-ae8d-b026b2420b86
+                useRowData: false
+                route: ''
+    -
+        name: 'ELD'
+        uuid: 7dae4e44-2da2-4484-a7ef-dbdbd5b72999
+        description: ELD
+        content:
+            -
+                type: DashboardManager
+                page_id: ''
+                htmlContent: ''
+                externalDataSource: ''
+                formSource: ''
+                form_name: {  }
+                formUrl: ''
+                urlPostParams: ''
+                dashboard_uuid: eee9485a-00f0-467f-baff-ef3d714a2b27
+                url: ''
+                content:
+                    uuid: eee9485a-00f0-467f-baff-ef3d714a2b27
+                useRowData: false
+                route: ''
+    -
+        name: 'Drive Safe'
+        uuid: 023f97e4-9bf9-4d6b-86ac-05a5f17cc1ad
+        description: Drive Safe
+        content:
+            -
+                type: DashboardManager
+                page_id: ''
+                htmlContent: ''
+                externalDataSource: ''
+                formSource: ''
+                form_name: {  }
+                formUrl: ''
+                urlPostParams: ''
+                dashboard_uuid: d3207317-1ec3-406d-8711-f7194fdc81bc
+                url: ''
+                content:
+                    uuid: d3207317-1ec3-406d-8711-f7194fdc81bc
+                useRowData: false
+                route: ''
 menu:
+    -
+        name: 'Home'
+        icon: 'fad fa-user-alt'
+        page_uuid: 75fc527c-459e-4799-b63c-7012fdba9f65
+        uuid: 4294e571-7c29-4ac5-8e7b-64b346f59271
+        privilege: MANAGE_PRODUCER_PROFILE
+    -
+        name: 'Claims'
+        icon: 'fad fa-user-shield'
+        page_uuid: 41a29ebf-439b-4254-97f5-02138dbb5ac2
+        uuid: f5158413-f93b-43a8-b76c-6e336656c793
+        privilege: MANAGE_CLAIMS_DASHBOARD
+    -
+        name: 'ELD'
+        icon: 'fad fa-user-chart'
+        page_uuid: 7dae4e44-2da2-4484-a7ef-dbdbd5b72999
+        uuid: 7980732f-8da6-4310-a4e7-ef2143566839
+        privilege: MANAGE_ELD_DASBOARD
+    -
+        name: 'Drive Safe'
+        icon: 'fad fa-tachometer-alt-fastest'
+        page_uuid: 023f97e4-9bf9-4d6b-86ac-05a5f17cc1ad
+        uuid: 8c8f27b8-b697-4c93-be55-f85e318d1027
+        privilege: MANAGE_DRIVE_SAFE_DASHBOARD
     -
         name: 'Independent Contractor'
         icon: 'fas fa-address-card'

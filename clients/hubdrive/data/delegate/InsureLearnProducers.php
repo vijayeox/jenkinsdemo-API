@@ -57,7 +57,7 @@ class InsureLearnProducers extends AbstractAppDelegate
         $dataUserData = [
             'loginID' => $data['email'],
             'userData' => $data['email'],
-            'passwd' => 'Welcome2eox!',
+            'passwd' => 'Welcome2Hdol!',
             'firstName' => $data['firstName'],
             'middleName' => $data['middleName'],
             'lastName' => $data['lastName'],
