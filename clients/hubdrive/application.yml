@@ -1414,8 +1414,12 @@ pages:
                             defaultAction: true
                         -
                             name: Review
-                            rule: '''{{to_be_claimed}}'' == 0'
+                            rule: '''{{to_be_claimed}}'' == 0 || ''{{to_be_claimed}}'' == 1'
                             details:
+                                -
+                                    type: Update
+                                    params:
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
                                 -
                                     type: Form
                                     url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
