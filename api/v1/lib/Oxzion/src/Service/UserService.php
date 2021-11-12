@@ -1552,4 +1552,29 @@ class UserService extends AbstractService
         $this->logger->info("INFO of username select---$select with param--" . print_r($selectQuery, true));
         return $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
     }
+
+    /**
+     * GET User Info
+     * @method  getUserInfoByUuid
+     * @param $uuid of User to View
+     * @return array with base information required to use for the User login.
+     * @return array Returns a JSON Response with Status Code and Existing User data.
+     */
+    public function getUserInfoByUuid($uuid)
+    {
+        $select = "SELECT ou.uuid,ou.username,per.firstname,per.lastname,
+                          ou.name,per.email,au.uuid as accountId,
+                          oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip 
+                    from ox_user as ou 
+                    inner join ox_account au on au.id = ou.account_id
+                    inner join ox_person per on per.id = ou.person_id 
+                    LEFT join ox_address as oa on per.address_id = oa.id 
+                    where ou.uuid = :uuid";
+        $params = ['uuid' => $uuid];
+        $response = $this->executeQueryWithBindParameters($select, $params)->toArray();
+        if (!empty($response)) {
+            return $response[0];
+        }
+        throw new EntityNotFoundException("User not found with username or email");
+    }
 }

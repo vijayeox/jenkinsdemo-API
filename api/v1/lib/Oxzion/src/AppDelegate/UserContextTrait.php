@@ -64,4 +64,8 @@ trait UserContextTrait
     {
         return $this->userService->getUserByUsername($username);
     }
+
+    public function getUserInfoByUuid($uuid){
+        return $this->userService->getUserInfoByUuid($uuid);
+    }
 }
