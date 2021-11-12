@@ -23,12 +23,13 @@ class SendMail extends MailDelegate
         // Add logs for created by id and producer name who triggered submission
         $mailOptions = [];
         $fileData = array();
-        if($data['mailType'] == "QuoteMailtoHub" || $data['mailType'] == "RequestForMoreInfoMail" || $data['mailType'] == "PolicyMailtoHub"){
+        if($data['mailType'] == "QuoteMailtoHub" || $data['mailType'] == "RequestForMoreInfoMail" || $data['mailType'] == "PolicyMailtoHub" || $data['mailType'] == "ApplicationRejected"){
             $mailOptions['to'] = $data['mailAddress'];
+        }else if($data['mailAddress'] == "genreMail"){
+            $this->getGenreMailAddress($mailOptions,$file['state'],$persistenceService);
         }else{
             $mailOptions['to'] = $this->getMailToAddress($data['mailAddress'],$persistenceService);
         }
-        
         $mailOptions['attachments'] = $this->getMailDocuments($file,$data['documentType'],$data['mailAttachments']);
         $template = $data['mailTemplate'];
         
@@ -107,7 +108,7 @@ class SendMail extends MailDelegate
         if($mailType == "ExcessMail"){
             $subjectLine = 'HUB Drive Excess Liability Document Submission -'.$data['SubmissionNumber'];
         }else if($mailType == "QuoteMailtoHub"){
-            $subjectLine = 'Quote Document';
+            $subjectLine = 'HUB Excess Quote Document';
         }else if($mailType == "RequestForBind"){
             $subjectLine = "Request to Bind Policy - ".$data['policyNumber'];
         }else if($mailType == "SubmissionMailToGenre"){
@@ -118,6 +119,8 @@ class SendMail extends MailDelegate
             $subjectLine = "Request For More Information - ".$data['insuredName'];
         }else if($mailType == "HubRejectedQuote"){
             $subjectLine = "Quote Rejected";
+        }else if($mailType == "ApplicationRejected"){
+            $subjectLine = "Submission Rejected";
         }
         return $subjectLine;
     }
@@ -129,5 +132,12 @@ class SendMail extends MailDelegate
                 $temp[$key] = json_encode($value);
             }
         }
+    }
+
+    private function getGenreMailAddress(&$mailAddress,$state,$persistenceService){
+        $selectQuery = "SELECT primary_email,additional_cc from genre_info where hubstate = 'Arkansas'";
+        $mailTo = ($persistenceService->selectQuery($selectQuery))->current();
+        $mailAddress['to'] = $mailTo['primary_email'];
+        $mailAddress['cc'] = !empty($mailTo['additional_cc']) ? $mailTo['additional_cc'] : '';
     }
 }

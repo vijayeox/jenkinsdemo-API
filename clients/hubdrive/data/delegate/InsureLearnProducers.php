@@ -57,7 +57,7 @@ class InsureLearnProducers extends AbstractAppDelegate
         $dataUserData = [
             'loginID' => $data['email'],
             'userData' => $data['email'],
-            'passwd' => 'Welcome2eox!',
+            'passwd' => 'Welcome2Hdol!',
             'firstName' => $data['firstName'],
             'middleName' => $data['middleName'],
             'lastName' => $data['lastName'],
@@ -67,7 +67,7 @@ class InsureLearnProducers extends AbstractAppDelegate
             $this->insuranceService->create('user', $dataUserData + [
                 'accessLevel' => 1,
                 'accessMode' => 0,
-                'roleName' => 'IC Driver - English',
+                'roleName' => 'Hub Producer',
                 'locationName' => $group['@attributes']['groupName']
             ]);
             $dataUser = $this->insuranceService->search('userData', [

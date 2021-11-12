@@ -3,6 +3,7 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\AccountTrait;
+use Oxzion\AppDelegate\FileTrait;
 use Oxzion\AppDelegate\UserContextTrait;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\DelegateException;
@@ -13,6 +14,7 @@ class ICRegister extends AbstractAppDelegate
 {
     use AccountTrait;
     use UserContextTrait;
+    use FileTrait;
     const APPID = 'a4b1f073-fc20-477f-a804-1aa206938c42';
 
     public function __construct()
@@ -26,7 +28,6 @@ class ICRegister extends AbstractAppDelegate
         $data['businessRole'] = 'Independent Contractor';
         $data['sellerBusinessRole'] = 'Contract Carrier';
         $data['sellerAccountName'] = "IGGI";
-        $data['accountId'] = '1f4d8896-a5da-4b34-8b35-3e8ab079aca2';
         $data['appId'] = self::APPID;
 
         // Add logs for created by id and producer name who triggered submission
@@ -76,6 +77,8 @@ class ICRegister extends AbstractAppDelegate
             $this->setupBusinessOfferings($dataForIC, $dataForIC['accountId'], 'a4b1f073-fc20-477f-a804-1aa206938c42');
             $this->logger->info("After RegisterAcount---" . print_r($dataForIC, true));
             $data['buyerAccountId'] = $dataForIC['accountId'];
+            $data['ICUserId'] = $dataForIC['accountUserId'];
+            $this->saveFile($data);
         } else {
             $response =  $this->getUserDataByIdentifier($data['appId'], $data[$data['identifier_field']], $data['identifier_field']);
             if (count($response) == 0) {
