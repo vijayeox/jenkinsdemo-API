@@ -21,9 +21,9 @@
 
 <div style='line-height: 24px'>
     Hi,<br/>
-    <p>Please find this Request to Bind this Excess Policy</p>
-    <p>{$avantNote}</p>
+    <p>Submission has been rejected.</p>
     <br/>
+    <p>Please contact Avant with any questions.</p>
 </div>
 
 <br/>

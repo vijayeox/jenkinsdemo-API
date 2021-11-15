@@ -963,6 +963,10 @@ entity:
                 name: policyStatus
                 data_type: text
                 index: true
+            -   
+                name: producerRegion
+                data_type: text
+                index: true
         identifiers:
             -
                 identifier: epicId
@@ -1447,7 +1451,125 @@ pages:
                                 type: dropdown
                                 listItems:
                                     - 'In Progress'
-                                    - Received
+                                    - 'Quoted'
+                                placeholder: 'Select Policy Status'
+                        -
+                            title: 'Policy Effective Date'
+                            field: start_date
+                            cell: '<td>{formatDate(item.start_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+                        -
+                            title: 'Policy End Date'
+                            field: end_date
+                            cell: '<td>{formatDate(item.end_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+    -
+        name: 'Approval Requests'
+        uuid: a00d92f9-43ca-4e95-8636-fb538e97056c
+        description: 'Shows a list of Excess Liability'
+        content:
+            -
+                type: List
+                content:
+                    route: assignments
+                    filterable: true
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Review
+                            rule: '''{{to_be_claimed}}'' == 0 || ''{{to_be_claimed}}'' == 1'
+                            details:
+                                -
+                                    type: Update
+                                    params:
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
+                                -
+                                    type: Form
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                            icon: 'fa fa-check-circle'
+                        -
+                            name: Claim and Review
+                            rule: '''{{to_be_claimed}}'' == 2'
+                            confirmationMessage: "This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded."
+                            details:
+                                -
+                                    type: Update
+                                    params:
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/reclaim'
+                                -
+                                    type: Form
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                            icon: 'fa fa-check-circle'
+                    columnConfig:
+                        -
+                            title: 'Insured Name'
+                            field: insuredName
+                        -
+                            title: Status
+                            field: policyStatus
+                            filterCell:
+                                type: dropdown
+                                listItems:
+                                    - 'Received'
+                                    - 'UW Review'
+                                    - 'Quote Rejected'
+                                    - 'Approved/Pending Bind'
+                                    - 'Bound'
                                 placeholder: 'Select Policy Status'
                         -
                             title: 'Policy Effective Date'
@@ -1482,7 +1604,7 @@ pages:
                 content:
                     route: 'entity/Excess Liability/file'
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "policyStatus","operator": "eq","value": " "},{"field": "policyStatus","operator": "eq","value": "New"},{"field": "policyStatus","operator": "eq","value": "Received"},{"field": "policyStatus","operator": "eq","value": "UW Review"},{"field": "policyStatus","operator": "eq","value": "Quote Approved"},{"field": "policyStatus","operator": "eq","value": "Policy Issued"},{"field": "policyStatus","operator": "eq","value": "Closed"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "policyStatus","operator": "eq","value": " "},{"field": "policyStatus","operator": "eq","value": "New"},{"field": "policyStatus","operator": "eq","value": "Received"},{"field": "policyStatus","operator": "eq","value": "UW Review"},{"field": "policyStatus","operator": "eq","value": "Quote Rejected"},{"field": "policyStatus","operator": "eq","value": "Approved/Pending Bind"},{"field": "policyStatus","operator": "eq","value": "Bound"},{"field": "policyStatus","operator": "eq","value": "Policy Issued"},{"field": "policyStatus","operator": "eq","value": "Closed"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     mergeDefaultFilters: true
                     resizable: true
                     refreshButton: true
@@ -1557,10 +1679,14 @@ pages:
                             filterCell:
                                 type: dropdown
                                 listItems:
-                                    - New
-                                    - Received
+                                    - 'New'
+                                    - 'Received'
                                     - 'UW Review'
+                                    - 'Quote Rejected'
+                                    - 'Approved/Pending Bind'
                                     - 'Policy Issued'
+                                    - 'Bound'
+                                    - 'Closed'
                                 placeholder: 'Select Policy Status'
                         -
                             title: 'Policy Effective Date'
@@ -1850,7 +1976,9 @@ pages:
                                 type: dropdown
                                 listItems:
                                     - 'In Progress'
+                                    - 'Quoted'
                                     - 'Policy Issued'
+                                    - 'Closed'
                                 placeholder: 'Select Policy Status'
                         -
                             title: 'Policy Effective Date'
@@ -2004,7 +2132,13 @@ menu:
         icon: 'fas fa-clipboard-check'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
-        privilege: MANAGE_EXCESS_WRITE 
+        privilege: MANAGE_ACCOUNT_MANAGER_WRITE
+    -
+        name: 'Approval Requests'
+        icon: 'fas fa-clipboard-check'
+        page_uuid: a00d92f9-43ca-4e95-8636-fb538e97056c
+        uuid: c53a1a94-58f5-49a6-ad71-df156e9c3506
+        privilege: '{"eq" : "MANAGE_EXCESS_WRITE","neq" : "MANAGE_ACCOUNT_MANAGER_WRITE"}'
     -   
         name: 'Driver Management'
         icon: 'fas fa fa-car'
