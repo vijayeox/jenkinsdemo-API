@@ -37,14 +37,14 @@
     <p><img alt="Avant" width = "200px" height = "200px" src = "{$avantImageUrl}"/></p>
     </div>
     <div class = "signature_column2">
-    <p><span style = "font-color:#1F497D;"><b>Stephanie Mathis | Account Manager</b></span></p>
-    <p>D 615-866-5093  | | <span style = "font-color:blue;" ><u>smathis@AvantBrokerage.com</u></span></p>
+    <p><span style = "color:#1F497D;"><b>Stephanie Mathis | Account Manager</b></span></p>
+    <p>D 615-866-5093  | | <span style = "color:blue;" ><u>smathis@AvantBrokerage.com</u></span></p>
     <br/>
-    <p><span style = "font-color : #d6e03d;"><b>Avant Brokerage</b></span>, Division of Specialty Program Group, LLC</p>
+    <p><span style = "color : #d6e03d;"><b>Avant Brokerage</b></span>, Division of Specialty Program Group, LLC</p>
     <p>P.O. Box 1540 | Lee’s Summit, MO 64063 | <a href = "https://avantins.com/" rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>AvantBrokerage.com</u></a></p>
     <br/>
     <br/>
-    <p style = "font-color : #d6e03d;">Our office closes at 4:00 p.m. CST on Fridays.</p>
+    <p style = "color : #d6e03d;">Our office closes at 4:00 p.m. CST on Fridays.</p>
     </div>
 </div>
 
