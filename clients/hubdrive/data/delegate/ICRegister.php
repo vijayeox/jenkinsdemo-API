@@ -78,7 +78,7 @@ class ICRegister extends AbstractAppDelegate
             $this->logger->info("After RegisterAcount---" . print_r($dataForIC, true));
             $data['buyerAccountId'] = $dataForIC['accountId'];
             $data['ICUserId'] = $dataForIC['accountUserId'];
-            $this->saveFile($data, $data['uuid']);
+            $this->saveFile($data);
         } else {
             $response =  $this->getUserDataByIdentifier($data['appId'], $data[$data['identifier_field']], $data['identifier_field']);
             if (count($response) == 0) {
