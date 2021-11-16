@@ -38,6 +38,7 @@ class InsertDriver extends AbstractAppDelegate
             $filterParams['filter'][0]['skip'] = $skip;
             $filterParams['filter'][0]['filter']['filters'][] = array('field' => 'ICUserId', 'operator' => 'eq', 'value' => $icUserId);
             $fileList = $this->getFileList($data, $filterParams);
+            $this->logger->info("file list " . print_r(json_encode($fileList), true));
             if (isset($fileList['data']) && sizeof($fileList['data']) > 0) {
                 $fileData = is_string($fileList['data'][0]['data']) ? json_decode($fileList['data'][0]['data'], true) : $fileList['data'][0]['data'];
                 $fileUuid = $fileList['data'][0]['uuid'];
