@@ -17,111 +17,116 @@ class CCandICPDFGeneration extends AbstractDocumentAppDelegate
     use CommentTrait;
     use EsignTrait;
     use AccountTrait;
+    const APPID = 'a4b1f073-fc20-477f-a804-1aa206938c42';
 
     public function __construct()
     {
         parent::__construct();
     }
-    
+
     public function execute(array $data, Persistence $persistenceService)
     {
         $fieldTypeMappingPDF = include(__DIR__ . "/FieldMappingCCPDF.php");
-        $this->logger->info("PDF MAPPING DATA : ". print_r($data, true));
+        $this->logger->info("PDF MAPPING DATA : " . print_r($data, true));
+        $data['appId'] = self::APPID;
         $PDFTemplateList = array("IC");
         $fileUUID = isset($data['uuid']) ? $data['uuid'] : $data['fileId'];
         $currentAccount = isset($data['accountId']) ? $data['accountId'] : null;
         $accountId = isset($data['accountName']) ? $this->getAccountByName($data['accountName']) : (isset($currentAccount) ? $currentAccount : AuthContext::get(AuthConstants::ACCOUNT_UUID));
-        $this->logger->info("ACCOUT IS ____" .$accountId);
+        $this->logger->info("ACCOUT IS ____" . $accountId);
         $fileDestination =  ArtifactUtils::getDocumentFilePath($this->destination, $fileUUID, array('accountId' => $accountId));
         $this->logger->info("GenerateFilledPDF Dest" . json_encode($fileDestination, JSON_UNESCAPED_SLASHES));
         $generatedPDFList = array();
         foreach ($PDFTemplateList as $selectedTemplate) {
-            $this->logger->info("selected template",$selectedTemplate);
+            $this->logger->info("selected template", $selectedTemplate);
             $pdfData = array();
-            $documentDestination = $fileDestination['absolutePath'].$selectedTemplate .".pdf";
-                foreach ($fieldTypeMappingPDF[$selectedTemplate]["text"] as  $formField => $pdfField) {
+            $documentDestination = $fileDestination['absolutePath'] . $selectedTemplate . ".pdf";
+            foreach ($fieldTypeMappingPDF[$selectedTemplate]["text"] as  $formField => $pdfField) {
                 isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
-                }
-                if(isset($data['contractDate'])){
-                $data['pdfDateIC'] = explode('T',$data['contractDate'])[0];
+            }
+            if (isset($data['contractDate'])) {
+                $data['pdfDateIC'] = explode('T', $data['contractDate'])[0];
                 $pdfData['contractDate'] = date("m/d/Y", strtotime($data['pdfDateIC']));
                 $pdfData['dayMonth'] = date("jS,F", strtotime($data['pdfDateIC']));
                 $pdfData['year'] = date("y", strtotime($data['pdfDateIC']));
-                }
-                $pdfData['accountId'] = $accountId;
-                $pdfData = array_filter($pdfData);
-                $pdfData['appId'] = $data['appId'];
-                $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            }
+            $pdfData['accountId'] = $accountId;
+            $pdfData = array_filter($pdfData);
+            $pdfData['appId'] = $data['appId'];
+            $this->logger->info("PDF Filling Data \n" . json_encode($pdfData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
             $this->documentBuilder->fillPDFForm(
-                $selectedTemplate.".pdf",
+                $selectedTemplate . ".pdf",
                 $pdfData,
                 $documentDestination
             );
-            $documentpdf = $fileDestination['relativePath'] . $selectedTemplate.".pdf";
+            $documentpdf = $fileDestination['relativePath'] . $selectedTemplate . ".pdf";
             switch ($selectedTemplate) {
-                case "IC":  
+                case "IC":
                     $field = array(
                         array(
-                        "name"=>"esignICForm",
-                        "height"=>80,
-                        "width"=>20,
-                        "x"=>60,
-                        "y"=>24,
-                        "pageNumber"=>13,
+                            "name" => "esignICForm",
+                            "height" => 80,
+                            "width" => 20,
+                            "x" => 60,
+                            "y" => 24,
+                            "pageNumber" => 13,
                         ),
                         array(
-                            "name"=>"esignICForm",
-                            "height"=>80,
-                            "width"=>15,
-                            "x"=>77,
-                            "y"=>31,
-                            "pageNumber"=>6,
+                            "name" => "esignICForm",
+                            "height" => 80,
+                            "width" => 15,
+                            "x" => 77,
+                            "y" => 31,
+                            "pageNumber" => 6,
                         ),
                         array(
-                            "name"=>"esignICForm",
-                            "height"=>80,
-                            "width"=>15,
-                            "x"=>77,
-                            "y"=>38,
-                            "pageNumber"=>6,
+                            "name" => "esignICForm",
+                            "height" => 80,
+                            "width" => 15,
+                            "x" => 77,
+                            "y" => 38,
+                            "pageNumber" => 6,
                         ),
-                         array(
-                            "name"=>"esignICForm",
-                            "height"=>80,
-                            "width"=>15,
-                            "x"=>77,
-                            "y"=>45,
-                            "pageNumber"=>6,
-                         )
-                        );
+                        array(
+                            "name" => "esignICForm",
+                            "height" => 80,
+                            "width" => 15,
+                            "x" => 77,
+                            "y" => 45,
+                            "pageNumber" => 6,
+                        )
+                    );
                     break;
                 default:
-                  echo "Invalid document name!";
-              }
-        $signers = array(
-                "name"=>$selectedTemplate,
-                "message"=>"Please sign",
-                "signers"=>[['participant' => ["email"=>$data['email'], 'name' => $data['firstname']],
-                            "fields"=> $field]]);
-        $docId = $this->setupDocument($fileUUID."_".$selectedTemplate,$documentDestination,$signers);
-        $signingLink = $this->getDocumentSigningLink($docId);
+                    echo "Invalid document name!";
+            }
+            $signers = array(
+                "name" => $selectedTemplate,
+                "message" => "Please sign",
+                "signers" => [[
+                    'participant' => ["email" => $data['email'], 'name' => $data['firstname']],
+                    "fields" => $field
+                ]]
+            );
+            $docId = $this->setupDocument($fileUUID . "_" . $selectedTemplate, $documentDestination, $signers);
+            $signingLink = $this->getDocumentSigningLink($docId);
             array_push(
                 $generatedPDFList,
                 array(
                     "fullPath" => $documentDestination,
                     "file" => $documentpdf,
-                    "originalName" => $selectedTemplate.".pdf",
+                    "originalName" => $selectedTemplate . ".pdf",
                     "type" => "file/pdf",
-                    "docId"=>$docId,
-                    "signingLink"=>$signingLink,
-                    "status"=>"UNSIGNED"
+                    "docId" => $docId,
+                    "signingLink" => $signingLink,
+                    "status" => "UNSIGNED"
                 )
-            );  
+            );
+        }
+        $data['attachments'] = $generatedPDFList;
+        $this->logger->info("PDF MAPPING : " . print_r($data['attachments'], true));
+        $this->logger->info("Completed signature document with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->saveFile($data, $fileUUID);
+        return $data;
     }
-    $data['attachments'] = $generatedPDFList;
-    $this->logger->info("PDF MAPPING : ". print_r($data['attachments'], true));
-    $this->logger->info("Completed signature document with data- " . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-    $this->saveFile($data, $fileUUID);
-    return $data;
-}
 }
