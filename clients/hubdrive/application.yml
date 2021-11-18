@@ -1606,7 +1606,7 @@ pages:
                             details:
                                 -
                                     type: Form
-                                    url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform
+                                    url: workflow/ab854546-9e1b-43b3-ae7d-e6cf93683f61/startform                    
             -
                 type: List
                 content:
