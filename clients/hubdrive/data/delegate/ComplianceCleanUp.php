@@ -16,18 +16,25 @@ class ComplianceCleanUp extends AbstractAppDelegate
 
     public function execute(array $data, Persistence $persistenceService)
     { 
+        
         $filterParams = array();
         $filterParams['filter'][0]['filter']['filters'][] = array('field' => 'entity_name', 'operator' => 'eq', 'value' => 'Compliance');
         $data['filterParams'] = $filterParams;
-        $data['entityName'] = 'Compliance';
+        $filterParams['filter'][0]['skip'] = $data['skip'];
+        $filterParams['filter'][0]['take'] = $data['take'];
 
         $files = $this->getFileList($data, $filterParams);
-        //print_r($files);
+        //print_r($files); die;
         //echo count($files['data']);die;
-        foreach($files['data'] as $eachfile){
+        $ff = [];
+        foreach($files['data'] as $k=>$eachfile){
+            //print_r($k);
             $fileData = json_decode($eachfile['data'], true);
             $fileId = $eachfile['uuid'];
-            //print_r($fileData);die;
+            //print_r($fileData);
+            $ff[$k] = $eachfile['name'];
+
+
             $fileData['driverTypeJson'] = array (
                 0 => 
                 array (
@@ -249,6 +256,8 @@ class ComplianceCleanUp extends AbstractAppDelegate
             
             //print_r($fileData);die;
             $this->saveFile($fileData, $fileId);
+            
         }
+        //print_r($ff);die;
     }
 }
