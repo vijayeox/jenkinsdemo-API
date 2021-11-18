@@ -1612,7 +1612,7 @@ pages:
                 content:
                     route: 'entity/Excess Liability/file'
                     filterable: true
-                    defaultFilters: '{"filter": {"logic": "or","filters": [{"field": "policyStatus","operator": "eq","value": " "},{"field": "policyStatus","operator": "eq","value": "New"},{"field": "policyStatus","operator": "eq","value": "Received"},{"field": "policyStatus","operator": "eq","value": "UW Review"},{"field": "policyStatus","operator": "eq","value": "Quote Rejected"},{"field": "policyStatus","operator": "eq","value": "Approved/Pending Bind"},{"field": "policyStatus","operator": "eq","value": "Bound"},{"field": "policyStatus","operator": "eq","value": "Policy Issued"},{"field": "policyStatus","operator": "eq","value": "Closed"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
+                    defaultFilters: '{"filter": {"logic": "and","filters": [{"field": "policyStatus","operator": "neq","value": " "},{"field": "policyStatus","operator": "neq","value": "In Progress"},{"field": "policyStatus","operator": "neq","value": "Quoted"}]},"sort": [{"field": "date_created","dir": "desc"}]}'
                     mergeDefaultFilters: true
                     resizable: true
                     refreshButton: true
