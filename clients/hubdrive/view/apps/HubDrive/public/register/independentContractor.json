@@ -80,13 +80,13 @@
 			"label": "Post Login Commands",
 			"customClass": "",
 			"modalEdit": false,
-			"defaultValue": "[{\"command\":\"delegate\",\"delegate\":\"CleanUpData\"},{\"command\":\"fileSave\", \"entity_name\": \"Motor Carrier\"},{\"command\":\"delegate\",\"delegate\":\"insureLearnInsuredCreation\"}]",
+			"defaultValue": null,
 			"persistent": true,
 			"protected": false,
 			"dbIndex": false,
 			"encrypted": false,
 			"redrawOn": "",
-			"customDefaultValue": "",
+			"customDefaultValue": "if(productName == 'motorCarrier') {\n  value = '[{\"command\":\"delegate\",\"delegate\":\"CleanUpData\"},{\"command\":\"delegate\",\"delegate\":\"insureLearnInsuredCreation\"}]';\n} else if(productName == 'contractCarrier') {\n  value = '[{\"command\":\"delegate\",\"delegate\":\"insureLearnInsuredCreation\"}]';\n} else {\n  value = '';\n}",
 			"calculateValue": "",
 			"calculateServer": false,
 			"key": "post_login_commands",
@@ -146,7 +146,7 @@
 			"showWordCount": false,
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "eb5iy49"
+			"id": "efwsc7s"
 		}, {
 			"label": "type",
 			"defaultValue": "BUSINESS",
@@ -289,7 +289,7 @@
 			"dbIndex": false,
 			"encrypted": false,
 			"redrawOn": "",
-			"customDefaultValue": "if(productName == 'independentContractor') {\n  value = '02510bad-981c-43a9-a83d-c7436c9aba1a';\n} else if(productName == 'contractCarrier') {\n  value = 'e26bd719-f47f-455b-9be4-9b26c18a0b78';\n} else if(productName == 'motorCarrier') {\n  value = 'e26bd719-f47f-455b-9be4-9b26c18a0b78';\n}\n  value = undefined;\n}",
+			"customDefaultValue": "if(productName == 'independentContractor') {\n  value = '02510bad-981c-43a9-a83d-c7436c9aba1a';\n} else if(productName == 'contractCarrier') { \n  value = 'e26bd719-f47f-455b-9be4-9b26c18a0b78'; \n} else if(productName == 'motorCarrier') { \n  value = '3446b166-37a4-4afd-9390-5fc7e80ce1df'; \n} else { \n  value = undefined;\n}\n",
 			"calculateValue": "",
 			"calculateServer": false,
 			"key": "formId",
@@ -347,7 +347,7 @@
 			"showWordCount": false,
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "egzdhyj"
+			"id": "efils1r"
 		}, {
 			"label": "account name",
 			"customDefaultValue": "value = accountName;",
@@ -416,25 +416,41 @@
 			"id": "ewau2ybf"
 		}, {
 			"label": "product",
-			"customDefaultValue": "if(productName == 'independentContractor' || productName == 'onTrac') {\n  value = '02510bad-981c-43a9-a83d-c7436c9aba1a';\n} else if(productName == 'contractCarrier') {\n  value = 'cfc8cd3f-58c4-400f-b9f1-e1916506f5e6';\n} else {\n  value = undefined;\n}",
+			"customClass": "",
+			"modalEdit": false,
+			"defaultValue": null,
+			"persistent": true,
+			"protected": false,
+			"dbIndex": false,
+			"encrypted": false,
+			"redrawOn": "",
+			"customDefaultValue": "if(productName == 'independentContractor' || productName == 'onTrac') \n  value = '02510bad-981c-43a9-a83d-c7436c9aba1a'; }\nelse if(productName == 'contractCarrier') {\n  value = 'cfc8cd3f-58c4-400f-b9f1-e1916506f5e6'; } \nelse { \n    value = undefined; \n  }",
+			"calculateValue": "",
+			"calculateServer": false,
 			"key": "product",
+			"tags": [],
+			"properties": {},
+			"logic": [],
+			"attributes": {},
+			"overlay": {
+				"style": "",
+				"page": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false,
 			"placeholder": "",
 			"prefix": "",
-			"customClass": "",
 			"suffix": "",
 			"multiple": false,
-			"defaultValue": null,
-			"protected": false,
 			"unique": false,
-			"persistent": true,
 			"hidden": false,
 			"clearOnHide": true,
 			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
 			"dataGridLabel": false,
 			"labelPosition": "top",
 			"description": "",
@@ -444,13 +460,9 @@
 			"tabindex": "",
 			"disabled": false,
 			"autofocus": false,
-			"dbIndex": false,
-			"calculateValue": "",
-			"calculateServer": false,
 			"widget": {
 				"type": "input"
 			},
-			"attributes": {},
 			"validateOn": "change",
 			"validate": {
 				"required": false,
@@ -465,21 +477,12 @@
 				"when": null,
 				"eq": ""
 			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
 			"allowCalculateOverride": false,
-			"encrypted": false,
 			"showCharCount": false,
 			"showWordCount": false,
-			"properties": {},
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "ebojzqe"
+			"id": "ex5362l"
 		}, {
 			"label": "identifier_field",
 			"defaultValue": "email",
@@ -878,25 +881,41 @@
 			"id": "eyx5lo"
 		}, {
 			"label": "entityName",
-			"calculateValue": "value = \"Complicance\";",
+			"customClass": "",
+			"modalEdit": false,
+			"defaultValue": null,
+			"persistent": true,
+			"protected": false,
+			"dbIndex": false,
+			"encrypted": false,
+			"redrawOn": "",
+			"customDefaultValue": "",
+			"calculateValue": "if(accountName == 'HUB'){ \n  value = 'PartTime Independent Contractor Onboarding'; \n} else { \n  value = 'Complicance'; \n}",
+			"calculateServer": false,
 			"key": "entity_name",
+			"tags": [],
+			"properties": {},
+			"logic": [],
+			"attributes": {},
+			"overlay": {
+				"style": "",
+				"page": "",
+				"left": "",
+				"top": "",
+				"width": "",
+				"height": ""
+			},
 			"type": "hidden",
 			"input": true,
 			"tableView": false,
 			"placeholder": "",
 			"prefix": "",
-			"customClass": "",
 			"suffix": "",
 			"multiple": false,
-			"defaultValue": null,
-			"protected": false,
 			"unique": false,
-			"persistent": true,
 			"hidden": false,
 			"clearOnHide": true,
 			"refreshOn": "",
-			"redrawOn": "",
-			"modalEdit": false,
 			"dataGridLabel": false,
 			"labelPosition": "top",
 			"description": "",
@@ -906,13 +925,9 @@
 			"tabindex": "",
 			"disabled": false,
 			"autofocus": false,
-			"dbIndex": false,
-			"customDefaultValue": "",
-			"calculateServer": false,
 			"widget": {
 				"type": "input"
 			},
-			"attributes": {},
 			"validateOn": "change",
 			"validate": {
 				"required": false,
@@ -927,21 +942,12 @@
 				"when": null,
 				"eq": ""
 			},
-			"overlay": {
-				"style": "",
-				"left": "",
-				"top": "",
-				"width": "",
-				"height": ""
-			},
 			"allowCalculateOverride": false,
-			"encrypted": false,
 			"showCharCount": false,
 			"showWordCount": false,
-			"properties": {},
 			"allowMultipleMasks": false,
 			"inputType": "hidden",
-			"id": "e3191d"
+			"id": "e4615w"
 		}, {
 			"label": "businessOffering",
 			"customClass": "",
@@ -2718,7 +2724,7 @@
 		"id": "e8sqpf"
 	}],
 	"revisions": "current",
-	"_vid": 66,
+	"_vid": 71,
 	"title": "ICRegistration",
 	"display": "form",
 	"access": [{
@@ -2737,6 +2743,6 @@
 	"path": "icregistration",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2021-05-18T07:58:28.572Z",
-	"modified": "2021-11-18T10:43:18.971Z",
+	"modified": "2021-11-19T11:04:30.919Z",
 	"machineName": "testdivehub:registration"
 }

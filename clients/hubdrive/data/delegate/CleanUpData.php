@@ -1,9 +1,10 @@
 <?php
 
 use Oxzion\AppDelegate\AbstractAppDelegate;
-use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\UserContextTrait;
+use Oxzion\Db\Persistence\Persistence;
 use Oxzion\AppDelegate\AccountTrait;
+use Oxzion\AppDelegate\FileTrait;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 
@@ -11,6 +12,7 @@ class CleanUpData extends AbstractAppDelegate
 {
 	use UserContextTrait;
 	use AccountTrait;
+	use FileTrait;
 
 	private $persistenceService;
 
@@ -68,9 +70,9 @@ class CleanUpData extends AbstractAppDelegate
 			unset($fileData['street1IC']);
 		}
 
-		if(isset($fileData['product'])){
+		/*if(isset($fileData['product'])){
 			unset($fileData['product']);
-		}
+		}*/
 
 		if(isset($fileData['zipCode1IC'])){
 			unset($fileData['zipCode1IC']);
@@ -90,7 +92,8 @@ class CleanUpData extends AbstractAppDelegate
 	   	$fileData['businessOffering'][0]['businessRole'] = 'Independent Contractor';
         $fileData['businessOffering'][0]['entity'][0] = 'Driver';
         $this->setupBusinessOfferings($fileData, $icUserAccountId, $fileData['appId']);
-        $this->logger->info("After filesave---" . print_r($dataForIC, true));
+        $this->saveFile($fileData);
+        $this->logger->info("After filesave---" . print_r($fileData, true));
 
     	return $fileData;
     }

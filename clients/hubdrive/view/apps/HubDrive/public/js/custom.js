@@ -238,7 +238,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var token = res.jwt;
         token.replace('"', '');
 
-        data['commands'] = data['post_login_commands'];
+        if(data['post_login_commands'] != ""){
+            data['commands'] = data['post_login_commands'];          
+        }
+
         var response = fetch(baseUrl + "app/" + appId + "/" +endUrl, {
           body: JSON.stringify(data),
           headers: {
