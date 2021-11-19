@@ -53,8 +53,7 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
-ENV DB_URL=jdbc:mysql://${DB_HOST}/${API_DB}
-ENV CAMUNDA_DB=jdbc:mysql://${DB_HOST}/${CAMUNDA_DATABASE}
+ENV DB_URL=jdbc:mysql://${DB_HOST}/${CAMUNDA_DB}
 ENV API_DB_URL=jdbc:mysql://${DB_HOST}/${API_DB}
 ENV API_DB_USERNAME=${DB_USERNAME}
 ENV API_DB_PASSWORD=${DB_PASSWORD}

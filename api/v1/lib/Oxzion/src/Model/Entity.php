@@ -1,4 +1,5 @@
 <?php
+
 namespace Oxzion\Model;
 
 use Countable;
@@ -305,6 +306,7 @@ abstract class Entity implements Countable
      */
     public function loadByUuid($uuid)
     {
+        // $this->logger->info("uuid in entity file -" . $uuid);
         $obj = $this->table->getByUuid($uuid);
         if (is_null($obj) || (0 == count($obj))) {
             throw new EntityNotFoundException(
@@ -419,12 +421,16 @@ abstract class Entity implements Countable
             if (!$includeId && (self::COLUMN_ID == $key)) {
                 continue;
             }
-            if (!$includeCreatedByAndDate &&
-                ((self::COLUMN_CREATED_BY == $key) || (self::COLUMN_CREATED_DATE == $key))) {
+            if (
+                !$includeCreatedByAndDate &&
+                ((self::COLUMN_CREATED_BY == $key) || (self::COLUMN_CREATED_DATE == $key))
+            ) {
                 continue;
             }
-            if (!$includeModifiedByAndDate &&
-                ((self::COLUMN_MODIFIED_BY == $key) || (self::COLUMN_MODIFIED_DATE == $key))) {
+            if (
+                !$includeModifiedByAndDate &&
+                ((self::COLUMN_MODIFIED_BY == $key) || (self::COLUMN_MODIFIED_DATE == $key))
+            ) {
                 continue;
             }
             $returnArray[$key] = $this->data[$key];
@@ -449,8 +455,10 @@ abstract class Entity implements Countable
             if (!$force && ($existingValue != $convertedValue)) {
                 throw new DataCorruptedException(
                     'Data corrupted.',
-                    ['entity' => $this->table->getTableGateway()->getTable(), 'property' => $key,
-                        'existingValue' => $existingValue, 'newValue' => $value]
+                    [
+                        'entity' => $this->table->getTableGateway()->getTable(), 'property' => $key,
+                        'existingValue' => $existingValue, 'newValue' => $value
+                    ]
                 );
             }
         }

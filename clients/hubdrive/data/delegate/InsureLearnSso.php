@@ -14,5 +14,4 @@ class InsureLearnSso
 
         return ['SSOLink' => $this->insuranceService->getSsoLink($data['email'], 'Welcome2Hdol!')];
     }
-
 }

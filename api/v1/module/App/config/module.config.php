@@ -313,8 +313,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'assignments',
-                        'access' => [
-                        ],
+                        'access' => [],
                     ],
                 ],
             ],
@@ -328,8 +327,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'assignments',
-                        'access' => [
-                        ],
+                        'access' => [],
                     ],
                 ],
             ],
@@ -344,8 +342,7 @@ return [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
                         'action' => 'getFileList',
-                        'access' => [
-                        ],
+                        'access' => [],
                     ],
                 ],
             ],
@@ -528,8 +525,7 @@ return [
                         'controller' => Controller\FileController::class,
                         'action' => 'sendReminder',
                         'method' => 'POST',
-                        'access' => [
-                        ],
+                        'access' => [],
                     ],
                 ],
             ],

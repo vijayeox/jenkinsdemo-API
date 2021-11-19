@@ -2,9 +2,9 @@
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
         <testsuite name="HubDrive Fixtures">
-        <directory>test/OnTarcPDFGenerationTest.php</directory>
+        <!-- <directory>test/OnTarcPDFGenerationTest.php</directory>
         <directory>test/FtniApisTest.php</directory>
-        <directory>test/CCandICPDFGenerationTest.php</directory>
+        <directory>test/CCandICPDFGenerationTest.php</directory> -->
         <directory>test/ZendriveIntegrationTest.php</directory>
         </testsuite>
     </testsuites> 

@@ -9,10 +9,16 @@ use Oxzion\AppDelegate\UserContextTrait;
 use Oxzion\DelegateException;
 use Oxzion\AppDelegate\FileTrait;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\AppDelegate\InsuranceTrait;
+
+use Zend\Code\Scanner\FunctionScanner;
+
+use function Matrix\trace;
 
 class InsertDriver extends AbstractAppDelegate
 {
     use UserContextTrait;
+    use InsuranceTrait;
     use FileTrait;
     const APPID = 'a4b1f073-fc20-477f-a804-1aa206938c42';
 
@@ -42,6 +48,8 @@ class InsertDriver extends AbstractAppDelegate
             if (isset($fileList['data']) && sizeof($fileList['data']) > 0) {
                 $fileData = is_string($fileList['data'][0]['data']) ? json_decode($fileList['data'][0]['data'], true) : $fileList['data'][0]['data'];
                 $fileUuid = $fileList['data'][0]['uuid'];
+                $companyName = $fileList['data'][0]['companyName'];
+                $this->logger->info("company name " . print_r(json_encode($companyName), true));
             } else {
                 return $data;
             }
@@ -49,8 +57,9 @@ class InsertDriver extends AbstractAppDelegate
                 $fileData['zenDriveIntegration'] = "Yes";
                 $this->saveFile($fileData, $fileUuid);
             }
-            $zendDriveSubscription = $fileList['data'][0]['zenDriveIntegration'];
-            $this->logger->info("ic subscription information " . print_r($zendDriveSubscription, true));
+            $zendDriveSubscription = "YES";
+            // $zendDriveSubscription = $fileList['data'][0]['zenDriveIntegration'];
+            // $this->logger->info("ic subscription information " . print_r($zendDriveSubscription, true));
             if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
                 $selectQuery = "SELECT * FROM `ic_info` WHERE email = '" . $data['icusername']['email'] . "'";
                 $ICrrecord = $persistenceService->selectQuery($selectQuery);
@@ -153,15 +162,25 @@ class InsertDriver extends AbstractAppDelegate
                                     }
                                     $dataForDriver['entity_name'] = 'Driver';
                                     $response = $this->createUser($params, $dataForDriver);
+                                    $dataForDriver['userUUID'] = $this->getUserByUsername($dataForDriver['username']);
+                                    $dataForDriver['status'] = 'Active';
                                     $response1 = $this->createFile($dataForDriver);
+                                    $this->logger->info("company name before " . print_r($companyName, true));
+                                    $dataForDriver['companyName'] = $companyName;
+                                    $response2 = $this->Insurelearn($dataForDriver);
                                     $this->logger->info("driver registration data " . print_r($response, true));
                                     $this->logger->info("driver file creation data " . print_r($response1, true));
+                                    $this->logger->info("driver insurelearn data " . print_r($response2, true));
                                     if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
                                         $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
                                         $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
                                     }
                                 } else {
+                                    $dataForDriver['companyName'] = $companyName;
                                     $this->logger->info("driver already exists");
+                                    $this->logger->info("company name before " . print_r($companyName, true));
+                                    $response2 = $this->Insurelearn($dataForDriver);
+                                    $this->logger->info("driver insurelearn data " . print_r($response2, true));
                                     if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
                                         $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
                                         $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
@@ -190,6 +209,7 @@ class InsertDriver extends AbstractAppDelegate
                     $dataForDriver['driverType'] = isset($data['driverType']) ? $data['driverType'] : "";
                     $dataForDriver['paidOption'] = isset($data['paidOption']) ? $data['paidOption'] : "";
                     $dataForDriver['username'] = $username;
+                    $dataForDriver['companyName'] = $companyName;
                     if (count($userDataIfExists) == 0) {
                         $dataForDriver['app_id'] = self::APPID;
                         $dataForDriver['type'] = 'INDIVIDUAL';
@@ -209,6 +229,9 @@ class InsertDriver extends AbstractAppDelegate
                         $this->saveDrivers($params, $dataForDriver);
                     } else {
                         $this->logger->info("driver already exists");
+                        $this->logger->info("company name before " . print_r($companyName, true));
+                        $response2 = $this->Insurelearn($dataForDriver);
+                        $this->logger->info("driver insurelearn data " . print_r($response2, true));
                         if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
                             $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
                             $this->logger->info("zenddriveIntegration response " . print_r($driverZendDriveResponse, true));
@@ -225,8 +248,13 @@ class InsertDriver extends AbstractAppDelegate
     public function saveDrivers($params, $dataForDriver)
     {
         $dataForDriver['entity_name'] = 'Driver';
+        $dataForDriver['status'] = 'Active';
         $response = $this->createUser($params, $dataForDriver);
         $response1 = $this->createFile($dataForDriver);
+        $dataForDriver['companyName'] = $companyName;
+        $this->logger->info("company name before " . print_r($companyName, true));
+        $response2 = $this->Insurelearn($dataForDriver);
+        $this->logger->info("driver insurelearn data " . print_r($response2, true));
         $this->logger->info("driver registration data " . print_r($response, true));
         $this->logger->info("driver file creation data " . print_r($response1, true));
         if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
@@ -336,5 +364,80 @@ class InsertDriver extends AbstractAppDelegate
             $insertQuery = $persistenceService->insertQuery($insert, $mappingArr);
         }
         $this->logger->info("driver record " . print_r($driverrecord, true));
+    }
+
+    private function Insurelearn($data)
+    {
+        $this->logger->info("HERE INSURE LEARN" . print_r($data, true));
+        $this->setInsuranceConfig([
+            "client" => "InsureLearn"
+        ]);
+        // if (!empty($data['debug'])) $data = $this->getSampleData();
+        $this->logger->info("HERE INSURE LEARN AFTER");
+        $contractorGroup = $this->insuranceService->search('groupName', [
+            'groupName' => $data['companyName']
+        ]);
+        $this->logger->info("contractorGroup info" . print_r($contractorGroup, true));
+        if (empty($contractorGroup['group'])) {
+            $this->insuranceService->create('group', [
+                'groupName' => $data['companyName'],
+                'groupTypeID' => 2,
+                'groupDescription' => 'created by eox vantage',
+                'userData' => $data['companyName']
+            ]);
+            $contractorGroup = $this->insuranceService->search('groupName', [
+                'groupName' => $data['companyName']
+            ]);
+            $this->logger->info("newly created contractorGroup info" . print_r($contractorGroup, true));
+        }
+        $this->checkDriver($data, $contractorGroup['group']);
+        $this->logger->info("HERE DRIVER INSURE LEARN ADDEDD");
+        return $data;
+    }
+    private function checkDriver($driver, $group)
+    {
+        $driver['email'] = strtolower($driver['email']);
+        $driverUser = $this->insuranceService->search('userData', [
+            'loginID' => $driver['email']
+        ]);
+        $this->logger->info("driver info" . print_r($driverUser, true));
+        $driverUserData = [
+            'loginID' => $driver['email'],
+            'userData' => $driver['email'],
+            'passwd' => 'Welcome2Hdol!',
+            'firstName' => $driver['firstname'],
+            'middleName' => $driver['middlename'],
+            'lastName' => $driver['lastname'],
+            'email' => $driver['email']
+        ];
+        if (empty($driverUser['userProfiles'])) {
+            $this->insuranceService->create('user', $driverUserData + [
+                'accessLevel' => 1,
+                'accessMode' => 0,
+                'roleName' => 'IC Driver - English',
+                'locationName' => $group['@attributes']['groupName']
+            ]);
+            $driverUser = $this->insuranceService->search('userData', [
+                'loginID' => $driver['email']
+            ]);
+            $this->logger->info("created driver info" . print_r($driverUser, true));
+        } else {
+            $this->insuranceService->create('user', $driverUserData);
+            $driverUser = $driverUser['userProfiles']['userProfile'];
+            $this->insuranceService->perform('group', [
+                'groupID' => 12,
+                'groupTypeID' => 1,
+                'userProfileID' => $driverUser['@attributes']['userProfileID']
+            ], 'adduser');
+            $groupDrivers[] = $driverUser['@attributes']['userProfileID'];
+            $this->logger->info("group drivers" . print_r($groupDrivers, true));
+        }
+        if (!empty($groupDrivers)) {
+            $this->insuranceService->perform('group', [
+                'groupID' => $group['@attributes']['groupID'],
+                'groupTypeID' => 2,
+                'userProfileID' => implode('|', $groupDrivers)
+            ], 'adduser');
+        }
     }
 }

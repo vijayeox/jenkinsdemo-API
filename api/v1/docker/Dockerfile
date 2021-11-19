@@ -49,4 +49,5 @@ RUN mkdir -p /app/clients
 RUN mkdir -p /app/api/v1 && \
     mv /var/www /var/www2 && \
     ln -s /app/api/v1 /var/www
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 WORKDIR /var/www
