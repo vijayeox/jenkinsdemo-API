@@ -65,7 +65,12 @@ trait UserContextTrait
         return $this->userService->getUserByUsername($username);
     }
 
-    public function getUserInfoByUuid($uuid){
+    public function getUserInfoByUuid($uuid)
+    {
         return $this->userService->getUserInfoByUuid($uuid);
+    }
+    public function updateUser($id, &$data, $accountId = null)
+    {
+        return $this->userService->updateUser($id, $data, $accountId = null);
     }
 }
