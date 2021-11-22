@@ -230,6 +230,36 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
+  function postLoginCmds(baseUrl, data, res) {
+        console.log(data);
+        console.log(res);
+        var appId = data['appId'];
+        var endUrl = data['postLoginUrl'];
+        var token = res.jwt;
+        token.replace('"', '');
+
+        if(data['post_login_commands'] != ""){
+            data['commands'] = data['post_login_commands'];          
+        }
+
+        var response = fetch(baseUrl + "app/" + appId + "/" +endUrl, {
+          body: JSON.stringify(data),
+          headers: {
+            "content-type": "application/json",
+            "Accept": "application/json",
+            "Authorization": "Bearer "+token
+          },
+          method: "POST",
+          mode: "cors"
+        }).then(response => {
+            console.log(response);
+            return response.json();
+        });
+        response.then(res => {
+            console.log(res);
+        });
+  }
+
   function autoLogin(data) {
     localStorage.clear();
     localStorage.setItem(
@@ -295,6 +325,7 @@ console.log("form load");
           form.emit("submitDone", submission);
           setTimeout(() => {
             autoLogin(res.data);
+            postLoginCmds(baseUrl, submission.data, res.data);
           }, 500);
         } else {
           Swal.fire({
