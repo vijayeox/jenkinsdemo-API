@@ -67,12 +67,12 @@ class Persistence extends AbstractService
      * @return \Zend\Db\Adapter\Driver\ResultInterface
      */
 
-    public function insertQuery($sqlQuery, array $params = [])
+    public function insertQuery($sqlQuery,array $params = [])
     {
-
+    
         $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
-        $adapter = $this->dbAdapter;
+        $adapter=$this->dbAdapter;
         try {
             if (!empty($parsedArray['INSERT'])) {
                 foreach ($parsedArray['INSERT'] as $key => $insertArray) {
@@ -109,8 +109,7 @@ class Persistence extends AbstractService
                     "expr_type" => "const",
                     "base_expr" => $accountId,
                     "sub_tree" => "",
-                    "delim" => ""
-                );
+                    "delim" => "");
                 array_push($parsedArray['SELECT'], $selectExpressionOperator);
                 $parsedArray = $this->processParsedArrayForAccountId($parsedArray, 'FROM');
             }
@@ -138,18 +137,18 @@ class Persistence extends AbstractService
         } catch (Exception $e) {
             return 0;
         }
-        return $queryExecute = $this->generateSQLFromArray($parsedArray, $params);
+        return $queryExecute = $this->generateSQLFromArray($parsedArray,$params);
     }
 
     /**
      * @param $sqlQuery
      * @return \Zend\Db\Adapter\Driver\ResultInterface
      */
-    public function updateQuery($sqlQuery, array $params = [])
+    public function updateQuery($sqlQuery,array $params = [])
     {
         $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
-        $adapter = $this->dbAdapter;
+        $adapter=$this->dbAdapter;
 
         try {
             $parsedArray = $this->processParsedArrayForAccountId($parsedArray, 'UPDATE');
@@ -157,7 +156,7 @@ class Persistence extends AbstractService
             return 0;
         }
 
-        return $queryExecute = $this->generateSQLFromArray($parsedArray, $params);
+        return $queryExecute = $this->generateSQLFromArray($parsedArray,$params);
     }
 
 
@@ -166,17 +165,17 @@ class Persistence extends AbstractService
      * @param $returnArray
      * @return array
      */
-    public function selectQuery($sqlQuery, array $params = [], $returnArray = false)
+    public function selectQuery($sqlQuery,array $params = [], $returnArray = false)
     {
         $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
-        $adapter = $this->dbAdapter;
+        $adapter=$this->dbAdapter;
         try {
             $parsedArray = $this->processParsedArrayForAccountId($parsedArray, 'FROM');
         } catch (Exception $e) {
             return 0;
         }
-        $queryExecute = $this->generateSQLFromArray($parsedArray, $params);
+        $queryExecute = $this->generateSQLFromArray($parsedArray,$params);
         if ($returnArray === true) {
             return $this->toArray($queryExecute);
         } else {
@@ -188,11 +187,11 @@ class Persistence extends AbstractService
      * @param $sqlQuery
      * @return \Zend\Db\Adapter\Driver\ResultInterface
      */
-    public function deleteQuery($sqlQuery, array $params = [])
+    public function deleteQuery($sqlQuery,array $params = [])
     {
         $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
-        $adapter = $this->dbAdapter;
+        $adapter=$this->dbAdapter;
         try {
             if (!empty($parsedArray['FROM'])) {
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
@@ -205,12 +204,12 @@ class Persistence extends AbstractService
         } catch (Exception $e) {
             return 0;
         }
-        return $queryExecute = $this->generateSQLFromArray($parsedArray, $params);
+        return $queryExecute = $this->generateSQLFromArray($parsedArray,$params);
     }
 
     private function getReferenceClause($parsedArray, $key, $data, $tableArrayList, $queryStatement)
     {
-        $adapter = $this->dbAdapter;
+        $adapter=$this->dbAdapter;
         if (!empty($data['ref_clause'])) {
             $expAndOperator = array("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
             array_push($parsedArray[$queryStatement][$key]['ref_clause'], $expAndOperator);
@@ -244,7 +243,7 @@ class Persistence extends AbstractService
     {
         $adapter = $this->dbAdapter;
         $statement = new PHPSQLCreator($parsedArray);
-        $statement3 = $adapter->createStatement($statement->created, $params);
+        $statement3 = $adapter->createStatement($statement->created,$params);
         return $statement3->execute();
     }
 
@@ -255,7 +254,7 @@ class Persistence extends AbstractService
             $tableAliasName = $tableName;
         }
 
-        $tableName = str_replace('`', "", $tableName);
+        $tableName = str_replace('`',"",$tableName);
         $query = "SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list
                  FROM INFORMATION_SCHEMA.COLUMNS 
                  WHERE table_name  ='$tableName' AND
@@ -274,7 +273,8 @@ class Persistence extends AbstractService
                     $exp_const = array("expr_type" => "const", "base_expr" => $accountId, "sub_tree" => "");
                     $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
                     $exp_colref = array("expr_type" => "colref", "base_expr" => $tableAliasName . " . ox_app_account_id", "sub_tree" => "", "no_quotes" =>
-                    array("delim" => "", "parts" => array("0" => "ox_app_account_id")));
+                        array( "delim" => "", "parts" => array("0" => "ox_app_account_id") )
+                    );
                 }
                 if (!isset($parsedArray['WHERE'])) {
                     $parsedArray['WHERE'] = array();
@@ -293,7 +293,8 @@ class Persistence extends AbstractService
                 $exp_const = array("expr_type" => "const", "base_expr" => " NULL )", "sub_tree" => "");
                 $exp_operator = array("expr_type" => "operator", "base_expr" => "IS", "sub_tree" => "");
                 $exp_colref = array("expr_type" => "colref", "base_expr" => $tableAliasName . " . ox_app_account_id", "sub_tree" => "", "no_quotes" =>
-                array("delim" => "", "parts" => array("0" => "ox_app_account_id")));
+                    array( "delim" => "", "parts" => array("0" => "ox_app_account_id") )
+                );
                 array_push($parsedArray['WHERE'], $exp_colref, $exp_operator, $exp_const);
             }
         }
@@ -311,7 +312,7 @@ class Persistence extends AbstractService
 
     private function checkForStoredProcedure($storedProcedureName)
     {
-        $query = "SHOW PROCEDURE STATUS where Db = '" . $this->database . "' and name = '" . $storedProcedureName . "'";
+        $query = "SHOW PROCEDURE STATUS where Db = '" . $this->database . "' and name = '". $storedProcedureName . "'";
         $statement = $this->dbAdapter->query($query);
         $result = $statement->execute();
         $rowCount = $result->count();
@@ -339,7 +340,7 @@ class Persistence extends AbstractService
             if (isset($parsedArray[$operator])) {
                 $data = $parsedArray[$operator];
             } else {
-                $data = array();
+                $data =array();
             }
             if (empty($tableArrayList)) {
                 $processed = 0;

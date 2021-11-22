@@ -1,5 +1,4 @@
 <?php
-
 namespace Oxzion\AppDelegate;
 
 use Oxzion\Service\FileService;
@@ -10,7 +9,7 @@ trait FileTrait
     protected $logger;
     private $fileService;
     private $appId;
-
+    
     public function __construct()
     {
         $this->logger = Logger::getLogger(__CLASS__);
@@ -84,10 +83,5 @@ trait FileTrait
     protected function getWorkflowInstanceStartDataFromFileId($fileId)
     {
         return $this->fileService->getWorkflowInstanceStartDataFromFileId($fileId);
-    }
-
-    protected function updateFile($data, $id)
-    {
-        return $this->fileService->updateFile($data, $id);
     }
 }
