@@ -17,16 +17,19 @@ use Analytics\Service\QueryService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Utils\ArtifactUtils;
+use Oxzion\Document\DocumentBuilder;
 
 class InvoiceService extends AbstractService
 {
 
-    public function __construct($config, $dbAdapter, PaymentService $paymentService,AppDelegateService $appDelegateService,FileService $fileService)
+    public function __construct($config, $dbAdapter, PaymentService $paymentService,AppDelegateService $appDelegateService,FileService $fileService,DocumentBuilder $documentBuilder)
     {
         parent::__construct($config, $dbAdapter);
         $this->paymentService = $paymentService;
         $this->appDelegateService = $appDelegateService;
         $this->fileService = $fileService;
+        $this->documentBuilder = $documentBuilder;
     }
     public function setRestClient($restClient)
     {
@@ -111,7 +114,6 @@ class InvoiceService extends AbstractService
                 throw new ServiceException("Invalid parameters specified in request","invalid.params");
             }
 
-
             
             $invoiceAmount = $data['total'];
             $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
@@ -126,14 +128,26 @@ class InvoiceService extends AbstractService
             $customerData = $this->createOrGetCustomer($data);
             $customerId = $customerData['customerId'];
 
-
             $data['appName'] = $customerData['appName'];
             $data['customerName'] = $customerData['customerName'];
     
             $invoiceUuid = UuidUtil::uuid();
             $data['invoiceUuid'] = $invoiceUuid;
             try {
-                $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
+                
+                $pdfGenerationDelegatePath = $this->config['DELEGATE_FOLDER'].$data['appId']."/CreateInvoicePDF.php";
+                if(file_exists($pdfGenerationDelegatePath))
+                {
+
+                    $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
+                }
+                else{
+                    $pdfTemplatePath = $this->config['TEMPLATE_FOLDER']."Invoice.tpl";
+                    $pdfTemplatePathForAccount = $this->config['TEMPLATE_FOLDER'].$data['accountId']."/".$data['appId']."/";
+                    FileUtils::copy($pdfTemplatePath,"Invoice.tpl",$pdfTemplatePathForAccount);;
+                    $this->generatePDF($data);
+                    FileUtils::deleteFile("Invoice.tpl",$pdfTemplatePathForAccount);
+                }
 
                 $data['invoicePDFPath'] = $data['accountId']."/invoice/".$data['appId']."/".$invoiceUuid.".pdf";
                 $data['paymentStatus'] = "pending";
@@ -157,6 +171,7 @@ class InvoiceService extends AbstractService
                     "accountNumber" => $data['accountNumber'],
                     "fileId" => $data['fileId']
                 ];
+
                 $insert = "INSERT INTO ox_billing_invoice (`uuid`,`customer_id`,`amount`,`data`,`date_created`,`created_by`) VALUES (:uuid,:customerId,:amount,:data,:invoiceDate,:createdBy)";
                 $this->executeQuerywithBindParameters($insert,[
                     "uuid"=> $invoiceUuid,
@@ -171,7 +186,6 @@ class InvoiceService extends AbstractService
                 return $data;   
             }
             catch (Exception $e) {
-                // print_r($e);exit;
                 throw new ServiceException("Invoice template not found for App: ".$data['appId'],"template.missing");
             }
         }
@@ -248,7 +262,19 @@ class InvoiceService extends AbstractService
 
         $data = $this->formatInvoiceData($data);
 
-        $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
+        $pdfGenerationDelegatePath = $this->config['DELEGATE_FOLDER'].$data['appId']."/CreateInvoicePDF.php";
+        if(file_exists($pdfGenerationDelegatePath))
+        {
+            $this->appDelegateService->execute($data['appId'],'CreateInvoicePDF',$data);
+        }
+        else{
+            
+            $pdfTemplatePath = $this->config['TEMPLATE_FOLDER']."Invoice.tpl";
+            $pdfTemplatePathForAccount = $this->config['TEMPLATE_FOLDER'].$data['accountId']."/".$data['appId']."/";
+            FileUtils::copy($pdfTemplatePath,"Invoice.tpl",$pdfTemplatePathForAccount);
+            $this->generatePDF($data);
+            FileUtils::deleteFile("Invoice.tpl",$pdfTemplatePathForAccount);
+        }
         
         $fileId = isset($data['fileId']) ? $data['fileId'] : (isset($data['uuid']) ? $data['uuid'] : null);
 
@@ -549,19 +575,47 @@ class InvoiceService extends AbstractService
         return $result;
     }
 
+    public function generatePDF($data)
+    {
+        $invoicePDFTemplate = "Invoice";
+        $invoicePDFName = $data['invoiceUuid'].".pdf";
+        $generatedInvoicePDF = array();
+
+        $accountId = $data['accountId'];
+        $appId = $data['appId'];
+
+        $data = $this->formatInvoiceDataForPDF($data);
+        $folderDestination =  ArtifactUtils::getDocumentFilePath($this->config['APP_DOCUMENT_FOLDER'],"invoice/".$appId, array('accountId' => $accountId));
+        $fileDestination = $folderDestination['absolutePath'].$invoicePDFName;
+        if(FileUtils::fileExists($fileDestination)) {
+            FileUtils::deleteFile($invoicePDFName,$folderDestination['absolutePath']);
+        }
+        $doc = $this->documentBuilder->generateDocument($invoicePDFTemplate,$data,$fileDestination);
+        $documentpdf = $folderDestination['relativePath'] . $invoicePDFName;
+    }
+
+    public function formatInvoiceDataForPDF($data)
+    {
+        $invoiceAmount = $data['total'];
+        $amountPaid = isset($data['amountPaid'])?$data['amountPaid']:0.0;
+        $amountDue = $invoiceAmount - $amountPaid;
+
+        $data['amountDue'] = number_format($amountDue, 2, '.', ',');
+        $data['amountPaid'] = isset($data['amountPaid'])?number_format($data['amountPaid'], 2, '.', ','):'0.0';
+        $data['total'] = number_format($data['total'], 2, '.', ',');
+        $data['subtotal'] = number_format($data['subtotal'], 2, '.', ',');
+        $data['tax'] = number_format($data['tax'], 2, '.', ',');
+
+        
+        foreach($data['ledgerData'] as $key=> $lineItem)
+        {
+            $data['ledgerData'][$key]['amount'] = number_format($lineItem['amount'], 2, '.', ',');
+            $data['ledgerData'][$key]['unitCost'] = number_format($lineItem['unitCost'], 2, '.', ',');
+        } 
+
+        
+        return $data;
+    }
+
 }
 
-
-/*
-SELECT DISTINCT obr.app_id, oa.name as app_name, oa.uuid as app_uuid, 
-GROUP_CONCAT(oabrb.account_id) as buyer_account_id, GROUP_CONCAT(oac.uuid) as account_uuid,
-GROUP_CONCAT(oac.name) as account_name
-FROM ox_account_business_role as oabr 
-INNER JOIN ox_business_role as obr on oabr.business_role_id=obr.id 
-INNER JOIN ox_business_relationship as obrs on obrs.seller_account_business_role_id=oabr.id 
-INNER JOIN ox_account_business_role as oabrb on oabrb.id=obrs.buyer_account_business_role_id 
-INNER JOIN ox_app as oa on oa.id=obr.app_id
-INNER JOIN ox_account as oac on oac.id=oabrb.account_id
-WHERE oabr.account_id=1 GROUP BY obr.app_id
-
-*/

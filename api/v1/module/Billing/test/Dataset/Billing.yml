@@ -1,0 +1,116 @@
+ox_app:
+  -
+    id: 99
+    uuid: "aff3ddd4-e411-11e9-a359-2a2ae2dbcce4"
+    name: "Sample App"
+    category: "OTHERS"
+    type: 2
+    status: 4
+  -
+    id: 100
+    uuid: "aff3e23e-e411-11e9-a359-2a2ae2dbcce4"
+    name: "Payment"
+    category: "OTHERS"
+    type: 2
+    status: 4
+    
+ox_payment:
+  -
+    id: 1
+    app_id: 99
+    account_id: 1
+    payment_client: "FTNI"
+    api_url: "https://directformtest.ftnirdc.com/payment"
+    server_instance_name: "DEMO"
+    payment_config: '{"sessionUrl":"https://directformtest.ftnirdc.com/session", "formUrl":"https://directformtest.ftnirdc.com/payment", "username": "HDOLWebServicesAcct@EPICU", "password":"Hd0LW3bSerV!ce5s","customerId":"IGGI000-01"}'
+  -
+    id: 2
+    app_id: 100
+    account_id: 1
+    payment_client: "FTNI"
+    api_url: "https://directformtest.ftnirdc.com/payment"
+    server_instance_name: "DEMO"
+    payment_config: '{"sessionUrl":"https://directformtest.ftnirdc.com/session", "formUrl":"https://directformtest.ftnirdc.com/payment", "username": "HDOLWebServicesAcct@EPICU", "password":"Hd0LW3bSerV!ce5s","customerId":"IGGI000-01"}'
+
+ox_app_registry:
+  -
+    account_id: 1
+    app_id: 99
+  -
+    account_id: 1
+    app_id: 100
+  -
+    account_id: 21
+    app_id: 99
+  -
+    account_id: 21
+    app_id: 100
+  -
+    account_id: 22
+    app_id: 99
+  -
+    account_id: 22
+    app_id: 100
+
+ox_account:
+  -
+    id: 21
+    uuid: "dbad359d-1619-49d5-a58c-94dd4f5bc7c1"
+    status: "Active"
+    type: "BUSINESS"
+    name: "TestAccount1"
+
+ox_billing_customer:
+  -
+    id: 1
+    uuid: "109f6abf-b44e-46d3-b884-cb7f3864d266"
+    account_id: 1
+    app_id: 99
+  -
+    id: 2
+    uuid: "109f6abf-b44e-46d3-b884-cb7f3864d266"
+    account_id: 21
+    app_id: 99
+
+ox_billing_invoice:
+  -
+    id: 1
+    uuid: "0ac9b6ee-2330-47b5-a571-e6f6d4834c88"
+    customer_id: 2
+    amount: 260
+    data: '{"accountId":"dbad359d-1619-49d5-a58c-94dd4f5bc7c1","accountNumber":"35642575346789","amountPaid":200,"appId":"aff3ddd4-e411-11e9-a359-2a2ae2dbcce4","invoiceDate":"2021-11-18T00:00:00+05:30","invoiceDueDate":"2021-11-19T00:00:00+05:30","invoiceNumber":"12345645325789","ledgerData":[{"description":"Service1","quantity":1,"transactionEffectiveDate":"2021-11-18T00:00:00+05:30","transactionDueDate":"2021-11-19T00:00:00+05:30","amount":60,"unitCost":60},{"description":"Service2","quantity":1,"transactionEffectiveDate":"2021-11-18T00:00:00+05:30","transactionDueDate":"2021-11-19T00:00:00+05:30","unitCost":200,"amount":200}],"subtotal":260,"tax":"0.00","total":260}'
+    created_by: 1
+    date_created: "2019-06-26 00:00:00"
+
+  -
+    id: 2
+    uuid: "0ac9b6ee-2330-47b5-a571-e6f6d4834c89"
+    customer_id: 1
+    amount: 260
+    data: '{"accountId":"53012471-2863-4949-afb1-e69b0891c98a","accountNumber":"3564257534678979","amountPaid":200,"appId":"aff3ddd4-e411-11e9-a359-2a2ae2dbcce4","invoiceDate":"2021-11-18T00:00:00+05:30","invoiceDueDate":"2021-11-19T00:00:00+05:30","invoiceNumber":"12345645325789","ledgerData":[{"description":"Service1","quantity":1,"transactionEffectiveDate":"2021-11-18T00:00:00+05:30","transactionDueDate":"2021-11-19T00:00:00+05:30","amount":60,"unitCost":60},{"description":"Service2","quantity":1,"transactionEffectiveDate":"2021-11-18T00:00:00+05:30","transactionDueDate":"2021-11-19T00:00:00+05:30","unitCost":200,"amount":200}],"subtotal":260,"tax":"0.00","total":260}'
+    created_by: 2
+    date_created: "2019-06-26 00:00:00"
+
+
+ox_app_entity:
+  - 
+    id: 10
+    name: "Invoice"
+    app_id: 100
+    date_created: "2019-06-26 00:00:00"
+    uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
+
+ox_file:
+  -
+    id: 1
+    uuid: "dcf9ce1e-b861-4b72-9280-9f919f11368d"
+    account_id: 1
+    data: '{"accountNumber":35642575346789,"amountPaid":200,"invoiceDate":"2021-11-18","invoiceDueDate":"2021-11-19","invoiceNumber":12345645325789,"ledgerData":"{\"accountId\":\"dbad359d-1619-49d5-a58c-94dd4f5bc7c1\",\"accountNumber\":\"35642575346789\",\"amountPaid\":200,\"appId\":\"aff3ddd4-e411-11e9-a359-2a2ae2dbcce4\",\"invoiceDate\":\"2021-11-18T00:00:00+05:30\",\"invoiceDueDate\":\"2021-11-19T00:00:00+05:30\",\"invoiceNumber\":\"12345645325789\",\"ledgerData\":[{\"description\":\"Service1\",\"quantity\":1,\"transactionEffectiveDate\":\"2021-11-18T00:00:00+05:30\",\"transactionDueDate\":\"2021-11-19T00:00:00+05:30\",\"amount\":60,\"unitCost\":60},{\"description\":\"Service2\",\"quantity\":1,\"transactionEffectiveDate\":\"2021-11-18T00:00:00+05:30\",\"transactionDueDate\":\"2021-11-19T00:00:00+05:30\",\"unitCost\":200,\"amount\":200}],\"subtotal\":260,\"tax\":\"0.00\",\"total\":260}","subtotal":260,"tax":0,"total":260,"amountDue":60,"invoiceUuid":"0ac9b6ee-2330-47b5-a571-e6f6d4834c88","invoicePDFPath":"53012471-2863-4949-afb1-e69b0891c98a/invoice/aff3ddd4-e411-11e9-a359-2a2ae2dbcce4/0ac9b6ee-2330-47b5-a571-e6f6d4834c88.pdf","paymentStatus":"pending"}'
+    created_by: 1
+    modified_by: 1
+    date_created: "2019-06-26 00:00:00"
+    date_modified: "2021-11-09 04:40:54"
+    entity_id: 10
+    is_active: 1
+    rygStatus: 'GREEN'

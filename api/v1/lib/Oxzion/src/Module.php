@@ -748,13 +748,15 @@ class Module
                     $paymentService = $container->get(Service\PaymentService::class);
                     $appDelegateService = $container->get(AppDelegate\AppDelegateService::class);
                     $fileService = $container->get(Service\FileService::class);
+                    $documentBuilder = $container->get(Document\DocumentBuilder::class);
 
                     return new Service\InvoiceService(
                         $container->get('config'),
                         $dbAdapter,
                         $paymentService,
                         $appDelegateService,
-                        $fileService
+                        $fileService,
+                        $documentBuilder
                     );
                 },
                 Service\CommandService::class => function ($container) {
