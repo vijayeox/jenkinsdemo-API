@@ -96,7 +96,7 @@ class InsertDriver extends AbstractAppDelegate
                     $values = "VALUES (:name,:email,:phone_number,:fleet_id,:fleet_api_key)";
                     $insertQuery = "INSERT INTO ic_info " . $columns . $values;
                     $this->logger->info("in zendrive delegate insert query- " . print_r($insertQuery, true));
-                    $icInsert = $persistenceService->insertQuery($insertQuery, $fleetArr);
+                    $icInsert = $persistenceService->insertQuery($insertQuery, $fleetArr, 'yes');
                     $ic_id = $icInsert->getGeneratedValue();
                 }
             } else {
@@ -166,7 +166,8 @@ class InsertDriver extends AbstractAppDelegate
                                     }
                                     $dataForDriver['entity_name'] = 'Driver';
                                     $response = $this->createUser($params, $dataForDriver);
-                                    $dataForDriver['userUUID'] = $this->getUserByUsername($dataForDriver['username']);
+                                    $driverUuid = $this->getUserByUsername($dataForDriver['username']);
+                                    $dataForDriver['userUUID'] = $driverUuid[0]['uuid'];
                                     $dataForDriver['status'] = 'Active';
                                     $response1 = $this->createFile($dataForDriver);
                                     $this->logger->info("driver file data " . print_r(json_encode($dataForDriver['uuid']), true));
@@ -200,7 +201,7 @@ class InsertDriver extends AbstractAppDelegate
                     }
                 } else {
                     $this->logger->info("Drivers Form Data..." . print_r($data, true));
-                    $username = str_replace('@', '.', $data['driverEmail']);
+                    $username = $data['driverEmail'];
                     $this->logger->info("driver username " . print_r($username, true));
                     $userDataIfExists = $this->userService->getUserByUsername($username);
                     $this->logger->info("driver existance data " . print_r($userDataIfExists, true));
@@ -257,7 +258,8 @@ class InsertDriver extends AbstractAppDelegate
         $dataForDriver['entity_name'] = 'Driver';
         $dataForDriver['status'] = 'Active';
         $response = $this->createUser($params, $dataForDriver);
-        $dataForDriver['userUUID'] = $this->getUserByUsername($dataForDriver['username']);
+        $driverUuid = $this->getUserByUsername($dataForDriver['username']);
+        $dataForDriver['userUUID'] = $driverUuid[0]['uuid'];
         $dataForDriver['status'] = 'Active';
         $response1 = $this->createFile($dataForDriver);
         $response2 = $this->Insurelearn($dataForDriver);
@@ -363,7 +365,7 @@ class InsertDriver extends AbstractAppDelegate
             $drivercolumns = "(`uuid`, `first_name`,`middle_name`,`last_name`,`email`,`ssn`,`license_num`,`driver_type`,`paid_by_option`,`zendrive_driver_id`) ";
             $drivervalues = "VALUES (:uuid,:firstName,:middleName,:lastName,:email,:ssn,:licenseNum,:driverType,:paidByOption,:zendrive_driver_id)";
             $driverinsertQuery = "INSERT INTO driver " . $drivercolumns . $drivervalues;
-            $driverSelect = $persistenceService->insertQuery($driverinsertQuery, $driverArr);
+            $driverSelect = $persistenceService->insertQuery($driverinsertQuery, $driverArr, 'yes');
             $driver_id = $driverSelect->getGeneratedValue();
 
             $mappingArr = ['driver_id' => $driver_id, 'ic_id' => $ic_id];
@@ -371,7 +373,7 @@ class InsertDriver extends AbstractAppDelegate
             $mappingvalues = "VALUES (:ic_id,:driver_id)";
             $insert = "INSERT INTO ic_driver_mapping " . $mappingcolumns . $mappingvalues;
             $this->logger->info("mapping query- " . print_r($insert, true));
-            $insertQuery = $persistenceService->insertQuery($insert, $mappingArr);
+            $insertQuery = $persistenceService->insertQuery($insert, $mappingArr, 'yes');
         }
         $this->logger->info("driver record " . print_r($driverrecord, true));
     }

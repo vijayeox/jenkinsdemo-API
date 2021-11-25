@@ -27,9 +27,9 @@ class DeleteDriver extends AbstractAppDelegate
     public function execute(array $data, Persistence $persistenceService)
     {
         $this->logger->info("inside delete delegate -" . json_encode($data, JSON_UNESCAPED_SLASHES));
-        $userUUID = $data['userUUID'][0]['uuid'];
+        $userUUID = $data['userUUID'];
         $accountId = $data['account_id'];
-        $this->logger->info("file data -" . $userUUID);
+        $this->logger->info("file data -" .  $data['userUUID']);
         $dataForDriver['status'] = 'Inactive';
         $fileupdateResult = $this->updateFile($dataForDriver, $data['fileId']);
         $userUpdateResult = $this->updateUser($userUUID, $dataForDriver, $accountId);
@@ -40,7 +40,7 @@ class DeleteDriver extends AbstractAppDelegate
         $driver_email = $data['email'];
         $selectQuery = "SELECT * FROM `driver` WHERE email = :email";
         $resultArr = $persistenceService->selectQuery($selectQuery, [
-            "email" => 'canny@gmail.com'
+            "email" => $data['email']
         ], true);
 
         // $this->logger->info("driver record from driver table- " . json_encode($resultArr));
@@ -65,7 +65,7 @@ class DeleteDriver extends AbstractAppDelegate
         if (isset($resultArr2) && !empty($resultArr2)) {
             $fleet_id = $resultArr2[0]['uuid'];
         }
-        // $this->logger->info("fleet uuid - ".$resultArr1[0]['zendrive_driver_id']);
+        // $this->logger->info("fleet uuid - " . $resultArr1[0]['zendrive_driver_id']);
         if (isset($fleet_id) && isset($driver_uuid)) {
             $endpoint = 'fleet/' . $fleet_id . '/driver/' . $driver_uuid;
             $params = array('fleet_id' => $fleet_id, 'driver_id' => $driver_uuid);
