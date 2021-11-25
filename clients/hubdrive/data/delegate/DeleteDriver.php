@@ -28,8 +28,9 @@ class DeleteDriver extends AbstractAppDelegate
     {
         $this->logger->info("inside delete delegate -" . json_encode($data, JSON_UNESCAPED_SLASHES));
         $userUUID = $data['userUUID'];
+        // $userUUID = $data['userUUID'][0]['uuid'];
         $accountId = $data['account_id'];
-        $this->logger->info("file data -" .  $data['userUUID']);
+        // $this->logger->info("file data -" .  $data['userUUID'][0]['uuid']);
         $dataForDriver['status'] = 'Inactive';
         $fileupdateResult = $this->updateFile($dataForDriver, $data['fileId']);
         $userUpdateResult = $this->updateUser($userUUID, $dataForDriver, $accountId);
@@ -43,25 +44,25 @@ class DeleteDriver extends AbstractAppDelegate
             "email" => $data['email']
         ], true);
 
-        // $this->logger->info("driver record from driver table- " . json_encode($resultArr));
+        $this->logger->info("driver record from driver table- " . json_encode($resultArr));
         if (isset($resultArr) && !empty($resultArr)) {
             $driver_id = $resultArr[0]['id'];
             $driver_uuid = $resultArr[0]['zendrive_driver_id'];
             $this->logger->info("return data from select query - " . $resultArr[0]['zendrive_driver_id']);
-            $selectQuery1 = 'SELECT * FROM `ic_driver_mapping` WHERE id = :id';
+            $selectQuery1 = 'SELECT * FROM `ic_driver_mapping` WHERE driver_id = :driver_id';
             $resultArr1 = $persistenceService->selectQuery($selectQuery1, [
-                "id" => $driver_id
+                "driver_id" => $driver_id
             ], true);
+            $this->logger->info("ic record from ic_driver_mapping " . json_encode($resultArr1));
         }
-        // $this->logger->info("ic record from ic_driver_mapping " . json_encode($resultArr1));
         if (isset($resultArr1) && !empty($resultArr1)) {
             $ic_id = $resultArr1[0]['ic_id'];
             $selectQuery2 = 'SELECT * FROM `ic_info` WHERE id = :id';
             $resultArr2 = $persistenceService->selectQuery($selectQuery2, [
                 "id" => $ic_id
             ], true);
+            $this->logger->info("ic record from ic_info " . json_encode($resultArr2));
         }
-        // $this->logger->info("ic record from ic_info " . json_encode($resultArr2));
         if (isset($resultArr2) && !empty($resultArr2)) {
             $fleet_id = $resultArr2[0]['uuid'];
         }
