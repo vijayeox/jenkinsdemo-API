@@ -113,9 +113,10 @@ class InsertDriver extends AbstractAppDelegate
                 $filterParams['filter'][0]['skip'] = $skip;
                 $filterParams['filter'][0]['filter']['filters'][] = array('field' => 'entity_name', 'operator' => 'eq', 'value' => 'Driver');
                 $fileList = $this->getFileList($data, $filterParams);
+                $this->logger->info("driver data in drive safe " . print_r($fileList['data'][0], true));
                 if (isset($fileList['data']) && sizeof($fileList['data']) > 0) {
                     foreach ($fileList['data'] as $key => $val) {
-                        $driverZendDriveResponse = $this->addDriver($fleet_id, $dataForDriver, $ic_id, $fleet_id, $persistenceService);
+                        $driverZendDriveResponse = $this->addDriver($fleet_id, $fileList['data'][0], $ic_id, $fleet_id, $persistenceService);
                     }
                 } else {
                     return $data;
@@ -228,7 +229,7 @@ class InsertDriver extends AbstractAppDelegate
                         }
                         if (!isset($dataForDriver['contact'])) {
                             $dataForDriver['contact'] = array();
-                            $dataForDriver['contact']['username'] = str_replace('@', '.', $dataForDriver['email']);
+                            $dataForDriver['contact']['username'] = $dataForDriver['email'];
                             $dataForDriver['contact']['firstname'] = $dataForDriver['name'];
                             $dataForDriver['contact']['lastname'] = $dataForDriver['lastname'];
                             $dataForDriver['contact']['email'] = $dataForDriver['email'];
@@ -326,6 +327,7 @@ class InsertDriver extends AbstractAppDelegate
     {
         $dataForDriver = array();
         $dataForDriver = $driverData;
+        $this->logger->info("Drivers Data..." . print_r($dataForDriver, true));
         $selectQuery = "SELECT * FROM `driver` WHERE email = '" . $dataForDriver['email'] . "'";
         $driverrecord = $persistenceService->selectQuery($selectQuery);
         $Driverdetails = array();

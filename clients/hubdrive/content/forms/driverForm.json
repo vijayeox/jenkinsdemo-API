@@ -263,6 +263,7 @@
                         "inputMask": "XXX9999999",
                         "tableView": true,
                         "validate": {
+                            "required": true,
                             "minLength": 10,
                             "maxLength": 10
                         },
@@ -463,6 +464,6 @@
     "path": "driverform",
     "project": "5dd3b1795ecd1e1c6da1ac2b",
     "created": "2021-10-07T08:02:07.265Z",
-    "modified": "2021-11-11T10:39:00.579Z",
+    "modified": "2021-11-25T07:10:28.921Z",
     "machineName": "insuranceprocurement-eoxvantage:reemaTesting"
 }
