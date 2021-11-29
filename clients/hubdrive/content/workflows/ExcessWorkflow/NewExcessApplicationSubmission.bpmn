@@ -10,7 +10,7 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1hm9lab</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1hm9lab" sourceRef="StartEvent_1" targetRef="Task_03gjrkv" />
+    <bpmn:sequenceFlow id="SequenceFlow_1hm9lab" sourceRef="StartEvent_1" targetRef="Task_1stdsf2" />
     <bpmn:userTask id="Task_1uzx3et" name="Avant initial submission check" camunda:asyncAfter="true" camunda:candidateUsers="{{role:ABAccountManager}}">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
@@ -55,8 +55,8 @@ execution.setVariable("mailTemplate","excessLiabilityMail");
 execution.setVariable("mailAttachments",true);</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_19i21k2</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1c1hg5d</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1hm9lab</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00ony52</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0e9rl8h" sourceRef="Task_1uzx3et" targetRef="ExclusiveGateway_0ko6ygc" />
@@ -187,23 +187,6 @@ execution.setVariable("mailAttachments",true);</camunda:script>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0bzie4l</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_079nplo</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_19i21k2" sourceRef="Task_03gjrkv" targetRef="Task_1stdsf2" />
-    <bpmn:serviceTask id="Task_03gjrkv" name="Generate the unique Submission Number" camunda:expression="0">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="commands">
-            <camunda:list>
-              <camunda:value>{"command" : "file"}</camunda:value>
-              <camunda:value>{"command" : "delegate" , "delegate" : "GetExcessApplicationSubmissionNumber"}</camunda:value>
-              <camunda:value>{"command" : "fileSave"}</camunda:value>
-            </camunda:list>
-          </camunda:inputParameter>
-          <camunda:inputParameter name="return">true</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_1hm9lab</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_19i21k2</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_03layki" sourceRef="Task_017u3xh" targetRef="Task_1uzx3et" />
     <bpmn:serviceTask id="Task_017u3xh" name="Update status to Received" camunda:expression="0">
@@ -454,7 +437,7 @@ execution.setVariable("mailAttachments",false);</camunda:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1hm9lab_di" bpmnElement="SequenceFlow_1hm9lab">
         <di:waypoint x="198" y="310" />
-        <di:waypoint x="290" y="310" />
+        <di:waypoint x="400" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_047rjth_di" bpmnElement="Task_1uzx3et">
         <dc:Bounds x="910" y="270" width="100" height="80" />
@@ -463,7 +446,7 @@ execution.setVariable("mailAttachments",false);</camunda:script>
         <dc:Bounds x="680" y="580" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_00ony52_di" bpmnElement="SequenceFlow_00ony52">
-        <di:waypoint x="550" y="310" />
+        <di:waypoint x="500" y="310" />
         <di:waypoint x="680" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_156oy9e_di" bpmnElement="SequenceFlow_156oy9e">
@@ -474,7 +457,7 @@ execution.setVariable("mailAttachments",false);</camunda:script>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1k79xq2_di" bpmnElement="Task_1stdsf2">
-        <dc:Bounds x="450" y="270" width="100" height="80" />
+        <dc:Bounds x="400" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0e9rl8h_di" bpmnElement="SequenceFlow_0e9rl8h">
         <di:waypoint x="1010" y="310" />
@@ -497,8 +480,8 @@ execution.setVariable("mailAttachments",false);</camunda:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1c1hg5d_di" bpmnElement="SequenceFlow_1c1hg5d">
         <di:waypoint x="680" y="620" />
-        <di:waypoint x="500" y="620" />
-        <di:waypoint x="500" y="350" />
+        <di:waypoint x="450" y="620" />
+        <di:waypoint x="450" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_0692jqv_di" bpmnElement="Task_191wd79">
         <dc:Bounds x="1720" y="270" width="100" height="80" />
@@ -555,13 +538,6 @@ execution.setVariable("mailAttachments",false);</camunda:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1d7cbnw_di" bpmnElement="Task_1n5oxi0">
         <dc:Bounds x="2920" y="270" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_19i21k2_di" bpmnElement="SequenceFlow_19i21k2">
-        <di:waypoint x="390" y="310" />
-        <di:waypoint x="450" y="310" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_003y2lm_di" bpmnElement="Task_03gjrkv">
-        <dc:Bounds x="290" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_03layki_di" bpmnElement="SequenceFlow_03layki">
         <di:waypoint x="780" y="310" />

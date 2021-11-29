@@ -15,6 +15,31 @@ class GenerateExcessPolicyPDF extends AbstractDocumentAppDelegate
     public function __construct()
     {
         parent::__construct();
+        $this->formatNumber = array(
+            'actsErrorsOrOmissionsLiabilityAggregate',
+            'additionalPremium',
+            'aggregateLimit',
+            'premiumAtEachAnniversary',
+            'premiumAtInception',
+            'attorneysFeesForAJudgmentOf',
+            'bodilyInjuryByAccidentEachAccident',
+            'bodilyInjuryByDiseaseEachEmployee',
+            'bodilyInjuryByDiseasePolicyLimit',
+            'coveredAutosLiabilityEachAccident',
+            'eachAccident',
+            'eachOccurenceLimit',
+            'eachOccurrence',
+            'excessLimitOfInsuranceOther',
+            'generalAggregate',
+            'generalLiabilityAggregate',
+            'generalLiabilityBodilyInjuryAndPropertyDamageLiabilityEachAccident',
+            'limitOfInsurance',
+            'personalAndAdvertisingInjury',
+            'personalAndAdvertisingInjuryGen',
+            'productsAndWorkYouPerformedAggregate',
+            'productsCompletedOperationsAggregate',
+            'premiumIncludingpremiumsubjecttoaudit',
+        );
     }
 
     public function execute(array $data, Persistence $persistenceService)
@@ -26,21 +51,38 @@ class GenerateExcessPolicyPDF extends AbstractDocumentAppDelegate
         $finalPolicy = array();
         $pdfName = 'RPG_excess_policy_-_Trisura__1_'.date('Y_m_d').'_FORM_Revised.pdf';
         $documentDestination = $fileDestination['absolutePath'].$pdfName;
-        $pdfData = array();
-        foreach ($fieldMapping["text"] as  $formField => $pdfField) {
-            isset($data[$formField]) ? $pdfData[$pdfField] = $data[$formField] : null;
-        }
-        if(isset($fieldMapping["checkbox"])){
-            foreach ($fieldMapping["checkbox"] as $formField => $fieldProps) {
-                $fieldNamePDF = $fieldProps['fieldname'];
-                $fieldOptions = $fieldProps["options"];
-                if (isset($data[$formField]) && $data[$formField] == 'true') {
-                    $pdfData[$fieldNamePDF] = $fieldOptions[$data[$formField]];
-                }
+        $fileData = $data;
+
+        foreach($this->formatNumber as $value){
+            if($fileData[$value] != ""){
+                $fileData[$value] = number_format($fileData[$value],2);
             }
         }
+        
+        $stateObj = is_string($fileData['stateObj']) ? json_decode($fileData['stateObj'],true) : $fileData['stateObj'];
+        $fileData['mailingAddress'] = $fileData['address'].",".$fileData['city'].",".$stateObj['abbreviation']."-".$fileData['zipCode'];
+        $fileData['policyFrom'] = date_format(date_create($fileData['proposedPolicyStartDate']),'m/d/Y');
+        $fileData['policyTo'] = date_format(date_create($fileData['proposedPolicyEndDate']),'m/d/Y');
+        $fileData['policyPeriod'] = $fileData['policyFrom']." to ".$fileData['policyTo'];
+
+        $pdfData = array();
+        foreach ($fieldMapping["text"] as  $formField => $pdfField) {
+            isset($fileData[$formField]) ? $pdfData[$pdfField] = $fileData[$formField] : null;
+        }
+
+        foreach ($fieldMapping['radioToCheckBox'] as $formFieldPDF => $pdfFieldData) {
+            $fieldNamePDF = $fileData[$formFieldPDF];
+            if(isset($fieldMapping['radioToCheckBox'][$formFieldPDF]) && in_array($fileData[$formFieldPDF], array_filter($fieldMapping['radioToCheckBox'][$formFieldPDF]))){
+                if($formFieldPDF == "coverageTypeOther"){
+                  $fieldNamePDF =  $fileData[$formFieldPDF]."_2";
+                }
+                $pdfData[$fieldNamePDF] = "On";
+            }
+        }
+
         $pdfData = array_filter($pdfData);
-        $pdfData['appId'] = $data['appId'];
+
+        $pdfData['appId'] = $fileData['appId'];
         $this->documentBuilder->fillPDFForm(
             "Excess_Final_Policy.pdf",
             $pdfData,

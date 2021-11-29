@@ -26,7 +26,7 @@ class GeneratePolicyNumber extends AbstractAppDelegate
         if($file['policyNumber'] == ""){
             $selectQuery = "SELECT value FROM applicationConfig WHERE type ='PolicyNumber'";
             $policyNumber = ($persistenceService->selectQuery($selectQuery))->current()["value"];
-            $data['policyNumber'] = $file['policyNumber'] = $policyNumber;
+            $data['policyNumber'] = $file['policyNumber'] = 'ABX'.$policyNumber."-00";
             $policyNumber = $policyNumber + 1;
 
             $params = array('value' => $policyNumber);
