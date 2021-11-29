@@ -106,7 +106,7 @@ class SendMail extends MailDelegate
     private function getSubjectLine($mailType,$data){
         $subjectLine = "";
         if($mailType == "ExcessMail"){
-            $subjectLine = 'HUB Drive Excess Liability Document Submission -'.$data['SubmissionNumber'];
+            $subjectLine = 'HUB Drive Excess Liability Document Submission';
         }else if($mailType == "QuoteMailtoHub"){
             $subjectLine = 'HUB Excess Quote Document';
         }else if($mailType == "RequestForBind"){
