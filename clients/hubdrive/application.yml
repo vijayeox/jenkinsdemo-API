@@ -22,7 +22,7 @@ org:
         state: CA
         zip: 90623
         country: 'United States of America'
-        start_options: '{"title": {"en_EN": "Hub Drive Excess Liability Shield"}}'
+        start_options: '{"title": {"en_EN": "HUB Drive Online"}}'
         contact:
             username: HubAdmin
             firstname: Admin
