@@ -50,6 +50,7 @@ class InsertDriver extends AbstractAppDelegate
                 $fileData = is_string($fileList['data'][0]['data']) ? json_decode($fileList['data'][0]['data'], true) : $fileList['data'][0]['data'];
                 $fileUuid = $fileList['data'][0]['uuid'];
                 $companyName = $fileList['data'][0]['companyName'];
+                $zendDriveSubscription = isset($fileList['data'][0]['zenDriveIntegration']) ? $fileList['data'][0]['zenDriveIntegration'] : 'false';
                 $this->logger->info("company name " . print_r(json_encode($companyName), true));
             } else {
                 return $data;
@@ -58,7 +59,7 @@ class InsertDriver extends AbstractAppDelegate
                 $fileData['zenDriveIntegration'] = "Yes";
                 $icFileData['zenDriveIntegration'] = "Yes";
             }
-            $zendDriveSubscription = "YES";
+            // $zendDriveSubscription = "YES";
             // $zendDriveSubscription = $fileList['data'][0]['zenDriveIntegration'];
             // $this->logger->info("ic subscription information " . print_r($zendDriveSubscription, true));
             if (isset($zendDriveSubscription) && strtoupper($zendDriveSubscription) == "YES") {
