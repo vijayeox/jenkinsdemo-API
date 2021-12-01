@@ -4,7 +4,7 @@ app:
     description: HubDriveOnline
     category: EXAMPLE_CATEGORY
     type: 2
-    autostart: false
+    autostart: true
     status: 4
     isdefault: false
     logo: default_app.png
@@ -348,8 +348,8 @@ entity:
                 index: true
             -
                 name: ICUserId
-                index: true
                 data_type: text
+                index: true
         identifiers:
             -
                 identifier: email
@@ -453,8 +453,8 @@ entity:
                 index: true
             -
                 name: ICUserId
-                index: true
                 data_type: text
+                index: true
         identifiers:
             -
                 identifier: email
@@ -984,6 +984,10 @@ entity:
                 name: policyStatus
                 data_type: text
                 index: true
+            -   
+                name: producerRegion
+                data_type: text
+                index: true
         identifiers:
             -
                 identifier: epicId
@@ -1434,16 +1438,20 @@ pages:
                             defaultAction: true
                         -
                             name: Review
-                            rule: '''{{to_be_claimed}}'' == 0'
+                            rule: '''{{to_be_claimed}}'' == 0 || ''{{to_be_claimed}}'' == 1'
                             details:
+                                -
+                                    type: Update
+                                    params:
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
                                 -
                                     type: Form
                                     url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                             icon: 'fa fa-check-circle'
                         -
-                            name: 'Claim and Review'
+                            name: Claim and Review
                             rule: '''{{to_be_claimed}}'' == 2'
-                            confirmationMessage: 'This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded.'
+                            confirmationMessage: "This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded."
                             details:
                                 -
                                     type: Update
@@ -1464,7 +1472,125 @@ pages:
                                 type: dropdown
                                 listItems:
                                     - 'In Progress'
-                                    - Received
+                                    - 'Quoted'
+                                placeholder: 'Select Policy Status'
+                        -
+                            title: 'Policy Effective Date'
+                            field: start_date
+                            cell: '<td>{formatDate(item.start_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+                        -
+                            title: 'Policy End Date'
+                            field: end_date
+                            cell: '<td>{formatDate(item.end_date)}</td>'
+                            filter: date
+                            filterFormat: YYYY-MM-DD
+    -
+        name: 'Approval Requests'
+        uuid: a00d92f9-43ca-4e95-8636-fb538e97056c
+        description: 'Shows a list of Excess Liability'
+        content:
+            -
+                type: List
+                content:
+                    route: assignments
+                    filterable: true
+                    resizable: true
+                    refreshButton: true
+                    pageable:
+                        buttonCount: 3
+                        pageSizes:
+                            - 10
+                            - 20
+                            - 50
+                        info: true
+                    sortable:
+                        allowUnsort: true
+                        mode: single
+                    actions:
+                        -
+                            name: View
+                            icon: 'fa fa-eye'
+                            rule: 'true'
+                            details:
+                                -
+                                    type: EntityViewer
+                                    page_id: ''
+                                    htmlContent: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                                    externalDataSource: ''
+                                    formSource: ''
+                                    form_name: {  }
+                                    formUrl: ''
+                                    urlPostParams: ''
+                                    dashboard_uuid: ''
+                                    url: ''
+                                    content: '<table style="width:100%"><tr><th>Insured Name</th><th>Status</th></tr><tr><td>{data.insuredName}</td><td>{data.policyStatus}</td></tr></table>'
+                                    useRowData: false
+                            paramsDuplicate:
+                                -
+                                    parameterKey: ''
+                                    parameterValue: ''
+                            contentDuplicate:
+                                data:
+                                    content:
+                                        -
+                                            type: EntityViewer
+                                            page_id: ''
+                                            htmlContent: ''
+                                            externalDataSource: ''
+                                            formSource: ''
+                                            form_name: {  }
+                                            formUrl: ''
+                                            urlPostParams: ''
+                                            dashboard_uuid: ''
+                                            url: ''
+                                            content: ''
+                                            useRowData: false
+                                    listActionContent: true
+                                    listAction: true
+                                metadata: {  }
+                            defaultAction: true
+                        -
+                            name: Review
+                            rule: '''{{to_be_claimed}}'' == 0 || ''{{to_be_claimed}}'' == 1'
+                            details:
+                                -
+                                    type: Update
+                                    params:
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
+                                -
+                                    type: Form
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                            icon: 'fa fa-check-circle'
+                        -
+                            name: Claim and Review
+                            rule: '''{{to_be_claimed}}'' == 2'
+                            confirmationMessage: "This task has already been claimed by another user. Do you really want to reclaim it, any unsaved data will be discarded."
+                            details:
+                                -
+                                    type: Update
+                                    params:
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/reclaim'
+                                -
+                                    type: Form
+                                    url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                            icon: 'fa fa-check-circle'
+                    columnConfig:
+                        -
+                            title: 'Insured Name'
+                            field: insuredName
+                        -
+                            title: Status
+                            field: policyStatus
+                            filterCell:
+                                type: dropdown
+                                listItems:
+                                    - 'Received'
+                                    - 'UW Review'
+                                    - 'Quote Rejected'
+                                    - 'Approved/Pending Bind'
+                                    - 'Bound'
                                 placeholder: 'Select Policy Status'
                         -
                             title: 'Policy Effective Date'
@@ -1574,10 +1700,14 @@ pages:
                             filterCell:
                                 type: dropdown
                                 listItems:
-                                    - New
-                                    - Received
+                                    - 'New'
+                                    - 'Received'
                                     - 'UW Review'
+                                    - 'Quote Rejected'
+                                    - 'Approved/Pending Bind'
                                     - 'Policy Issued'
+                                    - 'Bound'
+                                    - 'Closed'
                                 placeholder: 'Select Policy Status'
                         -
                             title: 'Policy Effective Date'
@@ -1700,6 +1830,22 @@ pages:
             -
                 type: Form
                 form_id: 3446b166-37a4-4afd-9390-5fc7e80ce1df
+    -
+        name: 'ELD Subscription'
+        uuid: 37b79b26-630d-4f4b-8bbb-54aad4e305d7
+        description: 'Shows a list of Excess Liability'
+        content:
+            -
+                type: Form
+                form_id: a2b0f6aa-4491-4682-a8f6-89bbd8ee18e1
+    -
+        name: 'Compliance Subscription'
+        uuid: 51b1c705-eae0-462b-8ea5-78935a4dabd6
+        description: 'Shows a list of Excess Liability'
+        content:
+            -
+                type: Form
+                form_id: 16829a5e-927a-4070-9cc7-b28d9b86919f
     -
         name: 'Foley Applicant Shell'
         uuid: 7e742804-1ab5-11ec-9621-0242ac130002
@@ -1882,7 +2028,9 @@ pages:
                                 type: dropdown
                                 listItems:
                                     - 'In Progress'
+                                    - 'Quoted'
                                     - 'Policy Issued'
+                                    - 'Closed'
                                 placeholder: 'Select Policy Status'
                         -
                             title: 'Policy Effective Date'
@@ -1894,7 +2042,7 @@ pages:
         page_name: GenerateDriversReport.yml
         uuid: ba632ab9-c87d-4417-852e-fcf609b96926
     -
-        name: Profile
+        name: Home
         uuid: 75fc527c-459e-4799-b63c-7012fdba9f65
         description: 'Producer Profile'
         content:
@@ -1903,19 +2051,42 @@ pages:
                 dashboard_uuid: 6ada8486-42df-4e57-9bbe-e91a4c09660a
                 content:
                     uuid: 6ada8486-42df-4e57-9bbe-e91a4c09660a
-                    page_id: ''
-                    htmlContent: ''
-                    externalDataSource: ''
-                    formSource: ''
-                    form_name: {  }
-                    formUrl: ''
-                    urlPostParams: ''
-                    apiUrl: 'app/{{uuid}}/delegate/InsureLearnSso'
-                    apiAction: redirect
-                    apiMethod: post
-                    responseParam: SSOLink
-                    useRowData: false
-                    route: ''
+                page_id: ''
+                htmlContent: ''
+                externalDataSource: ''
+                formSource: ''
+                form_name: {  }
+                formUrl: ''
+                urlPostParams: ''
+                apiUrl: 'app/{{uuid}}/delegate/InsureLearnSso'
+                apiAction: redirect
+                apiMethod: post
+                responseParam: SSOLink
+                useRowData: false
+                route: ''
+    -
+        name: Home
+        uuid: 948265ce-a9d4-454b-862c-b7bdd666f83b
+        description: 'Insured Profile'
+        content:
+            -
+                type: DashboardManager
+                dashboard_uuid: 86c82609-a842-4dc4-b670-a1459a1fa1b0
+                content:
+                    uuid: 86c82609-a842-4dc4-b670-a1459a1fa1b0
+                page_id: ''
+                htmlContent: ''
+                externalDataSource: ''
+                formSource: ''
+                form_name: {  }
+                formUrl: ''
+                urlPostParams: ''
+                apiUrl: 'app/{{uuid}}/delegate/InsureLearnSso'
+                apiAction: redirect
+                apiMethod: post
+                responseParam: SSOLink
+                useRowData: false
+                route: ''
     -
         name: Claims
         uuid: 41a29ebf-439b-4254-97f5-02138dbb5ac2
@@ -1978,11 +2149,17 @@ pages:
                 route: ''
 menu:
     -
-        name: Profile
+        name: Home
         icon: 'fad fa-user-alt'
         page_uuid: 75fc527c-459e-4799-b63c-7012fdba9f65
         uuid: 4294e571-7c29-4ac5-8e7b-64b346f59271
         privilege: MANAGE_PRODUCER_PROFILE
+    -
+        name: Home
+        icon: 'fad fa-user-alt'
+        page_uuid: 948265ce-a9d4-454b-862c-b7bdd666f83b
+        uuid: aa11c759-7641-4aa3-b7b7-9d41cc584b49
+        privilege: '{"eq" : "MANAGE_APP_WRITE","neq" : "MANAGE_ACCOUNT_MANAGER_WRITE"}'
     -
         name: Claims
         icon: 'fad fa-user-shield'
@@ -2036,18 +2213,18 @@ menu:
         icon: 'fas fa-clipboard-check'
         page_uuid: 29f8c11e-d89c-11eb-b8bc-0242ac130003
         uuid: 29f8c3b2-d89c-11eb-b8bc-0242ac130003
-        privilege: MANAGE_EXCESS_WRITE
+        privilege: MANAGE_ACCOUNT_MANAGER_WRITE
+    -
+        name: 'Approval Requests'
+        icon: 'fas fa-clipboard-check'
+        page_uuid: a00d92f9-43ca-4e95-8636-fb538e97056c
+        uuid: c53a1a94-58f5-49a6-ad71-df156e9c3506
+        privilege: '{"eq" : "MANAGE_EXCESS_WRITE","neq" : "MANAGE_ACCOUNT_MANAGER_WRITE"}'
     -
         name: 'Driver Management'
         icon: 'fas fa fa-car'
         page_uuid: 9a4708a8-6212-4625-9bb0-c40b423c4204
         uuid: 659feefb-79b9-469d-b39a-9cee5682f0d4
-        privilege: MANAGE_APP_WRITE
-    -
-        name: 'Drive Safe Subscription'
-        icon: 'fas fa fa-cars'
-        page_uuid: 2ff5f37e-a8b3-47fe-bd33-889c2baf1728
-        uuid: 0e47c25a-d5c7-4b13-9365-a54ae73de40b
         privilege: MANAGE_APP_WRITE
     -
         name: 'Driver Management Reports'
@@ -2158,6 +2335,18 @@ form:
         description: 'Driver form upload option '
         template_file: driverForm.json
         entity: 'How To Survive A Dot Audit'
+    -
+        name: 'ELD Subscription Form'
+        uuid: a2b0f6aa-4491-4682-a8f6-89bbd8ee18e1
+        description: 'ELD'
+        template_file: eldSubscription.json
+        entity: 'Independent Contractor Onboarding'
+    -
+        name: 'Compliance Subscription Form'
+        uuid: 16829a5e-927a-4070-9cc7-b28d9b86919f
+        description: 'Compliance'
+        template_file: complianceSubscription.json
+        entity: 'Independent Contractor Onboarding'
 workflow:
     -
         name: 'Excess New Application Submission'
