@@ -1,5 +1,5 @@
 {
-	"_id": "61a5a6c1ebbf1a422e144013",
+	"_id": "618a7960609b223e81b570b4",
 	"type": "form",
 	"tags": [],
 	"owner": "5db28b688d7586b574a8f4f6",
@@ -39,21 +39,21 @@
 				"attr": "",
 				"value": ""
 			}],
-			"content": "<h1>Electronic Logging Device (ELD) Dashboard Module</h1>\n<br/>\n<h4>HubDriveOnline “dashboard” with respect to applicable Customer ELD outputs.  Dashboard includes fleet benchmarking and safety coaching services.Click <a target=\"_blank\" href=\"https://hubdriveonline.com/files/HUB_Drive_ELD_Dashboard_sell_sheet_F.pdf\">here</a> to download</h4>\n\n<br/>\n<h4><b>Fees</b></h4>\n\n<h4>$6 per-user per-month fee for each VIN included in the Safety Center</h4>\n\n<h4>$6 per-user per-month fee for each driver whose driver-level data is included in dashboard</h4>\n\n<h4>$18 one-time per-VIN fee for up to 90 days of data (which data does not load to Safety Center but may be used for initial assessment and insurance renewal negotiations and data review)</h4>\n\n\n<h4>Per-driver per-month fee of $10</h4>\n\n",
+			"content": "<h1>Drive Safe</h1>\n<br/>\n<h4>HubDriveOnline “dashboard” with respect to mobile app output, which includes artificial intelligence-powered driver analytics platform utilizing applicable mobile phone sensors.  Dashboard includes fleet benchmarking and safety coaching services.Click <a target=\"_blank\" href=\"/apps/HubDrive/public/docs/HUB_Drive_Safe_App_sell_sheet_10.07.21_F.pdf\">here</a> to download</h4>\n\n<br/>\n<h4><b>Fees</b></h4>\n\n<h4>Per-month fee of $250</h4>\n\n<h4>Per-driver per-month fee of $10</h4>\n\n",
 			"refreshOnChange": false,
 			"key": "html",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
 		}, {
-			"label": "I here by accept to enroll for Electronic Logging Device (ELD) Dashboard Module",
+			"label": "I here by accept to enroll for Drive Safe ",
 			"customClass": "textSize",
 			"tableView": false,
 			"defaultValue": false,
 			"validate": {
 				"required": true
 			},
-			"key": "ELDService",
+			"key": "purchaseDriveSafe",
 			"type": "checkbox",
 			"input": true
 		}, {
@@ -68,6 +68,191 @@
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
+		}, {
+			"title": " ",
+			"breadcrumbClickable": false,
+			"buttonSettings": {
+				"previous": true,
+				"cancel": true,
+				"next": true
+			},
+			"scrollToTop": false,
+			"collapsible": false,
+			"key": "esign",
+			"conditional": {
+				"show": true,
+				"when": "purchaseDriveSafe",
+				"eq": "true"
+			},
+			"type": "panel",
+			"label": " Agreement",
+			"components": [{
+				"title": "End User License Agreement",
+				"breadcrumbClickable": true,
+				"buttonSettings": {
+					"previous": true,
+					"cancel": true,
+					"next": true
+				},
+				"scrollToTop": false,
+				"collapsible": false,
+				"key": "endUserLicenseAgreement",
+				"type": "panel",
+				"label": "End User License Agreement",
+				"input": false,
+				"tableView": false,
+				"components": [{
+					"title": "Terms and Conditions",
+					"breadcrumbClickable": true,
+					"buttonSettings": {
+						"previous": true,
+						"cancel": true,
+						"next": true
+					},
+					"collapsible": false,
+					"key": "termsAndConditionsPanel",
+					"type": "panel",
+					"label": "Terms and Conditions",
+					"input": false,
+					"tableView": false,
+					"components": [{
+						"label": "Click here to view document",
+						"attrs": [{
+							"attr": "",
+							"value": ""
+						}],
+						"content": "<a href=\"https://drive.google.com/file/d/1g0m9Q-rDSVcV2BNURZwpkZNrqSqNNs31/view?usp=sharing\" target=\"_blank\"><button class=\"k-button k-primary\">Click To view Document</button></a>",
+						"refreshOnChange": false,
+						"key": "termsAndConditionsView",
+						"type": "htmlelement",
+						"input": false,
+						"tableView": false
+					}, {
+						"label": "I Acknowledge",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"validate": {
+							"required": true,
+							"custom": "valid = (input == 'yes') ? true : 'Acknowledgement is needed to proceed forward';"
+						},
+						"key": "termsAndConditionsAck",
+						"type": "radio",
+						"input": true
+					}],
+					"keyModified": true
+				}, {
+					"title": "Privacy Notice",
+					"breadcrumbClickable": true,
+					"buttonSettings": {
+						"previous": true,
+						"cancel": true,
+						"next": true
+					},
+					"collapsible": false,
+					"key": "privacyNoticePanel",
+					"type": "panel",
+					"label": "Privacy Notice",
+					"input": false,
+					"tableView": false,
+					"components": [{
+						"label": "Click here to view document",
+						"attrs": [{
+							"attr": "",
+							"value": ""
+						}],
+						"content": "<a href=\"https://drive.google.com/file/d/1DL-6OdbUY6rs3nKZ85hMSD31PsgAKHY2/view?usp=sharing\" target=\"_blank\"><button class=\"k-button k-primary\">Click To view Document</button></a>",
+						"refreshOnChange": false,
+						"key": "privacyNoticeView",
+						"type": "htmlelement",
+						"input": false,
+						"tableView": false
+					}, {
+						"label": "I Acknowledge",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"validate": {
+							"required": true,
+							"custom": "valid = (input == 'yes') ? true : 'Acknowledgement is needed to proceed forward';"
+						},
+						"key": "privacyNoticeAck",
+						"type": "radio",
+						"input": true
+					}],
+					"keyModified": true
+				}, {
+					"title": "EULA",
+					"breadcrumbClickable": true,
+					"buttonSettings": {
+						"previous": true,
+						"cancel": true,
+						"next": true
+					},
+					"collapsible": false,
+					"key": "eulaPanel",
+					"type": "panel",
+					"label": "EULA",
+					"input": false,
+					"tableView": false,
+					"components": [{
+						"label": "Click here to view document",
+						"attrs": [{
+							"attr": "",
+							"value": ""
+						}],
+						"content": "<a href=\"https://drive.google.com/file/d/1nvA_AoESj1b76Dp6tcmxWOnJoGTANOEq/view?usp=sharing\" target=\"_blank\"><button class=\"k-button k-primary\">Click To view Document</button></a>",
+						"refreshOnChange": false,
+						"key": "eulaView",
+						"type": "htmlelement",
+						"input": false,
+						"tableView": false
+					}, {
+						"label": "I Acknowledge",
+						"optionsLabelPosition": "right",
+						"inline": false,
+						"tableView": false,
+						"values": [{
+							"label": "Yes",
+							"value": "yes",
+							"shortcut": ""
+						}, {
+							"label": "No",
+							"value": "no",
+							"shortcut": ""
+						}],
+						"validate": {
+							"required": true,
+							"custom": "valid = (input == 'yes') ? true : 'Acknowledgement is needed to proceed forward';"
+						},
+						"key": "eulaAck",
+						"type": "radio",
+						"input": true
+					}],
+					"keyModified": true
+				}]
+			}],
+			"input": false,
+			"tableView": false,
+			"allowPrevious": false
 		}],
 		"breadcrumbClickable": true
 	}, {
@@ -111,7 +296,7 @@
 	}],
 	"revisions": "",
 	"_vid": 0,
-	"title": "ELDSubscription",
+	"title": "driveSafeSubscriptionForm",
 	"display": "form",
 	"access": [{
 		"roles": ["5dd3b1795ecd1efceaa1ac2c", "5dd3b1795ecd1e1b5fa1ac2d", "5dd3b1795ecd1e43eaa1ac2e"],
@@ -120,13 +305,13 @@
 	"submissionAccess": [],
 	"controller": "",
 	"properties": {
-		"submission_commands": "[{\"command\":\"delegate\",\"delegate\":\"ELDSubscription\"}]"
+		"submission_commands": "[{\"command\":\"delegate\",\"delegate\":\"InsertDriver\"}]"
 	},
 	"settings": {},
-	"name": "eldSubscription",
-	"path": "eldsubscription",
+	"name": "driveSafeSubscriptionForm",
+	"path": "drivesafesubscriptionform",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
-	"created": "2021-11-30T04:21:21.110Z",
-	"modified": "2021-11-30T09:19:32.978Z",
-	"machineName": "insuranceprocurement-eoxvantage:eldSubscription"
+	"created": "2021-11-09T13:36:32.869Z",
+	"modified": "2021-11-30T06:56:23.771Z",
+	"machineName": "insuranceprocurement-eoxvantage:driverSafeSubscriptionForm"
 }
