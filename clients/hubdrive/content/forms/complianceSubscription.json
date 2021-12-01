@@ -1,5 +1,5 @@
 {
-	"_id": "61a5a6c1ebbf1a422e144013",
+	"_id": "61a5f1f676fde59fd08d7fc4",
 	"type": "form",
 	"tags": [],
 	"owner": "5db28b688d7586b574a8f4f6",
@@ -39,21 +39,21 @@
 				"attr": "",
 				"value": ""
 			}],
-			"content": "<h1>Electronic Logging Device (ELD) Dashboard Module</h1>\n<br/>\n<h4>HubDriveOnline “dashboard” with respect to applicable Customer ELD outputs.  Dashboard includes fleet benchmarking and safety coaching services.Click <a target=\"_blank\" href=\"https://hubdriveonline.com/files/HUB_Drive_ELD_Dashboard_sell_sheet_F.pdf\">here</a> to download</h4>\n\n<br/>\n<h4><b>Fees</b></h4>\n\n<h4>$6 per-user per-month fee for each VIN included in the Safety Center</h4>\n\n<h4>$6 per-user per-month fee for each driver whose driver-level data is included in dashboard</h4>\n\n<h4>$18 one-time per-VIN fee for up to 90 days of data (which data does not load to Safety Center but may be used for initial assessment and insurance renewal negotiations and data review)</h4>\n\n\n<h4>Per-driver per-month fee of $10</h4>\n\n",
+			"content": "<h1>Compliance Dashboard Module</h1>\n<br/>\n<h4>HubDriveOnline “dashboard” with respect to certain of Customer’s insurance-related employment or contract requirements, including those relating to permitting and licensing. Click <a target=\"_blank\" href=\"https://hubdriveonlinetest.eoxvantage.com/files/HUB_Drive_Compliance_v2.pdf\">here</a> to download</h4>\n\n<br/>\n<h4>Access to professionals with respect to insurance coverage-related obligations of independent contractors and/or contract carriers of Customer.  Professionals available (other than during weekends, holidays and other “out-of-office” days) from 9:00 am Eastern Time to 3:00 am Eastern Time.</h4>\n\n<br/>\n<h4>Fee is $22.50/hour (prorated for any partial hour) during 9:00 am Eastern Time to 5:00 pm Eastern Time.</h4>\n\n<h4>Fee is $18.25/hour (prorated for any partial hour) during 5:00 pm Eastern Time to 3:00 am Eastern Time.</h4>\n\n<h4>Access to bilingual (i.e., English and Spanish language) professionals with respect to insurance coverage-related obligations of Customer and its independent contractors and/or contract carriers.  Professionals available (other than during weekends, holidays and other “out-of-office” days) from 9:00 am to 4:30 pm local time (i.e., the relevant professionals’ location). </h4>\n\n",
 			"refreshOnChange": false,
 			"key": "html",
 			"type": "htmlelement",
 			"input": false,
 			"tableView": false
 		}, {
-			"label": "I here by accept to enroll for Electronic Logging Device (ELD) Dashboard Module",
+			"label": "I here by accept to enroll for Compliance Module",
 			"customClass": "textSize",
 			"tableView": false,
 			"defaultValue": false,
 			"validate": {
 				"required": true
 			},
-			"key": "ELDService",
+			"key": "ComplianceSubscription",
 			"type": "checkbox",
 			"input": true
 		}, {
@@ -111,7 +111,7 @@
 	}],
 	"revisions": "",
 	"_vid": 0,
-	"title": "ELDSubscription",
+	"title": "ComplianceSubscription",
 	"display": "form",
 	"access": [{
 		"roles": ["5dd3b1795ecd1efceaa1ac2c", "5dd3b1795ecd1e1b5fa1ac2d", "5dd3b1795ecd1e43eaa1ac2e"],
@@ -120,13 +120,13 @@
 	"submissionAccess": [],
 	"controller": "",
 	"properties": {
-		"submission_commands": "[{\"command\":\"delegate\",\"delegate\":\"ELDSubscription\"}]"
+		"submission_commands": "[{\"command\":\"delegate\",\"delegate\":\"ComplianceSubscription\"}]"
 	},
 	"settings": {},
-	"name": "eldSubscription",
-	"path": "eldsubscription",
+	"name": "complianceSubscription",
+	"path": "compliancesubscription",
 	"project": "5dd3b1795ecd1e1c6da1ac2b",
-	"created": "2021-11-30T04:21:21.110Z",
-	"modified": "2021-11-30T09:19:32.978Z",
-	"machineName": "insuranceprocurement-eoxvantage:eldSubscription"
+	"created": "2021-11-30T09:42:14.863Z",
+	"modified": "2021-11-30T09:47:17.990Z",
+	"machineName": "insuranceprocurement-eoxvantage:complianceSubscription"
 }
