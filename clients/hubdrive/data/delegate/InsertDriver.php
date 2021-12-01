@@ -58,6 +58,7 @@ class InsertDriver extends AbstractAppDelegate
             if ($data['formType'] == "driveSafeSubscriptionForm") {
                 $fileData['zenDriveIntegration'] = "Yes";
                 $icFileData['zenDriveIntegration'] = "Yes";
+                $zendDriveSubscription = "YES";
             }
             // $zendDriveSubscription = "YES";
             // $zendDriveSubscription = $fileList['data'][0]['zenDriveIntegration'];
